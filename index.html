@@ -225,31 +225,31 @@
   <script>
     const imageFolder = 'menu/';
     
-    const flagList = ['p1.png','p2.png','p3.png','p4.png','p5.png','p6.png','p7.png','p8.png','p9.png','p10.png','p11.png','p12.png','p13.png','p14.png','p15.png','p16.png','p17.png'];
-    const tableList = ['ta1.png', 'ta2.png', 'ta3.png', 'ta4.png', 'ta5.png', 'ta6.png', 'ta10.png', 'ta12.png', 'ta20.png', 'ta21.png','ta22.png','ta23.png','ta24.png','ta25.png','ta26.png','ta27.png','ta28.png','ta29.png','ta30.png','ta31.png','ta32.png','ta33.png','ta34.png','ta35.png','ta36.png','ta37.png','ta38.png','ta39.png','ta40.png','ta41.png','ta42.png','ta43.png','ta44.png','ta45.png','ta46.png','ta47.png','ta48.png','ta49.png','ta50.png','ta51.png','ta52.png',];
-    const table0 = ['ttt1.png','ttt2.png','ttt3.png','ttt4.png'];
+    const flagList = ['p1.avif','p2.avif','p3.avif','p4.avif','p5.avif','p6.avif','p7.avif','p8.avif','p9.avif','p10.avif','p11.avif','p12.avif','p13.avif','p14.avif','p15.avif','p16.avif','p17.avif'];
+    const tableList = ['ta1.avif', 'ta2.avif', 'ta3.avif', 'ta4.avif', 'ta5.avif', 'ta6.avif', 'ta10.avif', 'ta12.avif', 'ta20.avif', 'ta21.avif','ta22.avif','ta23.avif','ta24.avif','ta25.avif','ta26.avif','ta27.avif','ta28.avif','ta29.avif','ta30.avif','ta31.avif','ta32.avif','ta33.avif','ta34.avif','ta35.avif','ta36.avif','ta37.avif','ta38.avif','ta39.avif','ta40.avif','ta41.avif','ta42.avif','ta43.avif','ta44.avif','ta45.avif','ta46.avif','ta47.avif','ta48.avif','ta49.avif','ta50.avif','ta51.avif','ta52.avif',];
+    const table0 = ['ttt1.avif','ttt2.avif','ttt3.avif','ttt4.avif'];
     const guestNumbersStandard = [1,2];
     const guestNumbersLarge = [3,4];
     const guestNumbersEnter = [1,1,1,1,1,1,2,2,2,2,2,3,4,4];
 
-    const imageListWinesWhite = ['w1.png','w2.png','w3.png','w4.png','w5.png','w6.png','w7.png','w8.png','w9.png'];
-    const imageListWinesRed = ['w10.png','w11.png','w12.png','w13.png','w14.png','w15.png','w16.png','w17.png','w18.png'];
-    const imageListDrinks = ['d1.png','d2.png','d3.png','d4.png','d5.png','d6.png','d7.png','d8.png','d9.png','d10.png','d11.png','d12.png','d13.png','d14.png','d15.png','d16.png','d17.png','d18.png','d19.png','d20.png','d21.png','d22.png','d23.png','d24.png','d25.png','d26.png','d27.png','d28.png','d29.png'];
-    const imageListNoDrink = ['w0.png','d0.png'];
-    const imageListLunchDrinkWeekdays = ['ld1.png','ld2.png','ld3.png','ld4.png','ld5.png','ld6.png','ld7.png', 'ldwine.png'];
-    const imageListDinnerTodays = ['hon3.png','hon4.png','hon5.png','hon6.png'];
-    const imageListLunchTodaysWeekdays = ['hon1.png','hon2.png','hon2a.png'];
-    const imageListDinnerGyokai = ['g1.png','g2.png','g3.png','g4.png','g5.png','g6.png'];
-    const imageListDinnerCharcuterie = ['c1.png','c2.png','c3.png'];
-    const imageListDinnerHotOven = ['h1.png','h2.png','h3.png','h4.png','h5.png','h6.png','h7.png','h8.png','h9.png','h10.png','h11.png'];
-    const imageListDinnerMainDish = ['m1.png','m2.png','m3.png','m4.png'];
-    const imageListDinnerPasta = ['p1.png','p2.png','p3.png','p4.png','p5.png','p6.png','p7.png','p8.png','p9.png','p10.png','p11.png','p12.png','p13.png','p14.png','p15.png','p16.png','p17.png'];
-    const imageListDinnerSalad = ['s1.png','s2.png','s3.png','s4.png'];
-    const imageListDinnerTapasCold = ['t1.png','t2.png','t3.png','t4.png','t5.png','t6.png','t7.png'];
-    const imageListLunchPastaWeekdays = ['rh1.png','rh2.png','rh3.png','rh4.png','rh5.png','rh6.png','rh7.png','rh8.png'];
-    const imageListLunchSetWeekdays = ['set1.png','set2.png','set3.png'];
-    const imageListLunchTanpinWeekdays = ['tan1.png','tan2.png','tan3.png','tan4.png'];
-    const imageListLunchTapasWeekdays = ['tapas1.png','tapas2.png','tapas3.png','tapas4.png'];
+    const imageListWinesWhite = ['w1.avif','w2.avif','w3.avif','w4.avif','w5.avif','w6.avif','w7.avif','w8.avif','w9.avif'];
+    const imageListWinesRed = ['w10.avif','w11.avif','w12.avif','w13.avif','w14.avif','w15.avif','w16.avif','w17.avif','w18.avif'];
+    const imageListDrinks = ['d1.avif','d2.avif','d3.avif','d4.avif','d5.avif','d6.avif','d7.avif','d8.avif','d9.avif','d10.avif','d11.avif','d12.avif','d13.avif','d14.avif','d15.avif','d16.avif','d17.avif','d18.avif','d19.avif','d20.avif','d21.avif','d22.avif','d23.avif','d24.avif','d25.avif','d26.avif','d27.avif','d28.avif','d29.avif'];
+    const imageListNoDrink = ['w0.avif','d0.avif'];
+    const imageListLunchDrinkWeekdays = ['ld1.avif','ld2.avif','ld3.avif','ld4.avif','ld5.avif','ld6.avif','ld7.avif', 'ldwine.avif'];
+    const imageListDinnerTodays = ['hon3.avif','hon4.avif','hon5.avif','hon6.avif'];
+    const imageListLunchTodaysWeekdays = ['hon1.avif','hon2.avif','hon2a.avif'];
+    const imageListDinnerGyokai = ['g1.avif','g2.avif','g3.avif','g4.avif','g5.avif','g6.avif'];
+    const imageListDinnerCharcuterie = ['c1.avif','c2.avif','c3.avif'];
+    const imageListDinnerHotOven = ['h1.avif','h2.avif','h3.avif','h4.avif','h5.avif','h6.avif','h7.avif','h8.avif','h9.avif','h10.avif','h11.avif'];
+    const imageListDinnerMainDish = ['m1.avif','m2.avif','m3.avif','m4.avif'];
+    const imageListDinnerPasta = ['p1.avif','p2.avif','p3.avif','p4.avif','p5.avif','p6.avif','p7.avif','p8.avif','p9.avif','p10.avif','p11.avif','p12.avif','p13.avif','p14.avif','p15.avif','p16.avif','p17.avif'];
+    const imageListDinnerSalad = ['s1.avif','s2.avif','s3.avif','s4.avif'];
+    const imageListDinnerTapasCold = ['t1.avif','t2.avif','t3.avif','t4.avif','t5.avif','t6.avif','t7.avif'];
+    const imageListLunchPastaWeekdays = ['rh1.avif','rh2.avif','rh3.avif','rh4.avif','rh5.avif','rh6.avif','rh7.avif','rh8.avif'];
+    const imageListLunchSetWeekdays = ['set1.avif','set2.avif','set3.avif'];
+    const imageListLunchTanpinWeekdays = ['tan1.avif','tan2.avif','tan3.avif','tan4.avif'];
+    const imageListLunchTapasWeekdays = ['tapas1.avif','tapas2.avif','tapas3.avif','tapas4.avif'];
 
     let currentImages = [];
     let currentIndex = 0;
@@ -323,7 +323,7 @@
       } else {
         tableIndex = Math.floor(Math.random() * tableList.length);
         tableImage = tableList[tableIndex];
-        if (tableImage === 'ta10.png' || tableImage === 'ta12.png') {
+        if (tableImage === 'ta10.avif' || tableImage === 'ta12.avif') {
           guestNumber = getRandomElement(guestNumbersLarge);
         } else {
           guestNumber = getRandomElement(guestNumbersStandard);
