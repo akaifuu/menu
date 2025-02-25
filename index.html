@@ -226,8 +226,8 @@
     const imageFolder = 'menu/';
     
     const flagList = ['p1.png','p2.png','p3.png','p4.png','p5.png','p6.png','p7.png','p8.png','p9.png','p10.png','p11.png','p12.png','p13.png','p14.png','p15.png','p16.png','p17.png'];
-    const tableList = ['ta1.png', 'ta2.png', 'ta3.png', 'ta4.png', 'ta5.png', 'ta6.png', 'ta10.png', 'ta12.png', 'ta20.png', 'ta21.png'];
-    const table0 = ['ttt.png'];
+    const tableList = ['ta1.png', 'ta2.png', 'ta3.png', 'ta4.png', 'ta5.png', 'ta6.png', 'ta10.png', 'ta12.png', 'ta20.png', 'ta21.png','ta22.png','ta23.png','ta24.png','ta25.png','ta26.png','ta27.png','ta28.png','ta29.png','ta30.png','ta31.png','ta32.png','ta33.png','ta34.png','ta35.png','ta36.png','ta37.png','ta38.png','ta39.png','ta40.png','ta41.png','ta42.png','ta43.png','ta44.png','ta45.png','ta46.png','ta47.png','ta48.png','ta49.png','ta50.png','ta51.png','ta52.png',];
+    const table0 = ['ttt1.png','ttt2.png','ttt3.png','ttt4.png'];
     const guestNumbersStandard = [1,2];
     const guestNumbersLarge = [3,4];
     const guestNumbersEnter = [1,1,1,1,1,1,2,2,2,2,2,3,4,4];
@@ -238,7 +238,7 @@
     const imageListNoDrink = ['w0.png','d0.png'];
     const imageListLunchDrinkWeekdays = ['ld1.png','ld2.png','ld3.png','ld4.png','ld5.png','ld6.png','ld7.png', 'ldwine.png'];
     const imageListDinnerTodays = ['hon3.png','hon4.png','hon5.png','hon6.png'];
-    const imageListLunchTodaysWeekdays = ['hon0.png','hon1.png','hon2.png','hon2a.png'];
+    const imageListLunchTodaysWeekdays = ['hon1.png','hon2.png','hon2a.png'];
     const imageListDinnerGyokai = ['g1.png','g2.png','g3.png','g4.png','g5.png','g6.png'];
     const imageListDinnerCharcuterie = ['c1.png','c2.png','c3.png'];
     const imageListDinnerHotOven = ['h1.png','h2.png','h3.png','h4.png','h5.png','h6.png','h7.png','h8.png','h9.png','h10.png','h11.png'];
@@ -247,7 +247,7 @@
     const imageListDinnerSalad = ['s1.png','s2.png','s3.png','s4.png'];
     const imageListDinnerTapasCold = ['t1.png','t2.png','t3.png','t4.png','t5.png','t6.png','t7.png'];
     const imageListLunchPastaWeekdays = ['rh1.png','rh2.png','rh3.png','rh4.png','rh5.png','rh6.png','rh7.png','rh8.png'];
-    const imageListLunchSetWeekdays = ['set0.png','set1.png','set2.png','set3.png'];
+    const imageListLunchSetWeekdays = ['set1.png','set2.png','set3.png'];
     const imageListLunchTanpinWeekdays = ['tan1.png','tan2.png','tan3.png','tan4.png'];
     const imageListLunchTapasWeekdays = ['tapas1.png','tapas2.png','tapas3.png','tapas4.png'];
 
@@ -316,9 +316,9 @@
       
       let tableIndex, guestNumber, tableImage;
       if (isFirstLoad) {
-        tableIndex = table0.indexOf('ttt.png');
+        tableIndex = table0.indexOf(getRandomElement(table0));
         guestNumber = getRandomElement(guestNumbersEnter);
-        tableImage = 'ttt.png';
+        tableImage = getRandomElement(table0);
         isFirstLoad = false;
       } else {
         tableIndex = Math.floor(Math.random() * tableList.length);
@@ -340,33 +340,26 @@
       tableContainer.appendChild(tableImg);
 
       const allImages = [];
-      let hasSet0 = false;
-      let hasHon0 = false;
+
 
       if (document.getElementById('lunchWeekdays').checked) {
-        const lunchSetImages = getRandomImagesFromArray(imageListLunchSetWeekdays, 1);
+        const lunchSetImages = getRandomImagesFromArray(imageListLunchSetWeekdays, 2);
         allImages.push(...lunchSetImages);
-        hasSet0 = lunchSetImages.includes('set0.png');
 
         const lunchTodayImages = getRandomImagesFromArray(imageListLunchTodaysWeekdays, 1);
         allImages.push(...lunchTodayImages);
-        hasHon0 = lunchTodayImages.includes('hon0.png');
-
-        if (!hasSet0) {
           allImages.push(...getRandomImagesFromArray(imageListLunchPastaWeekdays, 4));
           allImages.push(...getRandomImagesFromArray(imageListLunchTanpinWeekdays, 1));
           allImages.push(...getRandomImagesFromArray(imageListLunchTapasWeekdays, 1));
-        }
+        
       }
 
       if (document.getElementById('lunchWeekend').checked) {
         const lunchTodayImages = getRandomImagesFromArray(imageListLunchTodaysWeekdays, 2);
         allImages.push(...lunchTodayImages);
-        hasHon0 = lunchTodayImages.includes('hon0.png');
 
-        if (!hasHon0) {
-          allImages.push(...getRandomImagesFromArray(imageListDinnerTodays, 2));
-        }
+
+      
         
         allImages.push(...getRandomImagesFromArray(imageListDinnerGyokai, 2));
         allImages.push(...getRandomImagesFromArray(imageListDinnerCharcuterie, 2));
@@ -378,9 +371,7 @@
       }
 
       if (document.getElementById('dinner').checked) {
-        if (!hasHon0) {
-          allImages.push(...getRandomImagesFromArray(imageListDinnerTodays, 2));
-        }
+       
         allImages.push(...getRandomImagesFromArray(imageListDinnerGyokai, 1));
         allImages.push(...getRandomImagesFromArray(imageListDinnerCharcuterie, 1));
         allImages.push(...getRandomImagesFromArray(imageListDinnerHotOven, 1));
