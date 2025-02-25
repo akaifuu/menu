@@ -434,19 +434,16 @@ const swipeThreshold = 50; // Minimum distance (in pixels) for a swipe
 document.addEventListener('touchstart', (event) => {
   // Store starting positions
   touchStartX = event.changedTouches[0].screenX;
-  touchStartY = event.changedTouches[0].screenY;
 });
 
 document.addEventListener('touchend', (event) => {
   // Get ending positions
   const touchEndX = event.changedTouches[0].screenX;
-  const touchEndY = event.changedTouches[0].screenY;
-  handleGesture(touchEndX, touchEndY);
+  handleGesture(touchEndX);
 });
 
-function handleGesture(touchEndX, touchEndY) {
+function handleGesture(touchEndX) {
   const diffX = touchEndX - touchStartX;
-  const diffY = touchEndY - touchStartY;
 
   // Determine whether the swipe is more horizontal or vertical
   if (Math.abs(diffX) > Math.abs(diffY)) {
@@ -458,16 +455,7 @@ function handleGesture(touchEndX, touchEndY) {
       // Swipe left -> go to next image
       nextImage();
     }
-  } else {
-    // Vertical swipe
-    if (diffY > swipeThreshold) {
-      // Swipe down -> go to previous image
-      prevImage();
-    } else if (diffY < -swipeThreshold) {
-      // Swipe up -> go to next image
-      nextImage();
-    }
-  }
+  } 
 }
 
     document.addEventListener('keydown', (event) => {
