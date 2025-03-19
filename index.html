@@ -1,753 +1,768 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>メニュー</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppins', Arial, sans-serif;
-    }
-    body {
-      background-color: #f5f5f5;
-      color: #333;
-      line-height: 1.6;
-      min-height: 100vh;
-    }
-    .page {
-      display: none;
-      width: 100%;
-      height: 100vh;
-    }
-    .page.active {
-      display: flex;
-    }
-    .settings-panel {
-      width: 250px;
-      background: #fff;
-      padding: 15px;
-      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      overflow-y: auto;
-    }
-    #tableContainer {
-      text-align: center;
-      background: #ecf0f1;
-      padding: 10px;
-      border-radius: 5px;
-      margin-bottom: 15px;
-    }
-    #guestNumber {
-      font-size: 1rem;
-      margin-bottom: 5px;
-      color: #2c3e50;
-    }
-    .table-img {
-      width: 100px;
-      height: 150px;
-      object-fit: contain;
-      border-radius: 5px;
-    }
-    .checkbox-group {
-      margin-bottom: 15px;
-    }
-    .checkbox-group strong {
-      display: block;
-      font-size: 1rem;
-      color: #2c3e50;
-      margin-bottom: 5px;
-    }
-    .checkbox-group label {
-      display: flex;
-      align-items: center;
-      margin: 5px 0;
-      cursor: pointer;
-      font-size: 0.9rem;
-      transition: color 0.3s;
-    }
-    .checkbox-group label:hover {
-      color: #2980b9;
-    }
-    .checkbox-group input[type="checkbox"] {
-      margin-right: 8px;
-      accent-color: #2980b9;
-    }
-    .controls {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: auto;
-    }
-    button {
-      padding: 8px 15px;
-      background: #2980b9;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.3s;
-      font-size: 0.9rem;
-    }
-    .buttonfullspace {
-      flex: 1;
-    }
-
-    button:hover {
-      background: #3498db;
-    }
-    button:focus {
-      outline: 2px solid #2980b9;
-      outline-offset: 2px;
-    }
-    select {
-      padding: 6px;
-      border-radius: 5px;
-      border: 1px solid #ddd;
-      font-size: 0.9rem;
-    }
-    .image-panel {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-      background: #fff;
-      margin-left: 10px;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      position: relative;
-    }
-    #imageContainer {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      position: relative;
-    }
-    #imageContainer img {
-      max-width: 80vw;
-      max-height: 75vh;
-      object-fit: contain;
-      border-radius: 5px;
-    }
-    #flagEmoji {
-      font-size: 2rem;
-      position: absolute;
-      top: 0px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 1000;
-    }
-    .radio-group label input[type="radio"] {
-      margin-right: 5px;
-    }
-    #imageCounter {
-      font-size: 1rem;
-      color: #2c3e50;
-      margin-top: 10px;
-    }
-
-    #infoOverlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      z-index: 2000;
-      justify-content: center;
-      align-items: center;
-    }
-    #infoContent {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      max-width: 600px;
-      width: 90%;
-      max-height: 80vh;
-      overflow-y: auto;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      position: relative;
-    }
-    #infoContent h2 {
-      margin-bottom: 15px;
-      color: #2c3e50;
-    }
-    #infoContent p {
-      margin-bottom: 10px;
-      line-height: 1.5;
-    }
-    #closeOverlay {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      border: none;
-      background: #ff4444;
-      color: white;
-      padding: 5px 10px;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    #closeOverlay:hover {
-      background: #cc0000;
-    }
-
-    .step-by-step {
-      margin: 20px 0;
-      text-align: center;
-    }
-    .step-by-step h3 {
-      margin-bottom: 10px;
-      color: #2c3e50;
-    }
-    .step-image-container {
-      position: relative;
-      max-width: 100%;
-      height: 200px;
-      overflow: hidden;
-    }
-    .step-image {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      border-radius: 5px;
-    }
-    .step-nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(0, 0, 0, 0.5);
-      color: white;
-      border: none;
-      padding: 10px;
-      cursor: pointer;
-      border-radius: 50%;
-      font-size: 1.2rem;
-      transition: background 0.3s;
-    }
-    .step-nav:hover {
-      background: rgba(0, 0, 0, 0.8);
-    }
-    .step-prev {
-      left: 10px;
-    }
-    .step-next {
-      right: 10px;
-    }
-    .step-counter {
-      margin-top: 10px;
-      font-size: 0.9rem;
-      color: #2c3e50;
-    }
-    .stepper {
-      display: flex;
-      justify-content: center;
-      margin: 10px 0;
-    }
-    .step-dot {
-      width: 10px;
-      height: 10px;
-      background: #ddd;
-      border-radius: 50%;
-      margin: 0 5px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .step-dot:hover {
-      background: #a0c4ff;
-    }
-    .step-dot.active {
-      background: #2980b9;
-    }
-    .step-text p {
-      margin: 10px 0;
-      font-size: 1rem;
-    }
-    .step-text b {
-      font-weight: bold;
-    }
-    .step-text i {
-      font-style: italic;
-    }
-    .step-text ul {
-      margin-left: 20px;
-      list-style-type: disc;
-    }
-
-    .video-section {
-      margin: 20px 0;
-      text-align: center;
-    }
-    .video-section h3 {
-      margin-bottom: 10px;
-      color: #2c3e50;
-    }
-    .video-section a {
-      color: #2980b9;
-      text-decoration: none;
-      font-size: 1rem;
-    }
-    .video-section a:hover {
-      text-decoration: underline;
-    }
-    .video-section iframe {
-      width: 100%;
-      height: 315px;
-      border: none;
-      border-radius: 5px;
-    }
-
-    .additional-info {
-      margin: 20px 0;
-    }
-    .additional-info details {
-      margin-bottom: 10px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      padding: 10px;
-    }
-    .additional-info summary {
-      cursor: pointer;
-      font-weight: bold;
-      color: #2c3e50;
-      padding: 5px;
-      outline: none;
-    }
-    .additional-info summary:hover {
-      color: #2980b9;
-    }
-    .additional-info details[open] summary {
-      border-bottom: 1px solid #ddd;
-      margin-bottom: 10px;
-    }
-    .additional-info p {
-      padding: 5px;
-    }
-
-    #priceDatabase {
-      flex-direction: column;
-      padding: 20px;
-    }
-    #priceDatabase h2 {
-      margin-bottom: 15px;
-      color: #2c3e50;
-    }
-    #searchBar {
-      width: 100%;
-      max-width: 400px;
-      padding: 8px;
-      margin-bottom: 15px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      font-size: 1rem;
-    }
-    #filters {
-      margin-bottom: 15px;
-    }
-    #filters button {
-      margin-right: 10px;
-      margin-bottom: 10px;
-    }
-    #showLunchOnly {
-      margin-left: 10px;
-      padding: 5px 10px;
-    }
-    #itemList {
-      flex: 1;
-      overflow-y: auto;
-    }
-    .category {
-      margin-bottom: 20px;
-    }
-    .category h3 {
-      color: #2c3e50;
-      margin-bottom: 10px;
-      padding-left: 10px;
-      border-bottom: 1px solid #ddd;
-    }
-    .bordercontainer {
-      display: flex;  /* Arrange items in a row (or column) */
-      gap: 10px;      /* Space between items */
-      padding: 10px;  /* Space between border and items */
-      /* border: 2px solid black; */
-      background-color: #ECF7FF;
-      border-radius: 4px;
-    }
-    
-    .item {
-  display: flex;
-  align-items: center; /* Vertically center the items */
-  padding: 10px;
-  border-bottom: 1px solid #eee;
-}
-
-.item:hover {
-  background-color: #f9f9f9;
-}
-
-.item .name {
-  font-weight: bold;
-  flex: 1; /* This makes the name take up all available space on the left */
-}
-
-.item .price {
-  color: #2980b9;
-}
-
-.item .lunch-price {
-  color: #e74c3c;
-  margin-left: 10px; /* Keeps the spacing between the two prices */
-}
-
-/* Optional: If you want to ensure the prices stay together as a group */
-.item .price-container {
-  display: flex;
-  align-items: center;
-}
-
-/* New rule for alternating background colors */
-.category .item:nth-child(even) {
-  background-color: #F7F7F7; /* Slightly gray background for even-numbered items */
-}
-
-/* Optional: Ensure hover effect works consistently */
-.category .item:nth-child(even):hover {
-  background-color: #f9f9f9;
-}
-
-    .category-filter {
-      padding: 8px 15px;
-      background: #2980b9;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.3s;
-      font-size: 0.9rem;
-    }
-    .category-filter:hover {
-      background: #3498db;
-    }
-    .category-filter.selected {
-      background-color: #1a2a44;
-      color: white;
-    }
-    .category-filter.selected:hover {
-      background-color: #14263a;
-    }
-
-    #recipeDatabase {
-      flex-direction: column;
-      padding: 0;
-      height: 100%;
-      background: #f5f5f5;
-    }
-    #recipeDatabaseHeader {
-      position: sticky;
-      top: 0;
-      background: #fff;
-      padding: 15px 20px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    #recipeDatabase h2 {
-      color: #2c3e50;
-      font-size: 1.5rem;
-      margin: 0;
-    }
-    #recipeSearchBar {
-      padding: 8px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      font-size: 1rem;
-      width: 250px;
-      transition: border-color 0.3s;
-    }
-    #recipeSearchBar:focus {
-      border-color: #2980b9;
-      outline: none;
-    }
-    #recipeBackButton {
-      padding: 8px 15px;
-    }
-    #recipeContainer {
-      display: flex;
-      flex: 1;
-      overflow: hidden;
-      padding: 20px;
-    }
-    #recipeList {
-      flex: 1;
-      overflow-y: auto;
-      padding-right: 15px;
-    }
-    .recipe-card {
-      display: flex;
-      align-items: center;
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      margin-bottom: 15px;
-      padding: 15px;
-      cursor: pointer;
-      transition: background 0.3s;
-      position: relative;
-    }
-    .recipe-card:hover {
-      background: #f0f8ff;
-    }
-    .recipe-card.selected {
-      background: #e6f0fa;
-      border: 1px solid #2980b9;
-    }
-    .recipe-card .thumbnail {
-      width: 50px;
-      height: 50px;
-      object-fit: cover;
-      border-radius: 5px;
-      margin-right: 15px;
-    }
-    .recipe-card .placeholder {
-      width: 50px;
-      height: 50px;
-      background: #ddd;
-      border-radius: 5px;
-      margin-right: 15px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8rem;
-      color: #666;
-    }
-    .recipe-card .content {
-      flex: 1;
-    }
-    .recipe-card .name {
-      font-size: 1.2rem;
-      font-weight: 600;
-      color: #2c3e50;
-      margin-bottom: 5px;
-    }
-    .recipe-card .tags {
-      font-size: 0.9rem;
-      color: #666;
-    }
-    #recipeDetails {
-      flex: 2;
-      padding: 20px;
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      margin-left: 20px;
-      overflow-y: auto;
-      display: none;
-      position: relative;
-    }
-    #recipeDetails h2 {
-      font-size: 1.8rem;
-      color: #2c3e50;
-      margin-bottom: 15px;
-    }
-    .ingredient-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 15px;
-    }
-    .ingredient-table th,
-    .ingredient-table td {
-      padding: 10px;
-      text-align: left;
-      border: 1px solid #ddd;
-    }
-    .ingredient-table th {
-      background-color: #2980b9;
-      color: white;
-    }
-    .step-by-step {
-      margin: 20px 0;
-    }
-    .step-by-step h3 {
-      font-size: 1.4rem;
-      color: #2c3e50;
-      margin-bottom: 10px;
-    }
-    .stepper {
-      display: flex;
-      justify-content: center;
-      margin: 10px 0;
-    }
-    .step-dot {
-      width: 10px;
-      height: 10px;
-      background: #ddd;
-      border-radius: 50%;
-      margin: 0 5px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .step-dot:hover {
-      background: #a0c4ff;
-    }
-    .step-dot.active {
-      background: #2980b9;
-    }
-    .step-text p {
-      margin: 10px 0;
-      font-size: 1rem;
-    }
-    .step-text b {
-      font-weight: bold;
-    }
-    .step-text i {
-      font-style: italic;
-    }
-    .step-text ul {
-      margin-left: 20px;
-      list-style-type: disc;
-    }
-
-    .hey {
-      display: flex;
-    }
-
-    .heyitem {
-      padding: 0 0 10px 0;
-    }
-
-    #recipeDetailsModal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      z-index: 2000;
-      justify-content: center;
-      align-items: center;
-    }
-    #recipeDetailsModalContent {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      max-width: 90%;
-      max-height: 90vh;
-      overflow-y: auto;
-      position: relative;
-      animation: slideIn 0.3s ease-out;
-    }
-    @keyframes slideIn {
-      from { transform: translateY(-50px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-    #closeDetails {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      border: none;
-      background: #ff4444;
-      color: white;
-      padding: 5px 10px;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    #closeDetails:hover {
-      background: #cc0000;
-    }
-
-    @media (max-width: 768px) {
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>メニュー</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', Arial, sans-serif;
+      }
       body {
-        flex-direction: column;
+        background-color: #f5f5f5;
+        color: #333;
+        line-height: 1.6;
+        min-height: 100vh;
+      }
+      .page {
+        display: none;
+        width: 100%;
+        height: 100vh;
+      }
+      .page.active {
+        display: flex;
       }
       .settings-panel {
-        width: 100%;
-        height: auto;
-        padding: 10px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        width: 250px;
+        background: #fff;
+        padding: 15px;
+        box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow-y: auto;
       }
-      .image-panel {
-        margin-left: 0;
-        margin-top: 10px;
+      #tableContainer {
+        text-align: center;
+        background: #ecf0f1;
         padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 15px;
       }
-      #imageContainer img {
-        max-width: 90vw;
-        max-height: 65vh;
+      #guestNumber {
+        font-size: 1rem;
+        margin-bottom: 5px;
+        color: #2c3e50;
+      }
+      .table-img {
+        width: 100px;
+        height: 150px;
+        object-fit: contain;
+        border-radius: 5px;
+      }
+      .checkbox-group {
+        margin-bottom: 15px;
+      }
+      .checkbox-group strong {
+        display: block;
+        font-size: 1rem;
+        color: #2c3e50;
+        margin-bottom: 5px;
+      }
+      .checkbox-group label {
+        display: flex;
+        align-items: center;
+        margin: 5px 0;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: color 0.3s;
+      }
+      .checkbox-group label:hover {
+        color: #2980b9;
+      }
+      .checkbox-group input[type="checkbox"] {
+        margin-right: 8px;
+        accent-color: #2980b9;
       }
       .controls {
-        flex-direction: row;
-        justify-content: space-between;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: auto;
+      }
+      button {
+        padding: 8px 15px;
+        background: #2980b9;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s;
+        font-size: 0.9rem;
+      }
+      .buttonfullspace {
+        flex: 1;
+      }
+      button:hover {
+        background: #3498db;
+      }
+      button:focus {
+        outline: 2px solid #2980b9;
+        outline-offset: 2px;
+      }
+      select {
+        padding: 6px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        font-size: 0.9rem;
+      }
+      .image-panel {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        background: #fff;
+        margin-left: 10px;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        position: relative;
+      }
+      #imageContainer {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        position: relative;
+      }
+      #imageContainer img {
+        max-width: 80vw;
+        max-height: 75vh;
+        object-fit: contain;
+        border-radius: 5px;
       }
       #flagEmoji {
-        top: -25px;
+        font-size: 2rem;
+        position: absolute;
+        top: 0px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+      }
+      .radio-group label input[type="radio"] {
+        margin-right: 5px;
+      }
+      #imageCounter {
+        font-size: 1rem;
+        color: #2c3e50;
+        margin-top: 10px;
+      }
+      #infoOverlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 2000;
+        justify-content: center;
+        align-items: center;
       }
       #infoContent {
-        width: 85%;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 600px;
+        width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        position: relative;
+      }
+      #infoContent h2 {
+        margin-bottom: 15px;
+        color: #2c3e50;
+      }
+      #infoContent p {
+        margin-bottom: 10px;
+        line-height: 1.5;
+      }
+      #closeOverlay {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        border: none;
+        background: #ff4444;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+      #closeOverlay:hover {
+        background: #cc0000;
+      }
+      .step-by-step {
+        margin: 20px 0;
+        text-align: center;
+      }
+      .step-by-step h3 {
+        margin-bottom: 10px;
+        color: #2c3e50;
       }
       .step-image-container {
-        height: 150px;
+        position: relative;
+        max-width: 100%;
+        height: 200px;
+        overflow: hidden;
+      }
+      .step-image {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: 5px;
+      }
+      .step-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+        border-radius: 50%;
+        font-size: 1.2rem;
+        transition: background 0.3s;
+      }
+      .step-nav:hover {
+        background: rgba(0, 0, 0, 0.8);
+      }
+      .step-prev {
+        left: 10px;
+      }
+      .step-next {
+        right: 10px;
+      }
+      .step-counter {
+        margin-top: 10px;
+        font-size: 0.9rem;
+        color: #2c3e50;
+      }
+      .stepper {
+        display: flex;
+        justify-content: center;
+        margin: 10px 0;
+      }
+      .step-dot {
+        width: 10px;
+        height: 10px;
+        background: #ddd;
+        border-radius: 50%;
+        margin: 0 5px;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+      .step-dot:hover {
+        background: #a0c4ff;
+      }
+      .step-dot.active {
+        background: #2980b9;
+      }
+      .step-text p {
+        margin: 10px 0;
+        font-size: 1rem;
+      }
+      .step-text b {
+        font-weight: bold;
+      }
+      .step-text i {
+        font-style: italic;
+      }
+      .step-text ul {
+        margin-left: 20px;
+        list-style-type: disc;
+      }
+      .video-section {
+        margin: 20px 0;
+        text-align: center;
+      }
+      .video-section h3 {
+        margin-bottom: 10px;
+        color: #2c3e50;
+      }
+      .video-section a {
+        color: #2980b9;
+        text-decoration: none;
+        font-size: 1rem;
+      }
+      .video-section a:hover {
+        text-decoration: underline;
       }
       .video-section iframe {
-        height: 200px;
+        width: 100%;
+        height: 315px;
+        border: none;
+        border-radius: 5px;
       }
-      #priceDatabase, #recipeDatabase {
+      .additional-info {
+        margin: 20px 0;
+      }
+      .additional-info details {
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+      }
+      .additional-info summary {
+        cursor: pointer;
+        font-weight: bold;
+        color: #2c3e50;
+        padding: 5px;
+        outline: none;
+      }
+      .additional-info summary:hover {
+        color: #2980b9;
+      }
+      .additional-info details[open] summary {
+        border-bottom: 1px solid #ddd;
+        margin-bottom: 10px;
+      }
+      .additional-info p {
+        padding: 5px;
+      }
+      #priceDatabase {
+        flex-direction: column;
+        padding: 20px;
+      }
+      #priceDatabase h2 {
+        margin-bottom: 15px;
+        color: #2c3e50;
+      }
+      #searchBar {
+        width: 100%;
+        max-width: 400px;
+        padding: 8px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1rem;
+      }
+      #filters {
+        margin-bottom: 15px;
+      }
+      #filters button {
+        margin-right: 10px;
+        margin-bottom: 10px;
+      }
+      #showLunchOnly {
+        margin-left: 10px;
+        padding: 5px 10px;
+      }
+      #itemList {
+        flex: 1;
+        overflow-y: auto;
+      }
+      .category {
+        margin-bottom: 20px;
+      }
+      .category h3 {
+        color: #2c3e50;
+        margin-bottom: 10px;
+        padding-left: 10px;
+        border-bottom: 1px solid #ddd;
+      }
+      .bordercontainer {
+        display: flex;
+        gap: 10px;
+        padding: 10px;
+        background-color: #ECF7FF;
+        border-radius: 4px;
+      }
+      .bordercontainer.no-background {
+        background-color: transparent;
+      }
+      .item {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid #eee;
+      }
+      .item:hover {
+        background-color: #f9f9f9;
+      }
+      .item .name {
+        font-weight: bold;
+        flex: 1;
+      }
+      .item .price {
+        color: #2980b9;
+      }
+      .item .lunch-price {
+        color: #e74c3c;
+        margin-left: 10px;
+      }
+      .item .price-container {
+        display: flex;
+        align-items: center;
+      }
+      .category .item:nth-child(even) {
+        background-color: #F7F7F7;
+      }
+      .category .item:nth-child(even):hover {
+        background-color: #f9f9f9;
+      }
+      .category-filter {
+        padding: 8px 15px;
+        background: #2980b9;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s;
+        font-size: 0.9rem;
+      }
+      .category-filter:hover {
+        background: #3498db;
+      }
+      .category-filter.selected {
+        background-color: #1a2a44;
+        color: white;
+      }
+      .category-filter.selected:hover {
+        background-color: #14263a;
+      }
+      #recipeDatabase {
+        flex-direction: column;
         padding: 0;
+        height: 100%;
+        background: #f5f5f5;
       }
       #recipeDatabaseHeader {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 10px;
+        position: sticky;
+        top: 0;
+        background: #fff;
+        padding: 15px 20px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        z-index: 100;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      #recipeDatabase h2 {
+        color: #2c3e50;
+        font-size: 1.5rem;
+        margin: 0;
       }
       #recipeSearchBar {
-        width: 100%;
-        margin-top: 10px;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1rem;
+        width: 250px;
+        transition: border-color 0.3s;
+      }
+      #recipeSearchBar:focus {
+        border-color: #2980b9;
+        outline: none;
       }
       #recipeBackButton {
-        margin-top: 10px;
+        padding: 8px 15px;
       }
       #recipeContainer {
-        flex-direction: column;
-        padding: 10px;
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+        padding: 20px;
       }
       #recipeList {
-        padding-right: 0;
-      }
-      #recipeDetails {
-        display: none;
+        flex: 1;
+        overflow-y: auto;
+        padding-right: 15px;
       }
       .recipe-card {
-        padding: 10px;
+        display: flex;
+        align-items: center;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        margin-bottom: 15px;
+        padding: 15px;
+        cursor: pointer;
+        transition: background 0.3s;
+        position: relative;
+      }
+      .recipe-card:hover {
+        background: #f0f8ff;
+      }
+      .recipe-card.selected {
+        background: #e6f0fa;
+        border: 1px solid #2980b9;
       }
       .recipe-card .thumbnail {
-        width: 40px;
-        height: 40px;
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 5px;
+        margin-right: 15px;
       }
       .recipe-card .placeholder {
-        width: 40px;
-        height: 40px;
-        font-size: 0.7rem;
+        width: 50px;
+        height: 50px;
+        background: #ddd;
+        border-radius: 5px;
+        margin-right: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+        color: #666;
+      }
+      .recipe-card .content {
+        flex: 1;
       }
       .recipe-card .name {
-        font-size: 1.1rem;
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 5px;
       }
-    }
-  </style>
-</head>
+      .recipe-card .tags {
+        font-size: 0.9rem;
+        color: #666;
+      }
+      #recipeDetails {
+        flex: 2;
+        padding: 20px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        margin-left: 20px;
+        overflow-y: auto;
+        display: none;
+        position: relative;
+      }
+      #recipeDetails h2 {
+        font-size: 1.8rem;
+        color: #2c3e50;
+        margin-bottom: 15px;
+      }
+      .ingredient-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 15px;
+      }
+      .ingredient-table th,
+      .ingredient-table td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ddd;
+      }
+      .ingredient-table th {
+        background-color: #2980b9;
+        color: white;
+      }
+      .step-by-step {
+        margin: 20px 0;
+      }
+      .step-by-step h3 {
+        font-size: 1.4rem;
+        color: #2c3e50;
+        margin-bottom: 10px;
+      }
+      .stepper {
+        display: flex;
+        justify-content: center;
+        margin: 10px 0;
+      }
+      .step-dot {
+        width: 10px;
+        height: 10px;
+        background: #ddd;
+        border-radius: 50%;
+        margin: 0 5px;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+      .step-dot:hover {
+        background: #a0c4ff;
+      }
+      .step-dot.active {
+        background: #2980b9;
+      }
+      .step-text p {
+        margin: 10px 0;
+        font-size: 1rem;
+      }
+      .step-text b {
+        font-weight: bold;
+      }
+      .step-text i {
+        font-style: italic;
+      }
+      .step-text ul {
+        margin-left: 20px;
+        list-style-type: disc;
+      }
+      .hey {
+        display: flex;
+      }
+      .heyitem {
+        padding: 0 0 10px 0;
+      }
+      #recipeDetailsModal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 2000;
+        justify-content: center;
+        align-items: center;
+      }
+      #recipeDetailsModalContent {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        position: relative;
+        animation: slideIn 0.3s ease-out;
+      }
+      @keyframes slideIn {
+        from { transform: translateY(-50px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+      }
+      #closeDetails {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        border: none;
+        background: #ff4444;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+      #closeDetails:hover {
+        background: #cc0000;
+      }
+      @media (max-width: 768px) {
+        body {
+          flex-direction: column;
+        }
+        .page.active {
+          flex-direction: column;
+          height: auto;
+          min-height: 100vh;
+        }
+        .settings-panel {
+          width: 100%;
+          height: auto;
+          padding: 10px;
+          box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+          flex-shrink: 0;
+        }
+        .image-panel {
+          width: 100%;
+          margin-left: 0;
+          margin-top: 10px;
+          padding: 10px;
+          flex: 0 1 auto;
+          min-height: 0;
+        }
+        #imageContainer {
+          width: 100%;
+          height: auto;
+          max-height: 65vh;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+        }
+        #imageContainer img {
+          max-width: 90vw;
+          max-height: 60vh;
+          width: auto;
+          height: auto;
+          object-fit: contain;
+          border-radius: 5px;
+        }
+        #imageCounter {
+          margin-top: 5px;
+        }
+        #flagEmoji {
+          position: static;
+          transform: none;
+          margin-bottom: 5px;
+        }
+        .controls {
+          flex-direction: column; /* Stack containers vertically on mobile */
+          gap: 10px; /* Space between containers */
+        }
+        .bordercontainer {
+          width: 100%;
+          display: flex;
+          flex-direction: row;
+          gap: 5px;
+          padding: 5px;
+        }
+        .buttonfullspace {
+          flex: 1;
+          min-width: 0;
+        }
+        #infoContent {
+          width: 85%;
+        }
+        .step-image-container {
+          height: 150px;
+        }
+        .video-section iframe {
+          height: 200px;
+        }
+        #priceDatabase, #recipeDatabase {
+          padding: 0;
+        }
+        #recipeDatabaseHeader {
+          flex-direction: column;
+          align-items: flex-start;
+          padding: 10px;
+        }
+        #recipeSearchBar {
+          width: 100%;
+          margin-top: 10px;
+        }
+        #recipeBackButton {
+          margin-top: 10px;
+        }
+        #recipeContainer {
+          flex-direction: column;
+          padding: 10px;
+        }
+        #recipeList {
+          padding-right: 0;
+        }
+        .recipe-card {
+          padding: 10px;
+        }
+        .recipe-card .thumbnail {
+          width: 40px;
+          height: 40px;
+        }
+        .recipe-card .placeholder {
+          width: 40px;
+          height: 40px;
+          font-size: 0.7rem;
+        }
+        .recipe-card .name {
+          font-size: 1.1rem;
+        }
+      }
+    </style>
+  </head>
 <body>
   <div class="page active" id="menuPage">
     <div class="settings-panel">
@@ -785,10 +800,12 @@
       <div class="controls">
         <div class="bordercontainer">
           <button class="buttonfullspace" onclick="generateImages()">スタート</button>
-          <button class="buttonfullspace"  id="showInfoButton" onclick="showInfo()">表示</button>
+          <button class="buttonfullspace" id="showInfoButton" onclick="showInfo()">表示</button>
         </div>
-        <button onclick="navigateToPriceDatabase()">値段</button>
-        <button onclick="navigateToRecipeDatabase()">レシピ</button>
+        <div class="bordercontainer no-background">
+          <button class="buttonfullspace" onclick="navigateToPriceDatabase()">値段</button>
+          <button class="buttonfullspace" onclick="navigateToRecipeDatabase()">レシピ</button>
+        </div>
         <div>
           <label for="imageLimit">限定: </label>
           <select id="imageLimit">

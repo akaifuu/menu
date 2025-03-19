@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>メニュー</title>
+  <style>
+    /* (styles remain unchanged) */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+    body {
+      background-color: #f4f4f9;
+      color: #333;
+      line-height: 1.6;
+      display: flex;
+      min-height: 100vh;
+    }
+    .settings-panel {
+      width: 250px;
+      background: #fff;
+      padding: 15px;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    #tableContainer {
+      text-align: center;
+      background: #ecf0f1;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 15px;
+    }
+    #guestNumber {
+      font-size: 1rem;
+      margin-bottom: 5px;
+      color: #2c3e50;
+    }
+    .table-img {
+      width: 100px;
+      height: 150px;
+      object-fit: contain;
+      border-radius: 5px;
+    }
+    .checkbox-group {
+      margin-bottom: 15px;
+    }
+    .checkbox-group strong {
+      display: block;
+      font-size: 1rem;
+      color: #2c3e50;
+      margin-bottom: 5px;
+    }
+    .checkbox-group label {
+      display: flex;
+      align-items: center;
+      margin: 5px 0;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: color 0.3s;
+    }
+    .checkbox-group label:hover {
+      color: #2980b9;
+    }
+    .checkbox-group input[type="checkbox"] {
+      margin-right: 8px;
+      accent-color: #2980b9;
+    }
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: auto;
+    }
+    button {
+      padding: 8px 15px;
+      background: #2980b9;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+      font-size: 0.9rem;
+    }
+    button:hover {
+      background: #3498db;
+    }
+    select {
+      padding: 6px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      font-size: 0.9rem;
+    }
+    .image-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      background: #fff;
+      margin-left: 10px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      position: relative;
+    }
+    #imageContainer {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      position: relative;
+    }
+    #imageContainer img {
+      max-width: 80vw;
+      max-height: 75vh;
+      object-fit: contain;
+      border-radius: 5px;
+    }
+    #flagEmoji {
+      font-size: 2rem;
+      position: absolute;
+      top: 0px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+    }
+    .radio-group label input[type="radio"] {
+  margin-right: 5px;
+    }
+
+    #imageCounter {
+      font-size: 1rem;
+      color: #2c3e50;
+      margin-top: 10px;
+    }
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+      .settings-panel {
+        width: 100%;
+        height: auto;
+        padding: 10px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      }
+      .image-panel {
+        margin-left: 0;
+        margin-top: 10px;
+        padding: 10px;
+      }
+      #imageContainer img {
+        max-width: 90vw;
+        max-height: 65vh;
+      }
+      .controls {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+      #flagEmoji {
+        top: -25px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="settings-panel">
+    <div id="tableContainer">
+      <div id="guestNumber"></div>
+    </div>
+    <div class="checkbox-group">
+        <strong>食べ物</strong>
+        <div class="radio-group">
+          <label>
+            <input type="radio" id="lunchWeekdays" name="food" value="lunchWeekdays" style="margin-right: 8px ;" onchange="document.getElementById('pasta').disabled = true; document.getElementById('pasta').checked = false;">
+            ランチ（平）
+          </label>
+          <label>
+            <input type="radio" id="lunchWeekend" name="food" value="lunchWeekend" style="margin-right: 8px;" onchange="document.getElementById('pasta').disabled = false;">
+            ランチ（祝、末）
+          </label>
+          <label>
+            <input type="radio" id="dinner" name="food" value="dinner" style="margin-right: 8px;" onchange="document.getElementById('pasta').disabled = false;">
+            ディナー
+          </label>
+        </div>
+          <label>
+            <input type="checkbox" id="pasta" style="margin-right: 8px;">
+            パスタ
+          </label>
+      </div>
+      
+      
+    <div class="checkbox-group">
+      <strong>飲み物</strong>
+      <label><input type="checkbox" id="lunchDrinkWeekdays"> ランチドリンク（平）</label>
+      <label><input type="checkbox" id="wineWhite"> ワイン白</label>
+      <label><input type="checkbox" id="wineRed"> ワイン赤</label>
+      <label><input type="checkbox" id="drinks"> ドリンク</label>
+    </div>
+    <div class="controls">
+      <button onclick="generateImages()">スタート</button>
+      <div>
+        <label for="imageLimit">限定: </label>
+        <select id="imageLimit">
+          <option value="3">3</option>
+          <option value="5">5</option>
+          <option value="20" selected>20</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="image-panel">
+    <div id="imageContainer">
+      <div id="flagEmoji"></div>
+    </div>
+  </div>
+
+  <script>
+    const imageFolder = 'menu/';
+    
+    const flagList = ['p1.avif','p2.avif','p3.avif','p4.avif','p5.avif','p6.avif','p7.avif','p8.avif','p9.avif','p10.avif','p11.avif','p12.avif','p13.avif','p14.avif','p15.avif','p16.avif','p17.avif'];
+    const tableList = ['ta1.avif', 'ta2.avif', 'ta3.avif', 'ta4.avif', 'ta5.avif', 'ta6.avif', 'ta10.avif', 'ta12.avif', 'ta20.avif', 'ta21.avif','ta22.avif','ta23.avif','ta24.avif','ta25.avif','ta26.avif','ta27.avif','ta28.avif','ta29.avif','ta30.avif','ta31.avif','ta32.avif','ta33.avif','ta34.avif','ta35.avif','ta36.avif','ta37.avif','ta38.avif','ta39.avif','ta40.avif','ta41.avif','ta42.avif','ta43.avif','ta44.avif','ta45.avif','ta46.avif','ta47.avif','ta48.avif','ta49.avif','ta50.avif','ta51.avif','ta52.avif',];
+    const table0 = ['ttt1.avif','ttt2.avif','ttt3.avif','ttt4.avif'];
+    const guestNumbersStandard = [1,2];
+    const guestNumbersLarge = [3,4];
+    const guestNumbersEnter = [1,1,1,1,1,1,2,2,2,2,2,3,4,4];
+
+    const imageListWinesWhite = ['w1.avif','w2.avif','w3.avif','w4.avif','w5.avif','w6.avif','w7.avif','w8.avif','w9.avif'];
+    const imageListWinesRed = ['w10.avif','w11.avif','w12.avif','w13.avif','w14.avif','w15.avif','w16.avif','w17.avif','w18.avif'];
+    const imageListDrinks = ['d1.avif','d2.avif','d3.avif','d4.avif','d5.avif','d6.avif','d7.avif','d8.avif','d9.avif','d10.avif','d11.avif','d12.avif','d13.avif','d14.avif','d15.avif','d16.avif','d17.avif','d18.avif','d19.avif','d20.avif','d21.avif','d22.avif','d23.avif','d24.avif','d25.avif','d26.avif','d27.avif','d28.avif','d29.avif'];
+    const imageListNoDrink = ['w0.avif','d0.avif'];
+    const imageListLunchDrinkWeekdays = ['ld1.avif','ld2.avif','ld3.avif','ld4.avif','ld5.avif','ld6.avif','ld7.avif', 'ldwine.avif'];
+    const imageListDinnerTodays = ['hon3.avif','hon4.avif','hon5.avif','hon6.avif'];
+    const imageListLunchTodaysWeekdays = ['hon1.avif','hon2.avif','hon2a.avif'];
+    const imageListDinnerGyokai = ['g1.avif','g2.avif','g3.avif','g4.avif','g5.avif','g6.avif'];
+    const imageListDinnerCharcuterie = ['c1.avif','c2.avif','c3.avif'];
+    const imageListDinnerHotOven = ['h1.avif','h2.avif','h3.avif','h4.avif','h5.avif','h6.avif','h7.avif','h8.avif','h9.avif','h10.avif','h11.avif'];
+    const imageListDinnerMainDish = ['m1.avif','m2.avif','m3.avif','m4.avif'];
+    const imageListDinnerPasta = ['p1.avif','p2.avif','p3.avif','p4.avif','p5.avif','p6.avif','p7.avif','p8.avif','p9.avif','p10.avif','p11.avif','p12.avif','p13.avif','p14.avif','p15.avif','p16.avif','p17.avif'];
+    const imageListDinnerSalad = ['s1.avif','s2.avif','s3.avif','s4.avif'];
+    const imageListDinnerTapasCold = ['t1.avif','t2.avif','t3.avif','t4.avif','t5.avif','t6.avif','t7.avif'];
+    const imageListLunchPastaWeekdays = ['rh1.avif','rh2.avif','rh3.avif','rh4.avif','rh5.avif','rh6.avif','rh7.avif','rh8.avif'];
+    const imageListLunchSetWeekdays = ['set1.avif','set2.avif','set3.avif'];
+    const imageListLunchTanpinWeekdays = ['tan1.avif','tan2.avif','tan3.avif','tan4.avif'];
+    const imageListLunchTapasWeekdays = ['tapas1.avif','tapas2.avif','tapas3.avif','tapas4.avif'];
+
+    let currentImages = [];
+    let currentIndex = 0;
+    let isFirstLoad = true;
+
+    function getRandomElement(array) {
+      return array[Math.floor(Math.random() * array.length)];
+    }
+
+    // Fisher-Yates shuffle to randomize image order
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function getRandomImagesFromArray(array, maxCount) {
+      const count = Math.floor(Math.random() * (maxCount + 1));
+      let shuffled = [...array].sort(() => 0.5 - Math.random());
+      return shuffled.slice(0, count);
+    }
+
+    function displayImage() {
+      const imageContainer = document.getElementById('imageContainer');
+      const flagEmoji = document.getElementById('flagEmoji');
+      imageContainer.innerHTML = '';
+
+      if (currentImages.length === 0) {
+        imageContainer.innerHTML = '<p style="color: #7f8c8d;">画像が選択されていません。</p>';
+        return;
+      }
+
+      // Add flag emoji container back
+      const flagDiv = document.createElement('div');
+      flagDiv.id = 'flagEmoji';
+      flagDiv.innerHTML = flagList.includes(currentImages[currentIndex]) ? '‼️' : '';
+      imageContainer.appendChild(flagDiv);
+
+      const imgElement = document.createElement('img');
+      imgElement.src = imageFolder + currentImages[currentIndex];
+      imageContainer.appendChild(imgElement);
+
+      const counter = document.createElement('div');
+      counter.id = 'imageCounter';
+      counter.innerHTML = `${currentIndex + 1}/${currentImages.length}`;
+      imageContainer.appendChild(counter);
+    }
+
+    function prevImage() {
+      currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
+      displayImage();
+    }
+
+    function nextImage() {
+      currentIndex = (currentIndex + 1) % currentImages.length;
+      displayImage();
+    }
+
+    function generateImages() {
+      const guestNumberDiv = document.getElementById('guestNumber');
+      const tableContainer = document.getElementById('tableContainer');
+      const limit = parseInt(document.getElementById('imageLimit').value);
+      
+      let tableIndex, guestNumber, tableImage;
+      if (isFirstLoad) {
+        tableIndex = table0.indexOf(getRandomElement(table0));
+        guestNumber = getRandomElement(guestNumbersEnter);
+        tableImage = getRandomElement(table0);
+        isFirstLoad = false;
+      } else {
+        tableIndex = Math.floor(Math.random() * tableList.length);
+        tableImage = tableList[tableIndex];
+        if (tableImage === 'ta10.avif' || tableImage === 'ta12.avif') {
+          guestNumber = getRandomElement(guestNumbersLarge);
+        } else {
+          guestNumber = getRandomElement(guestNumbersStandard);
+        }
+      }
+      
+      guestNumberDiv.innerHTML = `${guestNumber}名`;
+      while (tableContainer.children.length > 1) {
+        tableContainer.removeChild(tableContainer.lastChild);
+      }
+      const tableImg = document.createElement('img');
+      tableImg.src = imageFolder + tableImage;
+      tableImg.className = 'table-img';
+      tableContainer.appendChild(tableImg);
+
+      const allImages = [];
+
+
+      if (document.getElementById('lunchWeekdays').checked) {
+        const lunchSetImages = getRandomImagesFromArray(imageListLunchSetWeekdays, 2);
+        allImages.push(...lunchSetImages);
+
+        const lunchTodayImages = getRandomImagesFromArray(imageListLunchTodaysWeekdays, 1);
+        allImages.push(...lunchTodayImages);
+          allImages.push(...getRandomImagesFromArray(imageListLunchPastaWeekdays, 4));
+          allImages.push(...getRandomImagesFromArray(imageListLunchTanpinWeekdays, 1));
+          allImages.push(...getRandomImagesFromArray(imageListLunchTapasWeekdays, 1));
+        
+      }
+
+      if (document.getElementById('lunchWeekend').checked) {
+        const lunchTodayImages = getRandomImagesFromArray(imageListLunchTodaysWeekdays, 2);
+        allImages.push(...lunchTodayImages);
+
+
+      
+        
+        allImages.push(...getRandomImagesFromArray(imageListDinnerGyokai, 2));
+        allImages.push(...getRandomImagesFromArray(imageListDinnerCharcuterie, 2));
+        allImages.push(...getRandomImagesFromArray(imageListDinnerHotOven, 2));
+        allImages.push(...getRandomImagesFromArray(imageListDinnerMainDish, 2));
+        // allImages.push(...getRandomImagesFromArray(imageListDinnerPasta, 2));
+        allImages.push(...getRandomImagesFromArray(imageListDinnerSalad, 2));
+        allImages.push(...getRandomImagesFromArray(imageListDinnerTapasCold, 2));
+      }
+
+      if (document.getElementById('dinner').checked) {
+       
+        allImages.push(...getRandomImagesFromArray(imageListDinnerGyokai, 1));
+        allImages.push(...getRandomImagesFromArray(imageListDinnerCharcuterie, 1));
+        allImages.push(...getRandomImagesFromArray(imageListDinnerHotOven, 1));
+        allImages.push(...getRandomImagesFromArray(imageListDinnerMainDish, 1));
+        allImages.push(...getRandomImagesFromArray(imageListDinnerSalad, 1));
+        allImages.push(...getRandomImagesFromArray(imageListDinnerTapasCold, 1));
+      }
+
+      if (document.getElementById('pasta').checked) {
+    let pastaImages = getRandomImagesFromArray(imageListDinnerPasta, 4);
+    if (pastaImages.length === 0) {
+        pastaImages = [getRandomElement(imageListDinnerPasta)]; // Guarantee at least one
+    }
+    allImages.push(...pastaImages);
+}
+
+      if (document.getElementById('wineWhite').checked) {
+        allImages.push(...getRandomImagesFromArray(imageListWinesWhite, 2));
+      }
+
+      if (document.getElementById('wineRed').checked) {
+        allImages.push(...getRandomImagesFromArray(imageListWinesRed, 2));
+      }
+
+      if (document.getElementById('drinks').checked) {
+        if (Math.random() < 0.05) {
+          allImages.push(...imageListNoDrink);
+        } else {
+          allImages.push(...getRandomImagesFromArray(imageListDrinks, 2));
+        }
+      }
+
+      if (document.getElementById('lunchDrinkWeekdays').checked) {
+        if (Math.random() < 0.05) {
+          allImages.push(...imageListNoDrink);
+        } else {
+          allImages.push(...getRandomImagesFromArray(imageListLunchDrinkWeekdays, 2));
+        }
+      }
+
+      // Select the first 'limit' images and shuffle them for a random order
+      currentImages = allImages.slice(0, limit);
+      shuffleArray(currentImages);
+      currentIndex = 0;
+      displayImage();
+    }
+let touchStartX = 0;
+let touchStartY = 0;
+const swipeThreshold = 50; // Minimum distance (in pixels) for a swipe
+
+document.addEventListener('touchstart', (event) => {
+  // Store starting positions
+  touchStartX = event.changedTouches[0].screenX;
+  touchStartY = event.changedTouches[0].screenY;
+});
+
+document.addEventListener('touchend', (event) => {
+  // Get ending positions
+  const touchEndX = event.changedTouches[0].screenX;
+  const touchEndY = event.changedTouches[0].screenY;
+  handleGesture(touchEndX, touchEndY);
+});
+
+function handleGesture(touchEndX, touchEndY) {
+  const diffX = touchEndX - touchStartX;
+  const diffY = touchEndY - touchStartY;
+
+  // Determine whether the swipe is more horizontal or vertical
+  if (Math.abs(diffX) > Math.abs(diffY)) {
+    // Horizontal swipe
+    if (diffX > swipeThreshold) {
+      // Swipe right -> go to previous image
+      prevImage();
+    } else if (diffX < -swipeThreshold) {
+      // Swipe left -> go to next image
+      nextImage();
+    }
+  } else {
+    // Vertical swipe
+    if (diffY > swipeThreshold) {
+      // Swipe down -> go to previous image
+      // prevImage();
+    } else if (diffY < -swipeThreshold) {
+      // Swipe up -> go to next image
+      // nextImage();
+    }
+  }
+}
+
+    document.addEventListener('keydown', (event) => {
+      if (currentImages.length <= 1) return;
+      if (event.key === 'ArrowLeft') {
+        prevImage();
+      } else if (event.key === 'ArrowRight') {
+        nextImage();
+      } else if (event.key === 'ArrowUp') {
+        nextImage();
+      }else if (event.key === 'ArrowDown') {
+        prevImage();
+      }
+    });
+
+    window.onload = generateImages;
+  </script>
+</body>
+</html>
