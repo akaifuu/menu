@@ -931,7 +931,7 @@
       <button class="close-price" onclick="navigateToMenu()">閉じる</button>
     </div>
       <div class="searchba">
-        <input type="text" id="searchBar" placeholder="メニューを検索..." oninput="filterItems()">
+        <input type="text" id="searchBar" placeholder="メニューを検索..." oninput="filterItems()" autocorrect="off" autocomplete="off" spellcheck="false">
       </div>
       <div id="filters">
         <button class="category-filter" data-category="">全部</button>
@@ -951,7 +951,7 @@
     <div id="recipeDatabase">
       <div id="recipeDatabaseHeader">
         <h2>レシピ</h2>
-        <input type="text" id="recipeSearchBar" placeholder="レシピを検索..." oninput="filterRecipes()">
+        <input type="text" id="recipeSearchBar" placeholder="レシピを検索..." oninput="filterRecipes()"　autocorrect="off" autocomplete="off" spellcheck="false">
         <button id="recipeBackButton" onclick="navigateToMenu()">メニューに戻る</button>
       </div>
       <div id="recipeContainer">
