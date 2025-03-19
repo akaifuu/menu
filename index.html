@@ -329,12 +329,21 @@
       }
       #priceDatabase {
         flex-direction: column;
-        padding: 20px;
+        padding: 0 20px 20px; /* Changed from 20px to 0 20px 20px */
       }
+      
       #priceDatabase h2 {
         margin-bottom: 15px;
         color: #2c3e50;
       }
+      @media (max-width: 768px) {
+  #priceDatabase {
+    padding: 0 10px 10px; /* Adjusted from 0 to match reduced spacing */
+  }
+  .price-header {
+    padding: 10px; /* Match reduced padding */
+  }
+}
       #searchBar {
         width: 100%;
         max-width: 400px;
@@ -346,6 +355,7 @@
       }
       #filters {
         margin-bottom: 15px;
+        padding: 10px;
       }
       #filters button {
         margin-right: 10px;
@@ -358,6 +368,9 @@
       #itemList {
         flex: 1;
         overflow-y: auto;
+      }
+      .searchba{
+        padding: 10px;
       }
       .category {
         margin-bottom: 20px;
@@ -409,14 +422,14 @@
         background-color: #f9f9f9;
       }
       .category-filter {
-        padding: 8px 15px;
+        padding: 4px 8px;
         background: #2980b9;
         color: white;
         border: none;
         border-radius: 5px;
         cursor: pointer;
         transition: background 0.3s;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
       }
       .category-filter:hover {
         background: #3498db;
@@ -604,10 +617,35 @@
       }
       .hey {
         display: flex;
+
       }
       .heyitem {
-        padding: 0 0 10px 0;
+        padding: 10px;
+        display: grid;
+        justify-content: space-between;
+        grid-auto-flow: column; /* Forces a horizontal layout */
       }
+
+      .price-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Puts space between h3 and button */
+  padding: 10px 20px; /* Matches #priceDatabase padding */
+}
+.close-price {
+  padding: 5px 10px; /* Smaller than regular buttons */
+  background: #ff4444; /* Red, like close buttons */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+  font-size: 0.8rem; /* Slightly smaller text */
+}
+
+.close-price:hover {
+  background: #cc0000; /* Darker red on hover */
+}
       #recipeDetailsModal {
         display: none;
         position: fixed;
@@ -824,23 +862,22 @@
   </div>
 
   <div class="page" id="priceDatabasePage">
-    <div id="priceDatabase">
-      <div class="hey">
-        <div class="heyitem">
-          <h2>値段</h2>
-          <button onclick="navigateToMenu()">メニューに戻る</button>
-        </div>
+  <div id="priceDatabase">
+    <div class="price-header">
+      <h3>値段</h3>
+      <button class="close-price" onclick="navigateToMenu()">閉じる</button>
+    </div>
+      <div class="searchba">
+        <input type="text" id="searchBar" placeholder="メニューを検索..." oninput="filterItems()">
       </div>
-      
-      <input type="text" id="searchBar" placeholder="メニューを検索..." oninput="filterItems()">
       <div id="filters">
-        <button class="category-filter" data-category="">全て表示</button>
+        <button class="category-filter" data-category="">全</button>
         <button class="category-filter" data-category="前菜">前菜</button>
         <button class="category-filter" data-category="Pasta">パスタ</button>
         <button class="category-filter" data-category="Drink">ドリンク</button>
         <button class="category-filter" data-category="Wine">ワイン</button>
         <label>
-          <input type="checkbox" id="showLunchOnly" onchange="filterItems()"> ランチ価格のみ
+          <input type="checkbox" id="showLunchOnly" onchange="filterItems()"> ランチのみ
         </label>
       </div>
       <div id="itemList"></div>
