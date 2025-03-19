@@ -2,7 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content">
     <title>メニュー</title>
     <style>
       * {
@@ -627,25 +628,25 @@
       }
 
       .price-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* Puts space between h3 and button */
-  padding: 10px 20px; /* Matches #priceDatabase padding */
-}
-.close-price {
-  padding: 5px 10px; /* Smaller than regular buttons */
-  background: #ff4444; /* Red, like close buttons */
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background 0.3s;
-  font-size: 0.8rem; /* Slightly smaller text */
-}
+        display: flex;
+        align-items: center;
+        justify-content: space-between; /* Puts space between h3 and button */
+        padding: 10px 20px; /* Matches #priceDatabase padding */
+      }
+      .close-price {
+        padding: 5px 10px; /* Smaller than regular buttons */
+        background: #ff4444; /* Red, like close buttons */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s;
+        font-size: 0.8rem; /* Slightly smaller text */
+      }
 
-.close-price:hover {
-  background: #cc0000; /* Darker red on hover */
-}
+      .close-price:hover {
+        background: #cc0000; /* Darker red on hover */
+      }
       #recipeDetailsModal {
         display: none;
         position: fixed;
@@ -798,6 +799,68 @@
         .recipe-card .name {
           font-size: 1.1rem;
         }
+
+        /* Ensure #priceDatabase fills the viewport but allows flexibility */
+#priceDatabase {
+  flex-direction: column;
+  padding: 0 20px 20px;
+  display: flex;
+  height: 100vh; /* Full height of the viewport */
+}
+
+/* Keep the header compact */
+.price-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+
+  position: sticky; /* Sticks to top */
+  top: 0;
+  z-index: 10;
+}
+
+/* Style the search bar to stay above the list */
+#searchBar {
+  width: 100%;
+  max-width: 400px;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  position: sticky; /* Sticks below header */
+  top: 50px; /* Adjust based on header height */
+  z-index: 10;
+}
+
+/* Filters stay compact */
+#filters {
+  margin-bottom: 10px;
+}
+
+/* Make itemList take remaining space and scroll */
+#itemList {
+  flex: 1; /* Takes remaining space */
+  overflow-y: auto; /* Scrollable */
+  max-height: calc(100vh - 120px); /* Adjust based on header + search bar height */
+  padding-bottom: 20px; /* Prevent content from being too close to bottom */
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  #priceDatabase {
+    padding: 0 10px 10px;
+    height: auto; /* Allow natural height on mobile */
+    min-height: 100vh;
+  }
+  #searchBar {
+    top: 40px; /* Adjust for smaller header */
+  }
+  #itemList {
+    max-height: calc(100vh - 100px); /* Tighter fit on mobile */
+  }
+}
       }
     </style>
   </head>
@@ -874,7 +937,7 @@
         <button class="category-filter" data-category="">全</button>
         <button class="category-filter" data-category="前菜">前菜</button>
         <button class="category-filter" data-category="Pasta">パスタ</button>
-        <button class="category-filter" data-category="Drink">ドリンク</button>
+        <button class="category-filter" data-category="Drink">飲</button>
         <button class="category-filter" data-category="Wine">ワイン</button>
         <label>
           <input type="checkbox" id="showLunchOnly" onchange="filterItems()"> ランチのみ
@@ -3752,6 +3815,42 @@
       generateImages();
       setupCategoryFilters();
     };
+
+    document.addEventListener('DOMContentLoaded', () => {
+  const searchBar = document.getElementById('searchBar');
+  const itemList = document.getElementById('itemList');
+
+  // Store initial viewport height
+  let initialHeight = window.innerHeight;
+
+  // When search bar is focused (keyboard appears)
+  searchBar.addEventListener('focus', () => {
+    setTimeout(() => {
+      // Check new height when keyboard is up
+      const newHeight = window.innerHeight;
+      if (newHeight < initialHeight) {
+        // Keyboard is visible, adjust itemList height
+        const keyboardHeight = initialHeight - newHeight;
+        itemList.style.maxHeight = `calc(100vh - ${keyboardHeight + 100}px)`; // 100px for header + search
+        // Scroll search bar into view
+        searchBar.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100); // Delay to ensure keyboard is fully up
+  });
+
+  // Reset when keyboard hides
+  searchBar.addEventListener('blur', () => {
+    itemList.style.maxHeight = 'calc(100vh - 100px)'; // Reset to default
+  });
+
+  // Handle window resize (e.g., orientation change)
+  window.addEventListener('resize', () => {
+    initialHeight = window.innerHeight; // Update initial height
+    if (!document.activeElement === searchBar) {
+      itemList.style.maxHeight = 'calc(100vh - 100px)'; // Reset if keyboard not active
+    }
+  });
+});
   </script>
 </body>
 </html>
