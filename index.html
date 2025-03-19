@@ -5,19 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>メニュー</title>
   <style>
-    /* (styles remain unchanged) */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: Arial, sans-serif;
+      font-family: 'Poppins', Arial, sans-serif;
     }
     body {
-      background-color: #f4f4f9;
+      background-color: #f5f5f5;
       color: #333;
       line-height: 1.6;
-      display: flex;
       min-height: 100vh;
+    }
+    .page {
+      display: none;
+      width: 100%;
+      height: 100vh;
+    }
+    .page.active {
+      display: flex;
     }
     .settings-panel {
       width: 250px;
@@ -87,8 +93,16 @@
       transition: background 0.3s;
       font-size: 0.9rem;
     }
+    .buttonfullspace {
+      flex: 1;
+    }
+
     button:hover {
       background: #3498db;
+    }
+    button:focus {
+      outline: 2px solid #2980b9;
+      outline-offset: 2px;
     }
     select {
       padding: 6px;
@@ -132,14 +146,530 @@
       z-index: 1000;
     }
     .radio-group label input[type="radio"] {
-  margin-right: 5px;
+      margin-right: 5px;
     }
-
     #imageCounter {
       font-size: 1rem;
       color: #2c3e50;
       margin-top: 10px;
     }
+
+    #infoOverlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
+    #infoContent {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+    #infoContent h2 {
+      margin-bottom: 15px;
+      color: #2c3e50;
+    }
+    #infoContent p {
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+    #closeOverlay {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      border: none;
+      background: #ff4444;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    #closeOverlay:hover {
+      background: #cc0000;
+    }
+
+    .step-by-step {
+      margin: 20px 0;
+      text-align: center;
+    }
+    .step-by-step h3 {
+      margin-bottom: 10px;
+      color: #2c3e50;
+    }
+    .step-image-container {
+      position: relative;
+      max-width: 100%;
+      height: 200px;
+      overflow: hidden;
+    }
+    .step-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 5px;
+    }
+    .step-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      transition: background 0.3s;
+    }
+    .step-nav:hover {
+      background: rgba(0, 0, 0, 0.8);
+    }
+    .step-prev {
+      left: 10px;
+    }
+    .step-next {
+      right: 10px;
+    }
+    .step-counter {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: #2c3e50;
+    }
+    .stepper {
+      display: flex;
+      justify-content: center;
+      margin: 10px 0;
+    }
+    .step-dot {
+      width: 10px;
+      height: 10px;
+      background: #ddd;
+      border-radius: 50%;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .step-dot:hover {
+      background: #a0c4ff;
+    }
+    .step-dot.active {
+      background: #2980b9;
+    }
+    .step-text p {
+      margin: 10px 0;
+      font-size: 1rem;
+    }
+    .step-text b {
+      font-weight: bold;
+    }
+    .step-text i {
+      font-style: italic;
+    }
+    .step-text ul {
+      margin-left: 20px;
+      list-style-type: disc;
+    }
+
+    .video-section {
+      margin: 20px 0;
+      text-align: center;
+    }
+    .video-section h3 {
+      margin-bottom: 10px;
+      color: #2c3e50;
+    }
+    .video-section a {
+      color: #2980b9;
+      text-decoration: none;
+      font-size: 1rem;
+    }
+    .video-section a:hover {
+      text-decoration: underline;
+    }
+    .video-section iframe {
+      width: 100%;
+      height: 315px;
+      border: none;
+      border-radius: 5px;
+    }
+
+    .additional-info {
+      margin: 20px 0;
+    }
+    .additional-info details {
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 10px;
+    }
+    .additional-info summary {
+      cursor: pointer;
+      font-weight: bold;
+      color: #2c3e50;
+      padding: 5px;
+      outline: none;
+    }
+    .additional-info summary:hover {
+      color: #2980b9;
+    }
+    .additional-info details[open] summary {
+      border-bottom: 1px solid #ddd;
+      margin-bottom: 10px;
+    }
+    .additional-info p {
+      padding: 5px;
+    }
+
+    #priceDatabase {
+      flex-direction: column;
+      padding: 20px;
+    }
+    #priceDatabase h2 {
+      margin-bottom: 15px;
+      color: #2c3e50;
+    }
+    #searchBar {
+      width: 100%;
+      max-width: 400px;
+      padding: 8px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    #filters {
+      margin-bottom: 15px;
+    }
+    #filters button {
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+    #showLunchOnly {
+      margin-left: 10px;
+      padding: 5px 10px;
+    }
+    #itemList {
+      flex: 1;
+      overflow-y: auto;
+    }
+    .category {
+      margin-bottom: 20px;
+    }
+    .category h3 {
+      color: #2c3e50;
+      margin-bottom: 10px;
+      padding-left: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    .bordercontainer {
+      display: flex;  /* Arrange items in a row (or column) */
+      gap: 10px;      /* Space between items */
+      padding: 10px;  /* Space between border and items */
+      /* border: 2px solid black; */
+      background-color: #ECF7FF;
+      border-radius: 4px;
+    }
+    
+    .item {
+  display: flex;
+  align-items: center; /* Vertically center the items */
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.item:hover {
+  background-color: #f9f9f9;
+}
+
+.item .name {
+  font-weight: bold;
+  flex: 1; /* This makes the name take up all available space on the left */
+}
+
+.item .price {
+  color: #2980b9;
+}
+
+.item .lunch-price {
+  color: #e74c3c;
+  margin-left: 10px; /* Keeps the spacing between the two prices */
+}
+
+/* Optional: If you want to ensure the prices stay together as a group */
+.item .price-container {
+  display: flex;
+  align-items: center;
+}
+
+/* New rule for alternating background colors */
+.category .item:nth-child(even) {
+  background-color: #F7F7F7; /* Slightly gray background for even-numbered items */
+}
+
+/* Optional: Ensure hover effect works consistently */
+.category .item:nth-child(even):hover {
+  background-color: #f9f9f9;
+}
+
+    .category-filter {
+      padding: 8px 15px;
+      background: #2980b9;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+      font-size: 0.9rem;
+    }
+    .category-filter:hover {
+      background: #3498db;
+    }
+    .category-filter.selected {
+      background-color: #1a2a44;
+      color: white;
+    }
+    .category-filter.selected:hover {
+      background-color: #14263a;
+    }
+
+    #recipeDatabase {
+      flex-direction: column;
+      padding: 0;
+      height: 100%;
+      background: #f5f5f5;
+    }
+    #recipeDatabaseHeader {
+      position: sticky;
+      top: 0;
+      background: #fff;
+      padding: 15px 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    #recipeDatabase h2 {
+      color: #2c3e50;
+      font-size: 1.5rem;
+      margin: 0;
+    }
+    #recipeSearchBar {
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+      width: 250px;
+      transition: border-color 0.3s;
+    }
+    #recipeSearchBar:focus {
+      border-color: #2980b9;
+      outline: none;
+    }
+    #recipeBackButton {
+      padding: 8px 15px;
+    }
+    #recipeContainer {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+      padding: 20px;
+    }
+    #recipeList {
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 15px;
+    }
+    .recipe-card {
+      display: flex;
+      align-items: center;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-bottom: 15px;
+      padding: 15px;
+      cursor: pointer;
+      transition: background 0.3s;
+      position: relative;
+    }
+    .recipe-card:hover {
+      background: #f0f8ff;
+    }
+    .recipe-card.selected {
+      background: #e6f0fa;
+      border: 1px solid #2980b9;
+    }
+    .recipe-card .thumbnail {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 5px;
+      margin-right: 15px;
+    }
+    .recipe-card .placeholder {
+      width: 50px;
+      height: 50px;
+      background: #ddd;
+      border-radius: 5px;
+      margin-right: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      color: #666;
+    }
+    .recipe-card .content {
+      flex: 1;
+    }
+    .recipe-card .name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 5px;
+    }
+    .recipe-card .tags {
+      font-size: 0.9rem;
+      color: #666;
+    }
+    #recipeDetails {
+      flex: 2;
+      padding: 20px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-left: 20px;
+      overflow-y: auto;
+      display: none;
+      position: relative;
+    }
+    #recipeDetails h2 {
+      font-size: 1.8rem;
+      color: #2c3e50;
+      margin-bottom: 15px;
+    }
+    .ingredient-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 15px;
+    }
+    .ingredient-table th,
+    .ingredient-table td {
+      padding: 10px;
+      text-align: left;
+      border: 1px solid #ddd;
+    }
+    .ingredient-table th {
+      background-color: #2980b9;
+      color: white;
+    }
+    .step-by-step {
+      margin: 20px 0;
+    }
+    .step-by-step h3 {
+      font-size: 1.4rem;
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+    .stepper {
+      display: flex;
+      justify-content: center;
+      margin: 10px 0;
+    }
+    .step-dot {
+      width: 10px;
+      height: 10px;
+      background: #ddd;
+      border-radius: 50%;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .step-dot:hover {
+      background: #a0c4ff;
+    }
+    .step-dot.active {
+      background: #2980b9;
+    }
+    .step-text p {
+      margin: 10px 0;
+      font-size: 1rem;
+    }
+    .step-text b {
+      font-weight: bold;
+    }
+    .step-text i {
+      font-style: italic;
+    }
+    .step-text ul {
+      margin-left: 20px;
+      list-style-type: disc;
+    }
+
+    .hey {
+      display: flex;
+    }
+
+    .heyitem {
+      padding: 0 0 10px 0;
+    }
+
+    #recipeDetailsModal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
+    #recipeDetailsModalContent {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      animation: slideIn 0.3s ease-out;
+    }
+    @keyframes slideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    #closeDetails {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      border: none;
+      background: #ff4444;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    #closeDetails:hover {
+      background: #cc0000;
+    }
+
     @media (max-width: 768px) {
       body {
         flex-direction: column;
@@ -166,19 +696,69 @@
       #flagEmoji {
         top: -25px;
       }
+      #infoContent {
+        width: 85%;
+      }
+      .step-image-container {
+        height: 150px;
+      }
+      .video-section iframe {
+        height: 200px;
+      }
+      #priceDatabase, #recipeDatabase {
+        padding: 0;
+      }
+      #recipeDatabaseHeader {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px;
+      }
+      #recipeSearchBar {
+        width: 100%;
+        margin-top: 10px;
+      }
+      #recipeBackButton {
+        margin-top: 10px;
+      }
+      #recipeContainer {
+        flex-direction: column;
+        padding: 10px;
+      }
+      #recipeList {
+        padding-right: 0;
+      }
+      #recipeDetails {
+        display: none;
+      }
+      .recipe-card {
+        padding: 10px;
+      }
+      .recipe-card .thumbnail {
+        width: 40px;
+        height: 40px;
+      }
+      .recipe-card .placeholder {
+        width: 40px;
+        height: 40px;
+        font-size: 0.7rem;
+      }
+      .recipe-card .name {
+        font-size: 1.1rem;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="settings-panel">
-    <div id="tableContainer">
-      <div id="guestNumber"></div>
-    </div>
-    <div class="checkbox-group">
+  <div class="page active" id="menuPage">
+    <div class="settings-panel">
+      <div id="tableContainer">
+        <div id="guestNumber"></div>
+      </div>
+      <div class="checkbox-group">
         <strong>食べ物</strong>
         <div class="radio-group">
           <label>
-            <input type="radio" id="lunchWeekdays" name="food" value="lunchWeekdays" style="margin-right: 8px ;" onchange="document.getElementById('pasta').disabled = true; document.getElementById('pasta').checked = false;">
+            <input type="radio" id="lunchWeekdays" name="food" value="lunchWeekdays" style="margin-right: 8px;" onchange="document.getElementById('pasta').disabled = true; document.getElementById('pasta').checked = false;">
             ランチ（平）
           </label>
           <label>
@@ -190,50 +770,2200 @@
             ディナー
           </label>
         </div>
-          <label>
-            <input type="checkbox" id="pasta" style="margin-right: 8px;">
-            パスタ
-          </label>
+        <label>
+          <input type="checkbox" id="pasta" style="margin-right: 8px;">
+          パスタ
+        </label>
       </div>
-      
-      
-    <div class="checkbox-group">
-      <strong>飲み物</strong>
-      <label><input type="checkbox" id="lunchDrinkWeekdays"> ランチドリンク（平）</label>
-      <label><input type="checkbox" id="wineWhite"> ワイン白</label>
-      <label><input type="checkbox" id="wineRed"> ワイン赤</label>
-      <label><input type="checkbox" id="drinks"> ドリンク</label>
+      <div class="checkbox-group">
+        <strong>飲み物</strong>
+        <label><input type="checkbox" id="lunchDrinkWeekdays"> ランチドリンク（平）</label>
+        <label><input type="checkbox" id="wineWhite"> ワイン白</label>
+        <label><input type="checkbox" id="wineRed"> ワイン赤</label>
+        <label><input type="checkbox" id="drinks"> ドリンク</label>
+      </div>
+      <div class="controls">
+        <div class="bordercontainer">
+          <button class="buttonfullspace" onclick="generateImages()">スタート</button>
+          <button class="buttonfullspace"  id="showInfoButton" onclick="showInfo()">表示</button>
+        </div>
+        <button onclick="navigateToPriceDatabase()">値段</button>
+        <button onclick="navigateToRecipeDatabase()">レシピ</button>
+        <div>
+          <label for="imageLimit">限定: </label>
+          <select id="imageLimit">
+            <option value="3">3</option>
+            <option value="5">5</option>
+            <option value="20" selected>20</option>
+          </select>
+        </div>
+      </div>
     </div>
-    <div class="controls">
-      <button onclick="generateImages()">スタート</button>
-      <div>
-        <label for="imageLimit">限定: </label>
-        <select id="imageLimit">
-          <option value="3">3</option>
-          <option value="5">5</option>
-          <option value="20" selected>20</option>
-        </select>
+    <div class="image-panel">
+      <div id="imageContainer">
+        <div id="flagEmoji"></div>
       </div>
     </div>
   </div>
-  <div class="image-panel">
-    <div id="imageContainer">
-      <div id="flagEmoji"></div>
+
+  <div class="page" id="priceDatabasePage">
+    <div id="priceDatabase">
+      <div class="hey">
+        <div class="heyitem">
+          <h2>値段</h2>
+          <button onclick="navigateToMenu()">メニューに戻る</button>
+        </div>
+      </div>
+      
+      <input type="text" id="searchBar" placeholder="メニューを検索..." oninput="filterItems()">
+      <div id="filters">
+        <button class="category-filter" data-category="">全て表示</button>
+        <button class="category-filter" data-category="前菜">前菜</button>
+        <button class="category-filter" data-category="Pasta">パスタ</button>
+        <button class="category-filter" data-category="Drink">ドリンク</button>
+        <button class="category-filter" data-category="Wine">ワイン</button>
+        <label>
+          <input type="checkbox" id="showLunchOnly" onchange="filterItems()"> ランチ価格のみ
+        </label>
+      </div>
+      <div id="itemList"></div>
+    </div>
+  </div>
+
+  <div class="page" id="recipeDatabasePage">
+    <div id="recipeDatabase">
+      <div id="recipeDatabaseHeader">
+        <h2>レシピ</h2>
+        <input type="text" id="recipeSearchBar" placeholder="レシピを検索..." oninput="filterRecipes()">
+        <button id="recipeBackButton" onclick="navigateToMenu()">メニューに戻る</button>
+      </div>
+      <div id="recipeContainer">
+        <div id="recipeList" role="list"></div>
+        <div id="recipeDetails" role="region" aria-label="レシピ詳細"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="recipeDetailsModal">
+    <div id="recipeDetailsModalContent">
+      <button id="closeDetails" onclick="closeRecipeDetails()">閉じる</button>
+      <div id="recipeModalContent"></div>
+    </div>
+  </div>
+
+  <div id="infoOverlay">
+    <div id="infoContent">
+      <button id="closeOverlay" onclick="hideInfo()">閉じる</button>
+      <h2 id="menuItemName"></h2>
+      <div id="ingredientTableContainer"></div>
+      <div class="step-by-step" id="stepSection">
+        <h3>作り方</h3>
+        <div class="step-image-container" id="stepImageContainer">
+          <img id="stepImage" class="step-image" src="" alt="Step Image">
+          <button class="step-nav step-prev" onclick="prevStep()" aria-label="前のステップ">◄</button>
+          <button class="step-nav step-next" onclick="nextStep()" aria-label="次のステップ">►</button>
+        </div>
+        <div class="stepper" id="stepper"></div>
+        <div class="step-counter" id="stepCounter"></div>
+        <div class="step-text" id="stepText"></div>
+      </div>
+      <div class="video-section" id="videoSection">
+        <h3>レシピ動画</h3>
+      </div>
+      <div class="additional-info" id="additionalInfo"></div>
     </div>
   </div>
 
   <script>
     const imageFolder = 'menu/';
-    
+
+    const menuItems = {
+      'm1.avif': {
+        name: '鶏もも肉のグリル　ポルチーニクリームソース',
+        nicknames: ['鶏', 'にわとり', 'ニワトリ','チキン','chicken','ちきん', 'momo','chikin','chikkin'],
+        category: 'Main Dish',
+        price: '2380円',
+        steps: ['step1-duck.jpg', 'step2-duck.jpg', 'step3-duck.jpg'],
+        videoLink: 'https://www.youtube.com/watch?v=example1',
+        additionalInfo: [
+          { title: '食材', content: '鴨肉、赤ワイン、にんにく、ローズマリー、塩、胡椒' },
+          { title: '調理のコツ', content: '低温で長時間調理することで、鴨肉が柔らかくジューシーに仕上がります。' },
+          { title: '栄養情報', content: 'カロリー: 450kcal、たんぱく質: 30g、脂質: 20g' }
+          ,
+          { title: '仕上げ', content: 'パセリ' }
+        ],
+        ingredients: {
+          '鴨肉': '300g',
+          '赤ワイン': '200ml',
+          'にんにく': '3片',
+          'ローズマリー': '2茎',
+          '塩': '5g',
+          '胡椒': '2g'
+        },
+        stepText: `"""
+        1. 鴨肉を塩と胡椒で下味をつける。
+           - **低温で** 30分ほど置く。
+        2. 鍋に**赤ワイン**、にんにく、ローズマリーを加え、*低温*で煮込む。
+        3. 鴨肉を加え、**2時間**かけてじっくり火を通す。
+        """`
+      },
+      'm2.avif': {
+        name: 'ラムランプのグリル　レモン胡椒タップナード',
+        nicknames: ['ランプ', 'ラム','ラムランプ','ramu', 'ranpu','ramuranpu', 'grill','グリル'],
+        category: 'Main Dish',
+        price: '2380円',
+        steps: ['step1-steak.jpg', 'step2-steak.jpg'],
+        videoLink: 'https://www.youtube.com/watch?v=example2',
+        ingredients: {
+          '牛フィレ肉': '200g',
+          'バター': '20g',
+          'にんにく': '2片',
+          '塩': '3g',
+          '胡椒': '2g'
+        },
+        stepText: `"""
+        1. 牛フィレ肉に塩と胡椒を振る。
+        2. フライパンにバターとにんにくを入れ、*中火*で焼く。
+        3. 両面を**3分ずつ**焼き、好みの焼き加減に仕上げる。
+        """`
+      },
+      'm3.avif': {
+        name: '牛ハラミのロースト　生姜バルサミコソース',
+        nicknames: ['ハラミ', '牛','beef','harami','gyuharami','gyuuharami','ぎゅうはらみ','うし','ぎゅ','roast','ロースト'],
+        category: 'Main Dish',
+        price: '3100円',
+        steps: ['step1-steak.jpg', 'step2-steak.jpg'],
+        videoLink: 'https://www.youtube.com/watch?v=example2',
+        ingredients: {
+          '牛フィレ肉': '200g',
+          'バター': '20g',
+          'にんにく': '2片',
+          '塩': '3g',
+          '胡椒': '2g'
+        },
+        stepText: `"""
+        1. 牛フィレ肉に塩と胡椒を振る。
+        2. フライパンにバターとにんにくを入れ、*中火*で焼く。
+        3. 両面を**3分ずつ**焼き、好みの焼き加減に仕上げる。
+        """`
+      },
+      'm4.avif': {
+        name: 'メカジキのグリル　海塩とレモン',
+        nicknames: ['メカジキ', 'Mekajiki','grill','グリル','guriru'],
+        category: 'Main Dish',
+        price: '1980円',
+        steps: ['step1-steak.jpg', 'step2-steak.jpg'],
+        videoLink: 'https://www.youtube.com/watch?v=example2',
+        ingredients: {
+          '牛フィレ肉': '200g',
+          'バター': '20g',
+          'にんにく': '2片',
+          '塩': '3g',
+          '胡椒': '2g'
+        },
+        stepText: `"""
+        1. 牛フィレ肉に塩と胡椒を振る。
+        2. フライパンにバターとにんにくを入れ、*中火*で焼く。
+        3. 両面を**3分ずつ**焼き、好みの焼き加減に仕上げる。
+        """`
+      }
+      ,
+      'p1.avif': {
+        name: '青じそと小海老',
+        nicknames: ['青じそ', '青えび', '青海老', 'あおえび','あお海老','Aoebi','ebi','Aojiso'],
+        category: 'Pasta',
+        price: '1100円',
+        steps: ['step1-steak.jpg', 'step2-steak.jpg'],
+        videoLink: 'https://www.youtube.com/watch?v=example2',
+        ingredients: {
+          '牛フィレ肉': '200g',
+          'バター': '20g',
+          'にんにく': '2片',
+          '塩': '3g',
+          '胡椒': '2g'
+        },
+        stepText: `"""
+        1. 牛フィレ肉に塩と胡椒を振る。
+        2. フライパンにバターとにんにくを入れ、*中火*で焼く。
+        3. 両面を**3分ずつ**焼き、好みの焼き加減に仕上げる。
+        """`
+      }
+      ,
+      'p2.avif': {
+        name: 'バジリコとアンチョビとパルメサン',
+        nicknames: ['ばジアン', 'バジあん', 'バジリコ', 'アンチョビ','あんちょび'],
+        category: 'Pasta',
+        price: '1380円',
+        steps: ['step1-steak.jpg', 'step2-steak.jpg'],
+        videoLink: 'https://www.youtube.com/watch?v=example2',
+        ingredients: {
+          '牛フィレ肉': '200g',
+          'バター': '20g',
+          'にんにく': '2片',
+          '塩': '3g',
+          '胡椒': '2g'
+        },
+        stepText: `"""
+        1. 牛フィレ肉に塩と胡椒を振る。
+        2. フライパンにバターとにんにくを入れ、*中火*で焼く。
+        3. 両面を**3分ずつ**焼き、好みの焼き加減に仕上げる。
+        """`
+      }
+      ,
+      'p3.avif': {
+        name: '釜揚げしらすと大葉とトマト',
+        nicknames: ['釜揚げ', 'かまあげ', 'しらす', '大葉','おおば','kamaage','shirasu', 'ooba'],
+        category: 'Pasta',
+        price: '1380円',
+        lunchPrice: '1100円',
+        steps: ['step1-steak.jpg', 'step2-steak.jpg'],
+        videoLink: 'https://www.youtube.com/watch?v=example2',
+        ingredients: {
+          '牛フィレ肉': '200g',
+          'バター': '20g',
+          'にんにく': '2片',
+          '塩': '3g',
+          '胡椒': '2g'
+        },
+        stepText: `"""
+        1. 牛フィレ肉に塩と胡椒を振る。
+        2. フライパンにバターとにんにくを入れ、*中火*で焼く。
+        3. 両面を**3分ずつ**焼き、好みの焼き加減に仕上げる。
+        """`
+      }
+      ,
+      'p4.avif': {
+        name: '帆立と水菜と生海苔',
+        nicknames: ['ホタテ', '帆立', 'ほたて', '生ノリ','namanori','nori','なまのり','mizuna','水菜'],
+        category: 'Pasta',
+        price: '1540円',
+        steps: ['step1-steak.jpg', 'step2-steak.jpg'],
+        videoLink: 'https://www.youtube.com/watch?v=example2',
+        ingredients: {
+          '牛フィレ肉': '200g',
+          'バター': '20g',
+          'にんにく': '2片',
+          '塩': '3g',
+          '胡椒': '2g'
+        },
+        stepText: `"""
+        1. 牛フィレ肉に塩と胡椒を振る。
+        2. フライパンにバターとにんにくを入れ、*中火*で焼く。
+        3. 両面を**3分ずつ**焼き、好みの焼き加減に仕上げる。
+        """`
+      }
+      ,
+      'p5.avif': {
+        name: 'ズワイ蟹と青唐辛子とちりめんじゃこ',
+        nicknames: ['かに', '蟹', 'ズワイ', 'ちり','zuwai','zwei','kani'],
+        category: 'Pasta',
+        price: '1540円',
+        steps: ['step1-steak.jpg', 'step2-steak.jpg'],
+        videoLink: 'https://www.youtube.com/watch?v=example2',
+        ingredients: {
+          '牛フィレ肉': '200g',
+          'バター': '20g',
+          'にんにく': '2片',
+          '塩': '3g',
+          '胡椒': '2g'
+        },
+        stepText: `"""
+        1. 牛フィレ肉に塩と胡椒を振る。
+        2. フライパンにバターとにんにくを入れ、*中火*で焼く。
+        3. 両面を**3分ずつ**焼き、好みの焼き加減に仕上げる。
+        """`
+      }
+      ,
+      'p6.avif': {
+        name: '真ダコとパクチー',
+        nicknames: ['パクチ', 'ぱくち', 'マダコ', 'まだこ','真蛸', 'madako', 'pakuchi','タコパク','たこぱく', 'takopaku'],
+        category: 'Pasta',
+        price: '1100円',
+        steps: ['step1-steak.jpg', 'step2-steak.jpg'],
+        videoLink: 'https://www.youtube.com/watch?v=example2',
+        ingredients: {
+          '牛フィレ肉': '200g',
+          'バター': '20g',
+          'にんにく': '2片',
+          '塩': '3g',
+          '胡椒': '2g'
+        },
+        stepText: `"""
+        1. 牛フィレ肉に塩と胡椒を振る。
+        2. フライパンにバターとにんにくを入れ、*中火*で焼く。
+        3. 両面を**3分ずつ**焼き、好みの焼き加減に仕上げる。
+        """`
+      }
+      ,
+      'p7.avif': {
+        name: 'アラビアータ　辛いトマトソース',
+        nicknames: ['アラビアータ', 'Arabi', 'アラビ', 'Arabiata'],
+        category: 'Pasta',
+        price: '1100円',
+        lunchPrice: '950円',
+        steps: ['step1-steak.jpg', 'step2-steak.jpg'],
+        videoLink: 'https://www.youtube.com/watch?v=example2',
+        ingredients: {
+          '牛フィレ肉': '200g',
+          'バター': '20g',
+          'にんにく': '2片',
+          '塩': '3g',
+          '胡椒': '2g'
+        },
+        stepText: `"""
+        1. 牛フィレ肉に塩と胡椒を振る。
+        2. フライパンにバターとにんにくを入れ、*中火*で焼く。
+        3. 両面を**3分ずつ**焼き、好みの焼き加減に仕上げる。
+        """`
+      }
+      ,
+      'p8.avif': {
+        name: '熟成ベーコンのアマトリチャーナ',
+        nicknames: ['マトリ', 'まとり', 'matori', 'アマトリ', 'あまとり','amatori','アマトリチャーナ','マトリチャーナ','まとりちゃーな','あまとりちゃーな','アマトリチャナ','あまとりちゃな'],
+        category: 'Pasta',
+        price: '1580円',
+        steps: ['step1-steak.jpg', 'step2-steak.jpg'],
+        videoLink: 'https://www.youtube.com/watch?v=example2',
+        ingredients: {
+          '牛フィレ肉': '200g',
+          'バター': '20g',
+          'にんにく': '2片',
+          '塩': '3g',
+          '胡椒': '2g'
+        },
+        stepText: `"""
+        1. 牛フィレ肉に塩と胡椒を振る。
+        2. フライパンにバターとにんにくを入れ、*中火*で焼く。
+        3. 両面を**3分ずつ**焼き、好みの焼き加減に仕上げる。
+        """`
+      }
+      ,
+      'p9.avif': {
+        name: 'バジルとモッツァレラのトマトソース',
+        nicknames: ['バジトマト', 'ばじとまと', 'bajitomato', 'tomato', 'mozza','トマト','とまと','モッツァレラ','もっつぁれら'],
+        category: 'Pasta',
+        price: '1600円',
+        steps: ['step1-steak.jpg', 'step2-steak.jpg'],
+        videoLink: 'https://www.youtube.com/watch?v=example2',
+        ingredients: {
+          '牛フィレ肉': '200g',
+          'バター': '20g',
+          'にんにく': '2片',
+          '塩': '3g',
+          '胡椒': '2g'
+        },
+        stepText: `"""
+        1. 牛フィレ肉に塩と胡椒を振る。
+        2. フライパンにバターとにんにくを入れ、*中火*で焼く。
+        3. 両面を**3分ずつ**焼き、好みの焼き加減に仕上げる。
+        """`
+      }
+      ,
+      'p10.avif': {
+        name: 'クラシック　カルボナーラ',
+        nicknames: ['カルボ', 'かるぼ', 'karubon', 'carbo','カルボーナラ','かるぼーなら','カルボナーラ','かるぼなーら','karbo'],
+        category: 'Pasta',
+        price: '1540円',
+        lunchPrice: '1250円',
+        steps: ['step1-steak.jpg', 'step2-steak.jpg'],
+        videoLink: 'https://www.youtube.com/watch?v=example2',
+        ingredients: {
+          '牛フィレ肉': '200g',
+          'バター': '20g',
+          'にんにく': '2片',
+          '塩': '3g',
+          '胡椒': '2g'
+        },
+        stepText: `"""
+        1. 牛フィレ肉に塩と胡椒を振る。
+        2. フライパンにバターとにんにくを入れ、*中火*で焼く。
+        3. 両面を**3分ずつ**焼き、好みの焼き加減に仕上げる。
+        """`
+      }
+      ,
+      'p11.avif': {
+        name: 'クラシック　ボロネーズ',
+        nicknames: ['ボロ', 'ぼろ', 'ボロネーズ', 'ぼろねーず','boro','boronezu'],
+        category: 'Pasta',
+        price: '1580円',
+        lunchPrice: '1350円',
+        steps: ['step1-steak.jpg', 'step2-steak.jpg'],
+        videoLink: 'https://www.youtube.com/watch?v=example2',
+        ingredients: {
+          '牛フィレ肉': '200g',
+          'バター': '20g',
+          'にんにく': '2片',
+          '塩': '3g',
+          '胡椒': '2g'
+        },
+        stepText: `"""
+        1. 牛フィレ肉に塩と胡椒を振る。
+        2. フライパンにバターとにんにくを入れ、*中火*で焼く。
+        3. 両面を**3分ずつ**焼き、好みの焼き加減に仕上げる。
+        """`
+      }
+      ,
+      'p12.avif': {
+        name: '北海大あさりのボンゴレビアンコ',
+        nicknames: ['大あさり', 'あさり', 'アサリ', 'asari','ooasari','bianko','ぼんごれ','ボンゴレ','bongore','大アサリ','大漁り'],
+        category: 'Pasta',
+        price: '1680円',
+        steps: ['step1-steak.jpg', 'step2-steak.jpg'],
+        videoLink: 'https://www.youtube.com/watch?v=example2',
+        ingredients: {
+          '牛フィレ肉': '200g',
+          'バター': '20g',
+          'にんにく': '2片',
+          '塩': '3g',
+          '胡椒': '2g'
+        },
+        stepText: `"""
+        1. 牛フィレ肉に塩と胡椒を振る。
+        2. フライパンにバターとにんにくを入れ、*中火*で焼く。
+        3. 両面を**3分ずつ**焼き、好みの焼き加減に仕上げる。
+        """`
+      }
+      ,
+      'p13.avif': {
+        name: 'ゴルゴンゾーラ　クリームソース',
+        nicknames: ['ゴルゴン', 'gorugon','ごるごん','gogogon','ごろごん','ゴロゴン'],
+        category: 'Pasta',
+        price: '1600円',
+        steps: ['step1-steak.jpg', 'step2-steak.jpg'],
+        videoLink: 'https://www.youtube.com/watch?v=example2',
+        ingredients: {
+          '牛フィレ肉': '200g',
+          'バター': '20g',
+          'にんにく': '2片',
+          '塩': '3g',
+          '胡椒': '2g'
+        },
+        stepText: `"""
+        1. 牛フィレ肉に塩と胡椒を振る。
+        2. フライパンにバターとにんにくを入れ、*中火*で焼く。
+        3. 両面を**3分ずつ**焼き、好みの焼き加減に仕上げる。
+        """`
+      }
+      ,
+      'p14.avif': {
+        name: 'うにとヤリイカと明太子',
+        nicknames: ['めんたいこ', '明太子','ヤリイカ','やりいか','uni','yariika','mentaiko','uniika','ういいか','うにイカ','ウニイカ'
+        ],
+        category: 'Pasta',
+        price: '1780円',
+        lunchPrice: '1450円',
+        steps: ['step1-steak.jpg', 'step2-steak.jpg'],
+        videoLink: 'https://www.youtube.com/watch?v=example2',
+        ingredients: {
+          '牛フィレ肉': '200g',
+          'バター': '20g',
+          'にんにく': '2片',
+          '塩': '3g',
+          '胡椒': '2g'
+        },
+        stepText: `"""
+        1. 牛フィレ肉に塩と胡椒を振る。
+        2. フライパンにバターとにんにくを入れ、*中火*で焼く。
+        3. 両面を**3分ずつ**焼き、好みの焼き加減に仕上げる。
+        """`
+      }
+      ,
+      'p15.avif': {
+        name: '海老のジェノベーゼ',
+        nicknames: ['えび', '海老','ジェノベ','じぇのべ','jenobe','genobe','ebi'
+        ],
+        category: 'Pasta',
+        price: '1680円',
+        lunchPrice: '1200円',
+        steps: ['step1-steak.jpg', 'step2-steak.jpg'],
+        videoLink: 'https://www.youtube.com/watch?v=example2',
+        ingredients: {
+          '牛フィレ肉': '200g',
+          'バター': '20g',
+          'にんにく': '2片',
+          '塩': '3g',
+          '胡椒': '2g'
+        },
+        stepText: `"""
+        1. 牛フィレ肉に塩と胡椒を振る。
+        2. フライパンにバターとにんにくを入れ、*中火*で焼く。
+        3. 両面を**3分ずつ**焼き、好みの焼き加減に仕上げる。
+        """`
+      }
+      ,
+      'p16.avif': {
+        name: 'しらすとしめじの生海苔カルボナーラ',
+        nicknames: ['しらす', 'しめじ','のりぼ','ノリボ','noribo','shirasu','shimeji'
+        ],
+        category: 'Pasta',
+        price: '1580円',
+        steps: ['step1-steak.jpg', 'step2-steak.jpg'],
+        videoLink: 'https://www.youtube.com/watch?v=example2',
+        ingredients: {
+          '牛フィレ肉': '200g',
+          'バター': '20g',
+          'にんにく': '2片',
+          '塩': '3g',
+          '胡椒': '2g'
+        },
+        stepText: `"""
+        1. 牛フィレ肉に塩と胡椒を振る。
+        2. フライパンにバターとにんにくを入れ、*中火*で焼く。
+        3. 両面を**3分ずつ**焼き、好みの焼き加減に仕上げる。
+        """`
+      }
+      ,
+      'p17.avif': {
+        name: '半熟卵と3種チーズと黒胡椒',
+        nicknames: ['ペッパ', 'ぺっぱ','peppa','pepper','tamago','卵','玉子','たまご'
+        ],
+        category: 'Pasta',
+        price: '1680円',
+        steps: ['step1-steak.jpg', 'step2-steak.jpg'],
+        videoLink: 'https://www.youtube.com/watch?v=example2',
+        ingredients: {
+          '牛フィレ肉': '200g',
+          'バター': '20g',
+          'にんにく': '2片',
+          '塩': '3g',
+          '胡椒': '2g'
+        },
+        stepText: `"""
+        1. 牛フィレ肉に塩と胡椒を振る。
+        2. フライパンにバターとにんにくを入れ、*中火*で焼く。
+        3. 両面を**3分ずつ**焼き、好みの焼き加減に仕上げる。
+        """`
+      }
+      ,
+      'p18.avif': {
+        name: '帆立とオクラとフレッシュトマト',
+        nicknames: ['帆立', 'ほたて','ホタテ','オクラ','okura','hotate'],
+        category: 'Pasta',
+        price: '',
+        lunchPrice: '1100円',
+        steps: ['step1-steak.jpg', 'step2-steak.jpg'],
+        videoLink: 'https://www.youtube.com/watch?v=example2',
+        ingredients: {
+          '牛フィレ肉': '200g',
+          'バター': '20g',
+          'にんにく': '2片',
+          '塩': '3g',
+          '胡椒': '2g'
+        },
+        stepText: `"""
+        1. 牛フィレ肉に塩と胡椒を振る。
+        2. フライパンにバターとにんにくを入れ、*中火*で焼く。
+        3. 両面を**3分ずつ**焼き、好みの焼き加減に仕上げる。
+        """`
+      },
+      'p19.avif': {
+        name: '今週のパスタ(03/10-03/15)',
+        nicknames: ['今週', 'こんしゅ','todays','today','tod'
+        ],
+        category: 'Pasta',
+        price: '',
+        lunchPrice: '9999円',
+        steps: ['step1-steak.jpg', 'step2-steak.jpg'],
+        videoLink: 'https://www.youtube.com/watch?v=example2',
+        ingredients: {
+          '牛フィレ肉': '200g',
+          'バター': '20g',
+          'にんにく': '2片',
+          '塩': '3g',
+          '胡椒': '2g'
+        },
+        stepText: `"""
+        1. 牛フィレ肉に塩と胡椒を振る。
+        2. フライパンにバターとにんにくを入れ、*中火*で焼く。
+        3. 両面を**3分ずつ**焼き、好みの焼き加減に仕上げる。
+        """`
+      }
+      ,
+      'c1.avif': {
+        name: '切りたて生ハム２種盛り',
+        nicknames: ['きりたて', '切り立て','2しゅ','2','２','shu','hamumori','ハム盛り','ハムモリ','はむもり','meat'
+        ],
+        category: 'Charcuterie',
+        price: '1760円',
+      }
+      ,
+      'c2.avif': {
+        name: 'コッパ',
+        nicknames: ['コッパ', 'こっぱ','koppa','kopa','meat'
+        ],
+        category: 'Charcuterie',
+        price: '880円',
+      } ,
+      'c3.avif': {
+        name: 'サラミ',
+        nicknames: ['サラミ', 'さらみ','salami','sarami','meat'
+        ],
+        category: 'Charcuterie',
+        price: '880円',
+      },
+      'd1.avif': {
+        name: '生ビール',
+        nicknames: ['なま', '生', 'ビル', 'ビール', 'びる', 'びーる', 'biru', 'bi-ru', 'beer','nama'],
+        category: 'Drink',
+        price: '770円',
+        lunchPrice: '770円',
+      }
+      ,
+      'd2.avif': {
+        name: 'プリチェンヘル',
+        nicknames: ['ビル', 'ビール', 'びる', 'びーる', 'biru', 'bi-ru', 'heru', 'hell', 'ヘル', 'へる', 'purichen', 'puri', 'purichenheru', 'プリ', 'ぷり', 'ぷりちぇん'],
+        category: 'Drink',
+        price: '1200円',
+      }
+      ,
+      'd3.avif': {
+        name: 'シャンディガフ',
+        nicknames: ['ビル', 'ビール', 'びる', 'びーる', 'biru', 'bi-ru', 'shanti', 'schanti', 'シャンディ', 'しゃんでぃ', 'schandi', 'shandi', 'ガフ', 'がふ', 'gafu'],
+        category: 'Drink',
+        price: '880円',
+      }
+      ,
+      'd4.avif': {
+        name: 'サッポロ　ノーアル！',
+        nicknames: ['ビル', 'ビール', 'びる', 'びーる', 'biru', 'bi-ru', '札幌', 'サッポロ', 'サポ', 'さぽ', 'さぽろ', 'さっぽろ', 'saporo', 'sapporo', 'non', 'alcohol', 'arukoru', 'non aru', 'ノアル', 'のある'],
+        category: 'Drink',
+        price: '700円',
+      }
+      ,
+      'd5.avif': {
+        name: '自家製サングリア（赤）',
+        nicknames: ['san', 'sangria', 'sun', 'sanguria', 'jikka', '実家', 'さん', 'サン', 'サングリ', '赤', 'あか', 'アカ', 'aka'],
+        category: 'Drink',
+        price: '850円',
+        lunchPrice: '880円',
+      }
+      ,
+      'd6.avif': {
+        name: '自家製サングリア（白）',
+        nicknames: ['san', 'sangria', 'sun', 'sanguria', 'jikka', '実家', 'さん', 'サン', 'サングリ', '白', 'しろ', 'シロ', 'shiro'],
+        category: 'Drink',
+        price: '850円',
+        lunchPrice: '880円',
+      }
+      ,
+      'd7.avif': {
+        name: 'クラフトジンジャーハイボール',
+        nicknames: ['kurafuto', 'ginger', 'ginja', 'haiboru', 'hai', 'boru', 'ginjahai', 'high', 'highball', 'はいぼろ', 'ハイボール', 'はいぼーる', 'gbh', 'GBH', 'cgbh'],
+        category: 'Drink',
+        price: '850円',
+      }
+      ,
+      'd8.avif': {
+        name: 'クラフトコーラハイボール',
+        nicknames: ['kurafuto', 'kora', 'cola', 'コーラ', 'ハイボール', 'こーら', 'ハイボル', 'はいぼーる', 'はいぼる', 'highball', 'haiboru', 'コーラHB', 'こーらHB', 'CHB','khb'],
+        category: 'Drink',
+        price: '850円',
+      }
+      ,
+      'd9.avif': {
+        name: 'カシスティーソーダ',
+        nicknames: ['kashishisuti', 'soda', 'ソーダ', 'そーだ', 'ソダ', 'そだ', 'CTS'],
+        category: 'Drink',
+        price: '850円',
+      }
+      ,
+      'd10.avif': {
+        name: 'カンパリソーダ',
+        nicknames: ['kanpari', 'soda', 'ソーダ', 'そーだ', 'ソダ', 'そだ', 'カンパリ'],
+        category: 'Drink',
+        price: '850円',
+      }
+      ,
+      'd11.avif': {
+        name: 'ハイボール',
+        nicknames: ['high', 'highball', 'はいぼろ', 'ハイボール', 'はいぼーる', 'haiboru', 'HB'],
+        category: 'Drink',
+        price: '770円',
+      }
+      ,
+      'd12.avif': {
+        name: 'レモンサワー',
+        nicknames: ['remonsawa', 'lemonsawa', 'lemon', 'sour', 'れもん', 'れもんさわ', 'サワー', 'さわ', 'Lさわー', 'Lサワー'],
+        category: 'Drink',
+        price: '770円',
+      }
+      ,
+      'd13.avif': {
+        name: 'クラフトジンジャーエール',
+        nicknames: ['kurafuto', 'ginger', 'ginja', 'gingerale', 'ジンジャーエール', 'ジンジャーエル', 'じんじゃーえーる', 'じんじゃーえる', 'エル', 'える', 'ale', 'あれ', 'アレ', 'GA'],
+        category: 'Drink',
+        price: '800円',
+      }
+      ,
+      'd14.avif': {
+        name: '自家製クラフトコーラ',
+        nicknames: ['kurafuto', 'kora', 'cola', 'コーラ', 'jikasei', 'こーら', 'こら', 'コラ'],
+        category: 'Drink',
+        price: '800円',
+      }
+      ,
+      'd15.avif': {
+        name: 'シチリアレモンソーダ',
+        nicknames: ['soda', 'ソーダ', 'そーだ', 'ソダ', 'そだ', 'しちりあ', 'sicilia', 'レモン', 'れもん', 'lemonsoda', 'lemon soda'],
+        category: 'Drink',
+        price: '850円',
+      }
+      ,
+      'd16.avif': {
+        name: 'ブラッドオレンジジュース',
+        nicknames: ['blood orange juice', 'orangejuice', 'orange juice', 'blood', 'ジュース', 'ジューズ', 'じゅーす', 'じゅーず', 'オレンジ', 'おれんじ', 'boj', 'oj'],
+        category: 'Drink',
+        price: '700円',
+      }
+      ,
+      'd17.avif': {
+        name: '完熟りんごジュース',
+        nicknames: ['ringo', 'ringo juice', 'apple juice', 'ringo jusu', 'jusu', 'ジュース', 'ジューズ', 'じゅーす', 'じゅーず', 'りんご', 'リンゴ'],
+        category: 'Drink',
+        price: '700円',
+      }
+      ,
+      'd18.avif': {
+        name: 'サンペレグリノ',
+        nicknames: ['water', '水', 'みず', 'sparkling water', 'sparkling', 'スパークリング', 'さんぺれぐりの', 'saint pellegrino',  'sparkeling water', 'sparkeling'],
+        category: 'Drink',
+        price: '900円',
+      }
+      ,
+      'd19.avif': {
+        name: 'グラス　シャンパーニュ',
+        nicknames: ['champagne', 'chanpagne', 'シャンパン', 'しゃんぱん', 'シャンパーニュ'],
+        category: 'Drink',
+        price: '1800円〜',
+        lunchPrice: '1500円〜',
+      }
+      ,
+      'd20.avif': {
+        name: 'アットゥアーレ　スプマンテ',
+        nicknames: ['supumante', 'spumante', 'sparkling wine', 'sparkeling wine', 'スパークリングワイン', 'ワイン', 'スプマンテ', 'すぷまんて'],
+        category: 'Drink',
+        price: '990円',
+        lunchPrice: '990円',
+      }
+      ,
+      'd21.avif': {
+        name: 'イタリアンミモザ',
+        nicknames: ['italian mimosa', 'italian mimoza', 'ミモザ', 'みもさ', 'ミモサ', 'みもざ'],
+        category: 'Drink',
+        price: '990円',
+      }
+      ,
+      'd22.avif': {
+        name: 'りんごスプマンテ',
+        nicknames: ['リンゴスプマンテ', 'すぷまんて', 'スプマンテ', 'ringo', 'apple', 'ringo supumante', 'supumante', 'spumante', 'リンゴ', 'りんご'],
+        category: 'Drink',
+        price: '990円',
+      }
+      ,
+      'd23.avif': {
+        name: 'バージンベリーニ',
+        nicknames: ['virgin bellini', 'bajinberini', 'バジンベリニ', 'ばじんべりに', 'ベリニ', 'べりに', 'bellini', 'Vベリーに', 'Vベリーニ'],
+        category: 'Drink',
+        price: '850円',
+      }
+      ,
+      'd24.avif': {
+        name: 'ストロベリーパンチ',
+        nicknames: ['strawberry punch', 'punch', 'パンチ', 'ぱんち', 'ベリー', 'べりー', 'sutoroberi'],
+        category: 'Drink',
+        price: '850円',
+      }
+      ,
+      'd25.avif': {
+        name: 'コーヒー（Hot・Ice）',
+        nicknames: ['kohi', 'こーひー', 'ice', 'hot', 'アイス', 'ホット', 'coffe', 'coffee', 'coofe', 'koohi','こひ','コヒ'],
+        category: 'Drink',
+        price: '550円',
+        lunchPrice: '550円',
+      }
+      ,
+      'd26.avif': {
+        name: 'エスプレッソ',
+        nicknames: ['espresso', 'coffe', 'coffee', 'coofe', 'koohi', 'kohi', 'こーひー'],
+        category: 'Drink',
+        price: '550円',
+        lunchPrice: '550円',
+      }
+      ,
+      'd27.avif': {
+        name: 'カフェラテ（Hot・Ice）',
+        nicknames: ['kohi', 'こーひー', 'ice', 'hot', 'アイス', 'ホット', 'coffe', 'coffee', 'coofe', 'koohi', 'ラテ', 'らて', 'latte', 'rate', 'ratte', 'ラッテ', 'らって', 'milk'],
+        category: 'Drink',
+        price: '700円',
+        lunchPrice: '700円',
+      }
+      ,
+      'd28.avif': {
+        name: 'アイスティ・アイスウーロン',
+        nicknames: ['ice tea', 'ulon', 'oolong', 'iceulon', 'ice', 'ウーロン', 'IT'],
+        category: 'Drink',
+        price: '550円',
+        lunchPrice: '550円',
+      }
+      ,
+      'd29.avif': {
+        name: '実家製チャイ（Hot・Ice）',
+        nicknames: ['ice', 'hot', 'アイス', 'ホット', 'chai', 'ちゃい', 'チャイ', 'milk'],
+        category: 'Drink',
+        price: '700円',
+        lunchPrice: '700円',
+      }
+      ,
+      'g1.avif': {
+        name: '生牡蠣　西洋わさびとレモン🍋',
+        nicknames: ['kaki', 'namakaki', 'namagaki', 'かき', 'カキ', 'がき', 'ガキ', '生カキ', '生ガキ', '生かき', '生がき', 'なまかき', 'ナマカキ'],
+        category: '前菜',
+        price: '550円',
+        lunchPrice: '550円',
+      }
+      ,
+      'g2.avif': {
+        name: '生牡蠣　青唐辛子トマトサルサ🫑',
+        nicknames: ['kaki', 'namakaki', 'namagaki', 'かき', 'カキ', 'がき', 'ガキ', '生カキ', '生ガキ', '生かき', '生がき', 'なまかき', 'ナマカキ'],
+        category: '前菜',
+        price: '550円',
+      }
+      ,
+      'g3.avif': {
+        name: '軽く炙った赤海老　ガンベロロッソ',
+        nicknames: ['ガンベロ', 'ganbero', '赤海老', 'あかえび', 'えび', '海老', 'エビ', 'akaebi', 'ebi', 'がんべろ', 'ガンベロロッソ', 'がんべろろっそ'],
+        category: '前菜',
+        price: '550円',
+        lunchPrice: '550円',
+      }
+      ,
+      'g4.avif': {
+        name: '北海真だことアボカド　タコポキソース',
+        nicknames: ['madako', 'abokado', 'avocado', 'takopoki', '真蛸', 'マダコ', 'まだこ', 'アボカド', 'あぼかど'],
+        category: '前菜',
+        price: '880円',
+      }
+      ,
+      'g5.avif': {
+        name: '北海真だ　青唐辛子トマトサルサ',
+        nicknames: ['たこマリネ', 'タコマリネ', '真蛸', '真だこ', '真ダコ', '真タコ', '真たこ', 'takomarine', 'tomato', 'salsa', 'tomato salsa', 'tomatosalsa', '青唐辛子'],
+        category: '前菜',
+        price: '880円',
+      }
+      ,
+      'g6.avif': {
+        name: '帆立のカルパッチョ　バジルと柚子ケッカソース',
+        nicknames: ['hotate karupaccho', '帆立', 'ホタテ', 'ほたて', 'カルパッチョ', 'かるぱっちょ'],
+        category: '前菜',
+        price: '880円',
+      }
+      ,
+      'h1.avif': {
+        name: '塩辛のローストポテトサラダ',
+        nicknames: ['potetosarada', 'ポテトサラダ', 'ぽてとさらだ', 'sarada', 'salad', 'サラダ', 'さらだ', 'ポテト', 'ぽてと'],
+        category: 'Hot/Oven',
+        price: '880円',
+      }
+      ,
+      'h2.avif': {
+        name: '釜揚げしらすと海老のアヒージョ',
+        nicknames: ['アヒージョ', 'しらーじょ', 'しらージョ', 'ahijo', 'shirajo', 'shirasu', 'しらす', 'ebi', 'えび', 'エビ', '海老'],
+        category: 'Hot/Oven',
+        price: '1050円',
+      }
+      ,
+      'h3.avif': {
+        name: '月島明太カマンベール',
+        nicknames: ['kamanberu', 'カマンベール', 'かまんべーる', 'mentaiko', '明太子', 'カマンベル', 'かまんベる'],
+        category: 'Hot/Oven',
+        price: '1280円',
+      }
+      ,
+      'h4.avif': {
+        name: '牛ハチノスの煮込み　トリッパ',
+        nicknames: ['tripper', 'torippa', 'hachinosu', 'とりぱ', 'トリパ', 'トリッパ', 'とりっぱ', 'hachisosu', 'そす', 'ソス', 'のす', 'ノス', 'beef', 'gyuuhachinosu', 'gyuhachinosu'],
+        category: 'Hot/Oven',
+        price: '1100円',
+      }
+      ,
+      'h5.avif': {
+        name: '北海大あさりのワイン蒸し',
+        nicknames: ['wain', 'wine', 'wine mushi', 'wain mushi', 'asari', 'ooasari', 'わいんむし', 'ワイン蒸し', 'ワインムシ', '大アサリ', 'おおあさり', '大漁り', 'おおあさり', 'あさり', 'アサリ'],
+        category: 'Hot/Oven',
+        price: '1540円',
+      }
+      ,
+      'h6.avif': {
+        name: 'お肉屋さんのグリルドソーセージアソート',
+        nicknames: ['gurirudo soseji', 'sosejiasoto', 'niku', 'grill', 'グリル', 'sauce', 'sosu', 'asort', 'asoto', 'そせじ', 'ソーセージ', 'そーせーじ', 'アソート', 'あそーと'],
+        category: 'Hot/Oven',
+        price: '1280円',
+      }
+      ,
+      'h7.avif': {
+        name: '白モツの辛いトマト煮　モツアラビアータ',
+        nicknames: ['motsu', 'shiromutsu', 'motsuarabiata', 'arabiata', 'モツ', 'もつ', 'アラビアタ', 'アラビアータ', 'あらびあーた', '白モツ', '白もつ', 'karaitomato', 'からいとまと', 'カライトマト'],
+        category: 'Hot/Oven',
+        price: '1100円',
+      }
+      ,
+      'h8.avif': {
+        name: 'うにとクレソンのガーリックソテー',
+        nicknames: ['uni', 'kureson', 'garlic sote', 'garikkusote', 'Kress', 'クレソン', 'くれそん', 'ガーリック', 'がーりっく', 'そてー', 'ソテー'],
+        category: 'Hot/Oven',
+        price: '1350円',
+      }
+      ,
+      'h9.avif': {
+        name: '4種チーズとマッシュポテトのオーブン焼き',
+        nicknames: ['cheese', 'mash potato', 'masshupoteto', 'obunyaki', 'ovenyaki', 'mashpotato', '4cheese', '4chizu', '4chiizu', 'チーズ', '4チーズ', '4種', 'マッシュポテト', 'まっしゅぽてと', 'おぶんやき', 'オブン', 'オーブン', 'オーブン焼き', 'おーぶんやき'],
+        category: 'Hot/Oven',
+        price: '1280円',
+      }
+      ,
+      'h10.avif': {
+        name: '白トリュフバタートースト　2P',
+        nicknames: ['truffletoast', 'buttertruffle', 'shirotruffle', 'truffle toast', 'トリュフ', 'バタートースト', 'トースト'],
+        category: 'Hot/Oven',
+        price: '400円',
+      }
+      ,
+      'h11.avif': {
+        name: '小さなガーリックトースト　2P',
+        nicknames: ['garlic toast', 'garlictoast', 'ガート', 'がーと', 'ガーリック', 'がーりっく', 'gato', 'garikkutosuto', 'garikku tost', 'garikku tosuto', 'トースト', 'とーすと'],
+        category: 'Hot/Oven',
+        price: '300円',
+      }
+      ,
+      'hon1.avif': {
+        name: '牛ツラミのカルパッチョ',
+        nicknames: ['tsurami', 'karupacco', 'carpaccio', 'ツラミ', 'つらみ', 'カルパチョ', 'カルパッチョー', 'かるぱっちょー'],
+        category: '本日のおすすめ',
+        price: '1380円',
+      }
+      ,
+      'hon2.avif': {
+        name: '桜海老',
+        nicknames: ['sakuraebi', 'ebi', 'さくらえび', 'サクラエビ', '桜えび', 'sakura ebi'],
+        category: '本日のおすすめ',
+        price: '1800円',
+      }
+      ,
+      'hon3.avif': {
+        name: '実家製ティラミス',
+        nicknames: ['jikasei', 'tiramisu', 'ティラミス', 'てぃらみす'],
+        category: '本日のおすすめ',
+        price: '650円',
+      }
+      ,
+      's1.avif': {
+        name: 'クラシックシーザーサラダ',
+        nicknames: ['caesar', 'salad', 'sarada', 'shizasarada', 'classic', 'シーザーサラダ', 'しーざーさらだ', 'シザサラダ', 'しざさらだ', 'シーザサラダ', 'しーざさらだ', 'シザーサラダ', 'しざーさらだ', 'half', 'full', 'ハーフ', 'フル', 'はーふ', 'ふる'],
+        category: 'Salad',
+        price: 'H980・F1380円',
+      }
+      ,
+      's2.avif': {
+        name: '生ハムグリーンサラダ',
+        nicknames: ['gurinsarada', 'sarada', 'hamu', 'namahamu', 'グリン', 'ぐりん', 'グリーン', 'グーリン', 'ぐりーん', 'ぐーりん', 'さらだ', 'サラダ', 'salad', 'half', 'full', 'ハーフ', 'フル', 'はーふ', 'ふる'],
+        category: 'Salad',
+        price: 'H1150・F1430円',
+      }
+      ,
+      's3.avif': {
+        name: '蟹とアボカドのコブサラダ',
+        nicknames: ['salad', 'sarada', 'abokado', 'kobusarada', 'kani', 'half', 'full', 'ハーフ', 'フル', 'はーふ', 'ふる', 'アボカド', 'こぶ', 'コブ', 'さらだ', 'サラダ'],
+        category: 'Salad',
+        price: 'H1150・F1430円',
+      }
+      ,
+      's4.avif': {
+        name: 'クレソンとベーコンの温かいサラダ',
+        nicknames: ['bacon', 'kureson', 'kreson', 'bekon', 'sarada', 'atatakaisarada'],
+        category: 'Salad',
+        price: '1430円',
+      }
+      ,
+      'set0.avif': {
+        name: '週末セット',
+        nicknames: ['shumatsu set', 'set', 'lunch set', 'セット', 'せっと'],
+        category: 'Lunch Set',
+        price: '',
+        lunchPrice: '500円',
+      }
+      ,
+      'set1.avif': {
+        name: 'Aセット　デリ、パン',
+        nicknames: ['set', 'lunch set', 'セット', 'せっと', 'デリ', 'パン', 'ぱん', 'でり'],
+        category: 'Lunch Set',
+        price: '',
+        lunchPrice: '250円',
+      }
+      ,
+      'set2.avif': {
+        name: 'Bセット　スープ、デリ、パン',
+        nicknames: ['set', 'lunch set', 'セット', 'せっと', 'スープ', 'デリ', 'パン', 'すーぷ', 'でり', 'ぱん'],
+        category: 'Lunch Set',
+        price: '',
+        lunchPrice: '350円',
+      }
+      ,
+      'set3.avif': {
+        name: 'Cセット　スープ、サラダ、パン',
+        nicknames: ['set', 'lunch set', 'セット', 'せっと', 'すーぷ', 'さらだ', 'ぱん', 'スープ', 'さらだ', 'ぱん'],
+        category: 'Lunch Set',
+        price: '',
+        lunchPrice: '700円',
+      }
+      ,
+      't1.avif': {
+        name: 'ツナと人参のマリネ　キャロットラペ',
+        nicknames: ['ninjin', 'ninjintsuna', 'kyarottorape', 'carrot', 'tsuna', 'tuna', '人参', 'キャロットラペ', 'マリネ', 'ツナ', 'にんじん', 'ニンジン', 'きゃろっとらぺ', 'ラペ', 'らぺ', 'つな'],
+        category: '前菜',
+        price: '650円',
+        lunchPrice: '650円',
+      }
+      ,
+      't2.avif': {
+        name: 'いいだことヤリイカの地中海風マリネ',
+        nicknames: ['yariika', 'chichukaifu marine', 'マリネ', '地中海風', 'マリネ', 'まりね', 'いいダコ', 'いいだこ', 'イイダコ', '飯蛸', '飯ダコ', '飯だこ', '飯タコ', '飯たこ'],
+        category: '前菜',
+        price: '990円',
+        lunchPrice: '990円',
+      }
+      ,
+      't3.avif': {
+        name: '無花果とナッツのハニーチーズ豆腐',
+        nicknames: ['honey', 'cheese', 'honeycheese', 'tofu', 'ichijika', 'natsu', 'nuts', 'なつ', 'ナツ', 'ナッツ', 'なっつ', 'ハニーチーズ', 'はにーちーず', 'チーズ', 'チズ', 'ちず', 'ちーず', 'ハニチズ', 'はにちず', 'はにちーず', 'ハニチーズ'],
+        category: '前菜',
+        price: '980円',
+      }
+      ,
+      't4.avif': {
+        name: '生ハムとブラータチーズ',
+        nicknames: ['burata', 'brata', 'burrata', 'cheese', 'namahamu', 'ブラータ', 'チーズ', 'チズ', 'ちず', 'ちーず', 'ブラタ', 'ぶらた', 'ぶらーた', 'hamu', 'はむ', 'ハム', 'chizu', 'chiizu', 'chis'],
+        category: '前菜',
+        price: '1480円',
+      }
+      ,
+      't5.avif': {
+        name: 'チーズ盛り合わせ',
+        nicknames: ['moriawase', 'cheese', 'チーズ', 'チズ', 'ちず', 'ちーず', 'chizu', 'chiizu', 'chis', 'もり', 'モリ', 'もりあわせ', 'モリアワセ'],
+        category: '前菜',
+        price: '1480円',
+      }
+      ,
+      't6.avif': {
+        name: '自家製ピクルス',
+        nicknames: ['pikurusu', 'pickels', 'pickles', 'jikasei', 'ピクルス', 'ピックルス', 'ピクルッス', 'ぴくるす', 'ぴっくるす', 'ぴくるっす'],
+        category: '前菜',
+        price: '600円',
+      }
+      ,
+      't7.avif': {
+        name: '自家製2種オリーブ',
+        nicknames: ['oribu', 'olives', 'jikasei', 'おりぶ', 'オリブ', 'オーリブ', 'オリーブ', 'おりぶ', 'おーりぶ', 'おりーぶ', '2shu', '2種', '2種オリーブ', '2種おりーぶ'],
+        category: '前菜',
+        price: '600円',
+      }
+      ,
+      'tan1.avif': {
+        name: '丸パン',
+        nicknames: ['pan', 'yakitate', 'maru', 'set', 'lunch set', 'セット', 'せっと', 'ぱん', 'パン', '焼きたて', 'やきたて', '焼き立て', 'ヤキタテ'],
+        category: '単品',
+        price: '150円',
+        lunchPrice: '150円',
+      }
+      ,
+      'tan2.avif': {
+        name: 'デリ',
+        nicknames: ['deli', 'vegetable', 'daily', 'set', 'lunch set', 'セット', 'せっと', 'でり', 'デリ'],
+        category: '単品',
+        price: '150円',
+        lunchPrice: '150円',
+      }
+      ,
+      'tan3.avif': {
+        name: 'スープ',
+        nicknames: ['set', 'lunch set', 'soup', 'supu', 'suupu', 'セット', 'せっと', 'スープ', 'すぷ', 'スプ', 'すーぷ'],
+        category: '単品',
+        price: '200円',
+        lunchPrice: '200円',
+      }
+      ,
+      'tan4.avif': {
+        name: 'サラダ',
+        nicknames: ['salad', 'tuna', 'set', 'lunch set', 'sarada', 'セット', 'せっと', 'さらだ', 'サラダ'],
+        category: '単品',
+        price: '500円',
+        lunchPrice: '500円',
+      }
+      ,
+      'w0.avif': {
+        name: 'グラスワイン',
+        nicknames: ['glass wine', 'wine', 'gurasu', 'ワイン', 'わいん','wain'],
+        category: 'Wine',
+        price: '990円',
+        lunchPrice: '990円',
+      }
+      ,
+      'w1.avif': {
+        name: 'ピッコロ 1,2',
+        nicknames: ['pikkoro', 'piccolo', 'ワイン', 'わいん', 'ぴころ', 'ピコロ', 'ぴっころ','wain','pikolo'],
+        category: 'Wine',
+        price: '芽育、河合、松田、坂東：1620円',
+      }
+      ,
+      'w11.avif': {
+        name: 'ピッコロ 3,4',
+        nicknames: ['pikkoro', 'piccolo', 'ワイン', 'わいん', 'ぴころ', 'ピコロ', 'ぴっころ','wain','pikolo'],
+        category: 'Wine',
+        price: 'みちょぱ 、森、水上、小田：1930円',
+      }
+      ,
+      'w12.avif': {
+        name: 'ピッコロ 5,6',
+        nicknames: ['pikkoro', 'piccolo','ワイン', 'わいん', 'ぴころ', 'ピコロ', 'ぴっころ','wain','pikolo'],
+        category: 'Wine',
+        price: '有村、高畑、玉森、岡田：2420円',
+      }
+      ,
+      'w13.avif': {
+        name: 'ピッコロ 7,8',
+        nicknames: ['pikkoro', 'piccolo', 'ワイン', 'わいん', 'ぴころ', 'ピコロ', 'ぴっころ','wain','pikolo'],
+        category: 'Wine',
+        price: '長谷川、吉瀬、永山、鈴木：2850円',
+      }
+      ,
+      'w14.avif': {
+        name: 'ピッコロ 9',
+        nicknames: ['pikkoro', 'piccolo','ワイン', 'わいん', 'ぴころ', 'ピコロ', 'ぴっころ','wain','pikolo'],
+        category: 'Wine',
+        price: '山口智子 、リリー・フランキー：3470円',
+      }
+      ,
+      'w2.avif': {
+        name: 'デキャンタ 1,2',
+        nicknames: ['dekyanta', 'dekyanter', 'dekanter', 'ワイン', 'わいん', 'できゃんた','wain'],
+        category: 'Wine',
+        price: '芽育、河合、松田、坂東：2990円',
+      }
+      ,
+      'w21.avif': {
+        name: 'デキャンタ 3,4',
+        nicknames: ['dekyanta', 'dekyanter', 'dekanter', 'ワイン', 'わいん', 'できゃんた','wain'],
+        category: 'Wine',
+        price: 'みちょぱ 、森、水上、小田：3650円',
+      }
+      ,
+      'w22.avif': {
+        name: 'デキャンタ 5,6',
+        nicknames: ['dekyanta', 'dekyanter', 'dekanter', 'ワイン', 'わいん', 'できゃんた','wain'],
+        category: 'Wine',
+        price: '有村、高畑、玉森、岡田：4600円',
+      }
+      ,
+      'w23.avif': {
+        name: 'デキャンタ 7,8',
+        nicknames: ['dekyanta', 'dekyanter', 'dekanter', 'ワイン', 'わいん', 'できゃんた','wain'],
+        category: 'Wine',
+        price: '長谷川、吉瀬、永山、鈴木：5450円',
+      }
+      ,
+      'w24.avif': {
+        name: 'デキャンタ 9',
+        nicknames: ['dekyanta', 'dekyanter', 'dekanter','ワイン', 'わいん', 'できゃんた','wain'],
+        category: 'Wine',
+        price: '山口智子 、リリー・フランキー：6650円',
+      }
+      ,
+      'w3.avif': {
+        name: 'ボトル 1,2',
+        nicknames: ['botoru','bottoru', 'bottle', 'bottle wine', 'ワイン', 'わいん', 'ぼとる','wain'],
+        category: 'Wine',
+        price: '芽育、河合、松田、坂東：3990円',
+      },
+      'w31.avif': {
+        name: 'ボトル 3,4',
+        nicknames: ['botoru', 'bottoru','bottle', 'bottle wine', 'ワイン', 'わいん', 'ぼとる','wain'],
+        category: 'Wine',
+        price: 'みちょぱ 、森、水上、小田：4950円',
+      },
+      'w32.avif': {
+        name: 'ボトル 5,6',
+        nicknames: ['botoru','bottoru', 'bottle', 'bottle wine', 'ワイン', 'わいん', 'ぼとる','wain'],
+        category: 'Wine',
+        price: '有村、高畑、玉森、岡田：6400円',
+      },
+      'w33.avif': {
+        name: 'ボトル 7,8',
+        nicknames: ['botoru', 'bottoru','bottle', 'bottle wine', 'ワイン', 'わいん', 'ぼとる','wain'],
+        category: 'Wine',
+        price: '長谷川、吉瀬、永山、鈴木：7650円',
+      },
+      'w34.avif': {
+        name: 'ボトル 9',
+        nicknames: ['botoru','bottoru', 'bottle', 'bottle wine', 'ワイン', 'わいん', 'ぼとる','wain'],
+        category: 'Wine',
+        price: '山口智子 、リリー・フランキー：9450円',
+      }
+    };
+
+    const recipeItems = {
+      '1.avif': {
+        name: '砂肝のコンフィ',
+        // nicknames: ['カレー', 'Chicken Curry'],
+        category: 'ホルモン',
+        tags: ['？mins', 'ホルモン'],
+        ingredients: {
+          '🅰 砂肝': '2kg',
+          '🅰 塩': '50g',
+          '🅰 タイム': '２本',
+          '🅰 ローリエ': '２枚',
+          '🅰 ローズマリー': '２本',
+          '白ワイン': '400cc',
+          'オイル': '400cc'
+        },
+        // steps: ['0.avif', '0.avif', '0.avif'],
+        // videoLink: 'https://www.youtube.com/watch?v=curryvideo',
+        stepText: `"""
+        1. 石砂肝をしっかり掃除する
+        2. Aの材料で砂肝をもみこみ、1晩マリネする
+        3. ワインとオイルの中で100℃ 5~6時間煮る。
+        """`
+      },
+      '2.avif': {
+        name: '5種の豆とベーコンのハニーマスタードマリネ',
+        nicknames: ['マリネ'],
+        category: 'マリネ',
+        tags: ['？mins', 'マリネ'],
+        ingredients: {
+          '🅰 ベーコン': '400g',
+          '🅰 4種豆': '500g',
+          '🅰 グリーンピース': '500g',
+          '🅰 コーン': '1缶',
+          '🅱 粒マスタード': '60g',
+          '🅱 はちみつ': '30g',
+          '🅱 ドレッシング': '180g',
+          '（🅲 酢（白ワインビネガーでもOK）': '270g）',
+          '（🅲 めんつゆ': '170g）',
+          '（🅲 コラ茶': '20g）',
+          '（🅲 塩': '15g）',
+          '（🅲 BP': '30ガリ）',
+          '（🅲 オイル': '820g）',
+        },
+        // steps: ['step1-soup.jpg', 'step2-soup.jpg'],
+        stepText: `"""
+        1. ベーコンを60cc程度の油でソテーする
+        2. Aの具材をボウルに入れてBの具材を合わせる
+        3. 混ぜ合わせて完成
+        ※ドレッシング＝🅲の材料
+        """`
+      },
+      '3.avif': {
+        name: '奈良漬のクリームチーズ和え',
+        // nicknames: ['ケーキ', 'Chocolate Cake'],
+        // category: 'Dessert',
+        tags: ['？mins', 'チーズ'],
+        ingredients: {
+          'チョコレート': '200・400g',
+          'サワークリーム': '75・180g（全部）',
+          '西京みそ': '40・80g',
+          '奈良漬': '100・200g',
+          'クルミ': '50・100g'
+        },
+        // videoLink: 'https://www.youtube.com/watch?v=cakevideo',
+        stepText: `"""
+        1. 奈良漬(あらみじん)を刻む。→汁も入れる
+        2. クルミを刻む。(ミックスナッツ代用)
+        3. 全てを混ぜる。
+        ※サワークリーム全部使い切りたいので、 2倍量仕込み!!
+        """`
+      }
+      ,
+      '4.avif': {
+        name: 'トリュフ醤油ドレッシング',
+        category: 'ドレッシング',
+        tags: ['？mins', 'ドレッシング'],
+        ingredients: {
+          'ピュアオイル': '250cc',
+          'うすくち醤油': '60cc',
+          'トリュフオイル': '50cc',
+          '白ワインVinegar': '50cc',
+          'ディジョンマスタード': '10g',
+          'だいだい酢': '10cc'
+        },
+        stepText: `"""
+        1. 全てまぜて完成
+        """`
+      }
+      ,
+      '5.avif': {
+        name: '（サバ）鯖アンチョビポテトサラダ',
+        category: 'サラダ',
+        tags: ['？mins', 'サラダ'],
+        ingredients: {
+          '男爵いも': '1kg',
+          'ズッキーニ': '1本',
+          'ガリ(みじん切り)': '100g',
+          '鯖水煮缶(1は120g)': '2缶',
+          'アンチョビペースト': '50g',
+          'マヨネーズ': '40g',
+          '粒マスタード': '40g',
+        },
+        stepText: `"""
+        1. ？？？
+        """`
+      },
+      '6.avif': {
+        name: 'マスタードドレッシング',
+        category: 'ドレッシング',
+        tags: ['？mins', 'ドレッシング'],
+        ingredients: {
+          'マスタード(粒ない)': '40g',
+          '白ワインビネガー': '20cc',
+          '塩': '5g',
+          '砂糖': '2g',
+          'ピュアオイル': '80cc',
+        },
+        stepText: `"""
+        1. 混ぜて完成
+        """`
+      },
+      '7.avif': {
+        name: 'ガーリックソイドレッシング',
+        category: 'ドレッシング',
+        tags: ['？mins', 'ドレッシング'],
+        ingredients: {
+          'ひまわり油': '800cc',
+          'にんにく(みじん切り)': '175g',
+          '正油': '250g',
+          '米酢': '100g',
+          '白ワインビネガー': '10g',
+          'マスタード': '140g',
+          '水': '50cc'
+        },
+        stepText: `"""
+        1. 鍋にオイル・にんにくを入れて強火にかける
+        2. にんにくに色が付いたら火を止めて水を入れこ冷ます
+        3. 他の材料に油を注ぎながらハンドブレンダーでゆっくりつなぐ
+        """`
+      },
+      '8.avif': {
+        name: 'きのこのデュクセル',
+        category: 'きのこ',
+        tags: ['？mins', 'きのこ'],
+        ingredients: {
+          '玉ネギ': '200g',
+          'セロリ(筋をとる)': '100g',
+          'マッシュルーム': '2pc',
+          'ポルチニパウダー': '10g',
+        },
+        stepText: `"""
+        1. セロリは筋をとっておく
+        2. 全ての材料をミキサーにかけてみじん切りの大きさにする
+        3. 混ぜ合わせて完成
+        """`
+      },
+      '9.avif': {
+        name: 'エシャロットドレッシング',
+        category: 'ドレッシング',
+        tags: ['？mins', 'ドレッシング'],
+        ingredients: {
+          'ピュアオイル': '250cc',
+          'りんご(皮込はずす)': '70g(目安粉)',
+          'オレンジ(実だけ)': '80g(目安1ヶ)',
+          'ハチミツ': '40g',
+          '薄口正油': '50g',
+          'マスタード(粒なし)': '20g',
+          'アップルビネガー': '50g',
+          '玉ネギ': '30g',
+          '塩': '5g'
+        },
+        stepText: `"""
+        1. りんご、オレンジは果実だけの状態にする
+        2. 全ての材料をジューサーで回して完成
+        """`
+      },
+      '10.avif': {
+        name: 'ベリーコンポート',
+        category: 'コンポート',
+        tags: ['？mins', 'コンポート'],
+        ingredients: {
+          '安い赤ワイン': '500cc',
+          'ミックスベリー': '500g',
+          'グラニュー糖': '150g',
+          'レモン汁': '20cc',
+          'アールグレイティーパック': '2つ'
+        },
+        stepText: `"""
+        1. ホワインは熱してアルコール飛ばす
+        2. アールグレイティーパック入れて5分置く
+        3. 5分経ったらティーパックあげてグラニュー糖を入れる
+        4. 中火でグラニュー糖溶かしながらミックスベリーを入れる
+        5. 少し弱火で15分煮立たせる
+        6. 粗熱とったらレモン汁を入れて出来上がり
+        """`
+      },
+      '11.avif': {
+        name: 'ハニーチーズ豆腐',
+        category: '前菜',
+        tags: ['？mins', '前菜'],
+        ingredients: {
+          'クルムチーズ': '2pc',
+          '絹豆腐(水気をよく切る)': '2pc',
+          '砂糖': '60g',
+          '牛乳': '200cc',
+          '生クリーム': '200cc',
+          'ゼラチン': '19g'
+        },
+        stepText: `"""
+        1. ゼラチンを氷水に漬けて戻しておく
+        2. なべに砂糖、乳、生クリームを入れて一煮立ちさせる(よく混ぜる)
+        3. なべの火を止めてゼラチンを加える。(よく混ぜる)
+        4. 水気を切った豆腐、クリームチーズを容器に入れ、そこに上記のなべの具材を流し入れる
+        5. ハンドブレンダーでよく混ぜる
+        6. 粗熱を取ったら、こ冷蔵庫で冷し固めて完成
+
+        Point
+        ・ゼラチンは沸騰し続けた所(変続ける)に入れておくとご凝固作用がなくなってしまうので注意
+・ゼラたは氷水でないと通常の水の温度でもタ少溶けるので注意
+        """`
+      },
+      '12.avif': {
+        name: 'キミチュリソース',
+        category: 'ソース',
+        tags: ['？mins', 'ソース'],
+        ingredients: {
+          'イタリアンパセリ': '50g',
+          'パクチー': '25g',
+          '玉ネギ': '100g',
+          'にんにく': '30g',
+          'EXVオイル': '150cc',
+          '塩': '２杯',
+          'タイム(茎は外す)': '3g',
+          '🅰 コラトゥーラ': '15g',
+          '🅰 レモンジュース': '15g',
+          '🅰 ライムジュース': '20g',
+        },
+        stepText: `"""
+        1. 野菜を全て刻んでボールで混ぜる (玉ネギは水にさらす)
+        2. 仕上り370gに対して🅰の材料を混ぜて完成
+        """`
+      },
+      '13.avif': {
+        name: '香草バター❷',
+        category: 'バター',
+        tags: ['？mins', 'バター'],
+        ingredients: {
+          'バター': '900g',
+          '生ハム(脂身は外れた状態)': '150g',
+          'にんにく': '210g',
+          'エシャロット': '120g',
+          'パセリ': '190g',
+          'アーモンドスライス': '120g',
+          'アーモンドパウダー': '45g',
+          'ペルノー': '5g',
+          'マスタード(粒無し)': '10g',
+          '塩': '11g'
+        },
+        stepText: `"""
+        1. バターを室温でかく戻しておく
+        2. マーモンドスライス・アーモンドパウダーをオーブンに入れローストする (150℃で5分)
+        3. ミキサーで生いんとエシャロット、にんにくペルノー・マスタードと②を混ぜる
+        4. 茎を外したパセリを塩を振りながらミキサーで回す
+        5. ③の具材とパセリ・バターをミキサーで回す(4日に分けて)
+        6. ボールでしっかり混ぜラップで包む
+        """`
+      },
+      '14.avif': {
+        name: '香草バター❶',
+        category: 'バター',
+        tags: ['？mins', 'バター'],
+        ingredients: {
+          'バター': '1kg',
+          'アーモンドプードル': '300g',
+          'エルハーパー': '40cc',
+          'ベーコン(みじん切り)': '150g',
+          'にんにく(みじん切り)': '150g',
+          'マスタード(粒なし)': '10g',
+          '塩': '10g',
+          'パセリ(みじん切り)': '1束(200g)'
+        },
+        stepText: `"""
+        1. バターを室温でかくなるまで戻しておく
+        2. アーモンドプードルを150℃ 10分ローストする
+        3. ミキサーで全べての材料を混ぜる
+        """`
+      },
+      '15.avif': {
+        name: 'ガルムドレッシング',
+        category: 'ドレッシング',
+        tags: ['？mins', 'ドレッシング'],
+        ingredients: {
+          '玉ネギ': '600g',
+          'にんにく(ホール)': '2ケ',
+          '白ワインビネガー': '600g',
+          '上白糖': '40g',
+          '焼塩': '50g',
+          'コラトゥーラ': '40g',
+          'マスタード(粒無い)': '6g',
+          'ゴルゴン': '10g',
+          'WP': '12がり',
+          'サラダ油': '1500cc',
+
+        },
+        stepText: `"""
+        1. 玉ネギを一口大に切り、ニンニクと白ワインビネガーで一緒にミキサーにかける
+        2. 他の材料を合わせて回す
+        3. 1週間寝かせてサラダ油で少しずつ。ミキサーでつなぐ
+        """`
+      },
+      '16.avif': {
+        name: 'レモンと玉ネギのソース',
+        category: 'ソース',
+        tags: ['？mins', 'ソース'],
+        ingredients: {
+          'レモン': '2ケ',
+          '玉ネギ': '1ケ',
+          '塩': '10g',
+          'ピュアオイル': '210cc',
+        },
+        stepText: `"""
+        1. レモンの皮をみじん切りにする (薄皮はしっかり取り除く)
+        2. 玉ネギをミキサーでみじん切りにするはく水でさらして、しっかり水気を切る)
+        3. レモンの果汁をしぼり具材と全べて合わせて完成
+        """`
+      },
+      '17.avif': {
+        name: 'ガーリックマヨネーズ',
+        category: 'マヨネーズ',
+        tags: ['？mins', 'マヨネーズ'],
+        ingredients: {
+          'マヨネーズ': '375g',
+          '酢': '15cc',
+          'ピュアキイル': '30cc',
+          'ニンニク(すりおろし)': '7g',
+        },
+        stepText: `"""
+        1. 混ぜて完成
+        """`
+      },
+      '18.avif': {
+        name: 'ティラミス',
+        category: 'デザート',
+        tags: ['？mins', 'デザート'],
+        ingredients: {
+          'ティラミス用クッキー': '18本',
+          'エスプレッソ': '12杯',
+          '生クリーム': '500cc',
+          '砂糖(グラニュー)': '130g',
+          'マスカルポーネ': '?',
+        },
+        steps: ['tiramisu.avif','tiramisu1.avif','tiramisu2.avif'],
+        stepText: `"""
+        1. クッキー生地をバットに並べる
+        - 写真の感じ
+        2. エスプレッソを入れる。 (エスプレッソを入れると生地が入りやすいかも)
+        3. クッキー生地がエスプレッを吸いとり、 生地が冷えるまで冷蔵庫で休ませる
+        4. 生クリームと砂糖を泡立てる。(分立てくらい) ボウルに入った生クリームをゆっくり混ぜて、ゆっくりと泡立て器を持ち上げたときにツノが立って曲がるくらい
+        5. マスカルポーネをゴムベラでつやが出るまで練る
+        6. アスカルポーネと生クリームを合わせて10分立てになるまで泡立てる。 (ツノがピンと立つまで
+        7. 生地がに含めたら、クリームを生地の上にのせて、ならす。
+        8. 生クリームをきれいにならすためにゴムベうをぬらすとやりやすいよ。
+        """`
+      },
+      '19.avif': {
+        name: 'バルサミコビネグレット(牛タンのソース)',
+        category: 'ソース',
+        tags: ['？mins', 'ソース'],
+        ingredients: {
+          'バルサミコ': '50cc',
+          '薄口正油': '100cc',
+          'にんにく(すりおろし)': '16g',
+          'ひまわり油': '150cc'
+        },
+        stepText: `"""
+        1. 混ぜて完成
+        """`
+      },
+      '20.avif': {
+        name: '牛タン',
+        category: '牛',
+        tags: ['？mins', '牛'],
+        ingredients: {
+          'むきタン': '1本',
+          '塩': '1%',
+          'ピュアオイル': '90cc',
+          'にんにく(みじん切り)': '5杯',
+          'BP': 'しっかり'
+        },
+        stepText: `"""
+        1. タンを掃除して、塩、BPをしっかりしてなじませる
+        2. 串を刺してから、表面を軽く焼く (消毒)
+        3. 袋のジップロックに入れた、オイル、にんにく⑧ を入れてよく揉みこむ
+        4. 低温調理器に入れる(63℃1.5~2時間) 指で確認!ウェルダンくらい
+        5. ジップロック袋のまま水水に入れて粗熱をとる
+        Point
+        調理する前に室温でられて戻しておくこと
+        """`
+      },
+      '21.avif': {
+        name: 'キャベツのドレ (ベーコンキャベツドレ)',
+        category: 'ドレッシング',
+        tags: ['？mins', 'ドレッシング'],
+        ingredients: {
+          'グラニュー糖': '30g',
+          'チキンコンソメ': '50g',
+          '塩': '30g',
+          'にんにく(おろし)': '90g',
+          'お湯': '200g',
+          'ごま油': '450g',
+          '白ごま': '50g'
+          
+        },
+        stepText: `"""
+        1. 粉末調味料とすりおろしにんにくを入れてお湯で溶かし混ぜる
+        2. ごま油を合わせ最後に白ごまを合わせる
+        """`
+      },
+      '22.avif': {
+        name: 'ジェノベーゼソース(バジルソース)',
+        category: 'ソース',
+        tags: ['？mins', 'ソース'],
+        ingredients: {
+          'バジル': '300g',
+          '万能ネギ': '3束',
+          'ピーナッツ': '60g',
+          'アンキュビ': '700g',
+          '粉チーズ': '150g',
+          'ピュアオイル': '600cc'
+        },
+        stepText: `"""
+        1. 万能ネギの根だけ落とす。バジル、万能ネギを沸いたお湯で軽くゆでる。その後、氷水でしめる
+        2. 万能ネギ・バジルを手でしぼって水気を切る
+        3. ピーナッツをミキサーで回して、ペーストになるまで回す。(ミキサー内に水分があると分離やすサー内に水分が無いかしっかり確認!!)
+        4. アンチョビをミキサーで回してペーストにする。ペーストになったらボウルに移す。
+        5. バジル、万能ネギをミキサーにかけペーストにする。ベーストになったらだらしに移す
+        6. ③④⑤が入ったボウルにビュアオイル・粉チーズを入れてハンドブレンダーで回して混ぜて完成
+        """`
+      },
+      '23.avif': {
+        name: 'CEO ソース',
+        category: 'ソース',
+        tags: ['？mins', 'ソース'],
+        ingredients: {
+          'にんべん': '100cc',
+          'バルサミコ': '400cc',
+          'ルビーポート(ワイン)': '200cc',
+          'バター': '40g',
+        },
+        stepText: `"""
+        1. 鍋ににんべん、バルサミコ、ボートワインを入れて半分の量まで詰める
+        2. 火を止めてバターを入れて完成
+        """`
+      },
+      '24.avif': {
+        name: '温玉',
+        category: '卵',
+        tags: ['？mins', '卵'],
+        ingredients: {
+          '卵': '8ケまで同時可',
+        },
+        stepText: `"""
+        1. 63° 1"45分
+        ー1時45分？？？
+        """`
+      },
+      '25.avif': {
+        name: 'きのこマリネ',
+        category: 'マリネ',
+        tags: ['？mins', 'マリネ'],
+        ingredients: {
+          'オイル': '450cc',
+          'ニンニク': '20g',
+          'しいたけ': '3pc',
+          'しめじ': '4pc',
+          'バラエリンギ': '4pc(250g)',
+          'オレガノ': '0.5g',
+          'マッシュルーム': '3pc',
+          '🅰 玉ねぎ': '1個',
+          '🅰 スイートピクルス': '6本',
+          '🅰 ケッパー': '40g',
+          '塩': '20g',
+          'BP': '5g',
+          'タイム': '5本'
+        },
+        stepText: `"""
+        1. キノコをすべて口大に切る
+        2. 🅰をミキサーにかける
+        3. ニンニクとオイルを入れていためる
+        4. ③のなべに全てのキノコを入れていためると塩とBP
+        5. キコがしんなりしてきたら🅰を入れる
+        6. 弱火で火にかけて食材がなじんだら火を止めて私がタイムをれて混ぜて完成
+
+        """`
+      },
+      '26.avif': {
+        name: 'レンコンと水菜柚子胡椒マリネ',
+        category: 'マリネ',
+        tags: ['？mins', 'マリネ'],
+        ingredients: {
+          'レンコン': '3pc',
+          '柚子胡椒': '40g',
+          'フレンチドレッシング': '500g',
+          'オリーブオイル': 'レードル7杯',
+          '刻み柚子': '50g',
+          '玉ねぎスライス': '1個分',
+          '水菜': '1.5~2pc'
+        },
+        stepText: `"""
+        1. レンコンをゆでる
+        2. ゆで終わったら粗熱を取って材料全てまぜて完成
+        """`
+      },
+      '27.avif': {
+        name: '生姜と玉ねぎのスープ',
+        category: 'スープ',
+        tags: ['？mins', 'スープ'],
+        ingredients: {
+          '玉ねぎ': '2個',
+          '水': '3L',
+          'コンソメ': '80g',
+          '塩': '4g',
+          '生姜': '80g',
+          'ポタージュベース': '1つ'
+        },
+        stepText: `"""
+        1. 玉ねぎを薄くスライスする
+        2. 鍋に上記の材料を全て入れ、 弱火~中火で煮込む
+        3. 玉ねぎがくた～としたら完成
+        """`
+      },
+      '28.avif': {
+        name: 'ガスパチョ',
+        category: 'スープ',
+        tags: ['？mins', 'スープ'],
+        ingredients: {
+          '赤ピーマンのスープ': '1kg',
+          'ロッソ': '500cc',
+          '水': '1.5L',
+          'チキンコンソメ': '60g',
+        },
+        stepText: `"""
+        1. 糧を全て入れ混ぜ合わせ一煮立ちさせて完成
+        """`
+      },
+      '29.avif': {
+        name: 'ミネストローネ',
+        category: 'スープ',
+        tags: ['？mins', 'スープ'],
+        ingredients: {
+          '野菜ミックス': '1kg',
+          '水': '1.5L',
+          'ロッソ': '500cc',
+          'チキンコンソメ': '40g',
+          'オレガノ': '2つまみ',
+        },
+        stepText: `"""
+        1. ①材料を全てされ混ぜ合わせ、煮立させて完成
+        """`
+      },
+      '30.avif': {
+        name: '',
+        category: '',
+        tags: ['？mins', ''],
+        ingredients: {
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': ''
+        },
+        stepText: `"""
+        1. 
+        """`
+      },
+      '.avif': {
+        name: '',
+        category: '',
+        tags: ['？mins', ''],
+        ingredients: {
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': ''
+        },
+        stepText: `"""
+        1. 
+        """`
+      },
+      '.avif': {
+        name: '',
+        category: '',
+        tags: ['？mins', ''],
+        ingredients: {
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': ''
+        },
+        stepText: `"""
+        1. 
+        """`
+      },
+      '.avif': {
+        name: '',
+        category: '',
+        tags: ['？mins', ''],
+        ingredients: {
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': ''
+        },
+        stepText: `"""
+        1. 
+        """`
+      },
+      '.avif': {
+        name: '',
+        category: '',
+        tags: ['？mins', ''],
+        ingredients: {
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': ''
+        },
+        stepText: `"""
+        1. 
+        """`
+      },
+      '.avif': {
+        name: '',
+        category: '',
+        tags: ['？mins', ''],
+        ingredients: {
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': ''
+        },
+        stepText: `"""
+        1. 
+        """`
+      },
+      '.avif': {
+        name: '',
+        category: '',
+        tags: ['？mins', ''],
+        ingredients: {
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': ''
+        },
+        stepText: `"""
+        1. 
+        """`
+      },
+      '.avif': {
+        name: '',
+        category: '',
+        tags: ['？mins', ''],
+        ingredients: {
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': ''
+        },
+        stepText: `"""
+        1. 
+        """`
+      },
+      '.avif': {
+        name: '',
+        category: '',
+        tags: ['？mins', ''],
+        ingredients: {
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': ''
+        },
+        stepText: `"""
+        1. 
+        """`
+      },
+      '.avif': {
+        name: '',
+        category: '',
+        tags: ['？mins', ''],
+        ingredients: {
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': ''
+        },
+        stepText: `"""
+        1. 
+        """`
+      },
+      '.avif': {
+        name: '',
+        category: '',
+        tags: ['？mins', ''],
+        ingredients: {
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': ''
+        },
+        stepText: `"""
+        1. 
+        """`
+      },
+      '.avif': {
+        name: '',
+        category: '',
+        tags: ['？mins', ''],
+        ingredients: {
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': ''
+        },
+        stepText: `"""
+        1. 
+        """`
+      },
+      '.avif': {
+        name: '',
+        category: '',
+        tags: ['？mins', ''],
+        ingredients: {
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': ''
+        },
+        stepText: `"""
+        1. 
+        """`
+      },
+      '.avif': {
+        name: '',
+        category: '',
+        tags: ['？mins', ''],
+        ingredients: {
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': ''
+        },
+        stepText: `"""
+        1. 
+        """`
+      },
+      '.avif': {
+        name: '',
+        category: '',
+        tags: ['？mins', ''],
+        ingredients: {
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': ''
+        },
+        stepText: `"""
+        1. 
+        """`
+      },
+      '.avif': {
+        name: '',
+        category: '',
+        tags: ['？mins', ''],
+        ingredients: {
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': ''
+        },
+        stepText: `"""
+        1. 
+        """`
+      },
+      '.avif': {
+        name: '',
+        category: '',
+        tags: ['？mins', ''],
+        ingredients: {
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': ''
+        },
+        stepText: `"""
+        1. 
+        """`
+      },
+      '.avif': {
+        name: '',
+        category: '',
+        tags: ['？mins', ''],
+        ingredients: {
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': ''
+        },
+        stepText: `"""
+        1. 
+        """`
+      },
+      '.avif': {
+        name: '',
+        category: '',
+        tags: ['？mins', ''],
+        ingredients: {
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': ''
+        },
+        stepText: `"""
+        1. 
+        """`
+      },
+      '.avif': {
+        name: '',
+        category: '',
+        tags: ['？mins', ''],
+        ingredients: {
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': ''
+        },
+        stepText: `"""
+        1. 
+        """`
+      },
+      '.avif': {
+        name: '',
+        category: '',
+        tags: ['？mins', ''],
+        ingredients: {
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': ''
+        },
+        stepText: `"""
+        1. 
+        """`
+      },
+      '.avif': {
+        name: '',
+        category: '',
+        tags: ['？mins', ''],
+        ingredients: {
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': ''
+        },
+        stepText: `"""
+        1. 
+        """`
+      },
+      '.avif': {
+        name: '',
+        category: '',
+        tags: ['？mins', ''],
+        ingredients: {
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': ''
+        },
+        stepText: `"""
+        1. 
+        """`
+      },
+      '.avif': {
+        name: '',
+        category: '',
+        tags: ['？mins', ''],
+        ingredients: {
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': '',
+          '': ''
+        },
+        stepText: `"""
+        1. 
+        """`
+      }
+    };
+
     const flagList = ['p1.avif','p2.avif','p3.avif','p4.avif','p5.avif','p6.avif','p7.avif','p8.avif','p9.avif','p10.avif','p11.avif','p12.avif','p13.avif','p14.avif','p15.avif','p16.avif','p17.avif'];
-    const tableList = ['ta1.avif', 'ta2.avif', 'ta3.avif', 'ta4.avif', 'ta5.avif', 'ta6.avif', 'ta10.avif', 'ta12.avif', 'ta20.avif', 'ta21.avif','ta22.avif','ta23.avif','ta24.avif','ta25.avif','ta26.avif','ta27.avif','ta28.avif','ta29.avif','ta30.avif','ta31.avif','ta32.avif','ta33.avif','ta34.avif','ta35.avif','ta36.avif','ta37.avif','ta38.avif','ta39.avif','ta40.avif','ta41.avif','ta42.avif','ta43.avif','ta44.avif','ta45.avif','ta46.avif','ta47.avif','ta48.avif','ta49.avif','ta50.avif','ta51.avif','ta52.avif',];
+    const tableList = ['ta1.avif', 'ta2.avif', 'ta3.avif', 'ta4.avif', 'ta5.avif', 'ta6.avif', 'ta10.avif', 'ta12.avif', 'ta20.avif', 'ta21.avif','ta22.avif','ta23.avif','ta24.avif','ta25.avif','ta26.avif','ta27.avif','ta28.avif','ta29.avif','ta30.avif','ta31.avif','ta32.avif','ta33.avif','ta34.avif','ta35.avif','ta36.avif','ta37.avif','ta38.avif','ta39.avif','ta40.avif','ta41.avif','ta42.avif','ta43.avif','ta44.avif','ta45.avif','ta46.avif','ta47.avif','ta48.avif','ta49.avif','ta50.avif','ta51.avif','ta52.avif'];
     const table0 = ['ttt1.avif','ttt2.avif','ttt3.avif','ttt4.avif'];
     const guestNumbersStandard = [1,2];
     const guestNumbersLarge = [3,4];
     const guestNumbersEnter = [1,1,1,1,1,1,2,2,2,2,2,3,4,4];
 
-    const imageListWinesWhite = ['w1.avif','w2.avif','w3.avif','w4.avif','w5.avif','w6.avif','w7.avif','w8.avif','w9.avif'];
-    const imageListWinesRed = ['w10.avif','w11.avif','w12.avif','w13.avif','w14.avif','w15.avif','w16.avif','w17.avif','w18.avif'];
+    const imageListWinesWhite = ['w1.avif','w2.avif','w3.avif','w4.avif','w5.avif','w6.avif','w7.avif','w8.avif','w9.avif','ww1.avif','ww2.avif','ww3.avif','ww4.avif','ww5.avif','ww6.avif','ww7.avif','ww8.avif','ww9.avif'];
+    const imageListWinesRed = ['w10.avif','w11.avif','w12.avif','w13.avif','w14.avif','w15.avif','w16.avif','w17.avif','w18.avif','ww10.avif','ww11.avif','ww12.avif','ww13.avif','ww14.avif','ww15.avif','ww16.avif','ww17.avif','ww18.avif'];
     const imageListDrinks = ['d1.avif','d2.avif','d3.avif','d4.avif','d5.avif','d6.avif','d7.avif','d8.avif','d9.avif','d10.avif','d11.avif','d12.avif','d13.avif','d14.avif','d15.avif','d16.avif','d17.avif','d18.avif','d19.avif','d20.avif','d21.avif','d22.avif','d23.avif','d24.avif','d25.avif','d26.avif','d27.avif','d28.avif','d29.avif'];
     const imageListNoDrink = ['w0.avif','d0.avif'];
     const imageListLunchDrinkWeekdays = ['ld1.avif','ld2.avif','ld3.avif','ld4.avif','ld5.avif','ld6.avif','ld7.avif', 'ldwine.avif'];
@@ -254,12 +2984,16 @@
     let currentImages = [];
     let currentIndex = 0;
     let isFirstLoad = true;
+    let currentStepIndex = 0;
+    let currentSteps = [];
+    let currentCategoryFilter = '';
+    let currentRecipe = null;
+    let isMobile = window.innerWidth <= 768;
 
     function getRandomElement(array) {
       return array[Math.floor(Math.random() * array.length)];
     }
 
-    // Fisher-Yates shuffle to randomize image order
     function shuffleArray(array) {
       for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -283,7 +3017,6 @@
         return;
       }
 
-      // Add flag emoji container back
       const flagDiv = document.createElement('div');
       flagDiv.id = 'flagEmoji';
       flagDiv.innerHTML = flagList.includes(currentImages[currentIndex]) ? '‼️' : '';
@@ -341,37 +3074,28 @@
 
       const allImages = [];
 
-
       if (document.getElementById('lunchWeekdays').checked) {
         const lunchSetImages = getRandomImagesFromArray(imageListLunchSetWeekdays, 2);
         allImages.push(...lunchSetImages);
-
         const lunchTodayImages = getRandomImagesFromArray(imageListLunchTodaysWeekdays, 1);
         allImages.push(...lunchTodayImages);
-          allImages.push(...getRandomImagesFromArray(imageListLunchPastaWeekdays, 4));
-          allImages.push(...getRandomImagesFromArray(imageListLunchTanpinWeekdays, 1));
-          allImages.push(...getRandomImagesFromArray(imageListLunchTapasWeekdays, 1));
-        
+        allImages.push(...getRandomImagesFromArray(imageListLunchPastaWeekdays, 4));
+        allImages.push(...getRandomImagesFromArray(imageListLunchTanpinWeekdays, 1));
+        allImages.push(...getRandomImagesFromArray(imageListLunchTapasWeekdays, 1));
       }
 
       if (document.getElementById('lunchWeekend').checked) {
         const lunchTodayImages = getRandomImagesFromArray(imageListLunchTodaysWeekdays, 2);
         allImages.push(...lunchTodayImages);
-
-
-      
-        
         allImages.push(...getRandomImagesFromArray(imageListDinnerGyokai, 2));
         allImages.push(...getRandomImagesFromArray(imageListDinnerCharcuterie, 2));
         allImages.push(...getRandomImagesFromArray(imageListDinnerHotOven, 2));
         allImages.push(...getRandomImagesFromArray(imageListDinnerMainDish, 2));
-        // allImages.push(...getRandomImagesFromArray(imageListDinnerPasta, 2));
         allImages.push(...getRandomImagesFromArray(imageListDinnerSalad, 2));
         allImages.push(...getRandomImagesFromArray(imageListDinnerTapasCold, 2));
       }
 
       if (document.getElementById('dinner').checked) {
-       
         allImages.push(...getRandomImagesFromArray(imageListDinnerGyokai, 1));
         allImages.push(...getRandomImagesFromArray(imageListDinnerCharcuterie, 1));
         allImages.push(...getRandomImagesFromArray(imageListDinnerHotOven, 1));
@@ -381,12 +3105,12 @@
       }
 
       if (document.getElementById('pasta').checked) {
-    let pastaImages = getRandomImagesFromArray(imageListDinnerPasta, 4);
-    if (pastaImages.length === 0) {
-        pastaImages = [getRandomElement(imageListDinnerPasta)]; // Guarantee at least one
-    }
-    allImages.push(...pastaImages);
-}
+        let pastaImages = getRandomImagesFromArray(imageListDinnerPasta, 4);
+        if (pastaImages.length === 0) {
+          pastaImages = [getRandomElement(imageListDinnerPasta)];
+        }
+        allImages.push(...pastaImages);
+      }
 
       if (document.getElementById('wineWhite').checked) {
         allImages.push(...getRandomImagesFromArray(imageListWinesWhite, 2));
@@ -412,69 +3136,568 @@
         }
       }
 
-      // Select the first 'limit' images and shuffle them for a random order
       currentImages = allImages.slice(0, limit);
       shuffleArray(currentImages);
       currentIndex = 0;
       displayImage();
     }
-let touchStartX = 0;
-let touchStartY = 0;
-const swipeThreshold = 50; // Minimum distance (in pixels) for a swipe
 
-document.addEventListener('touchstart', (event) => {
-  // Store starting positions
-  touchStartX = event.changedTouches[0].screenX;
-  touchStartY = event.changedTouches[0].screenY;
-});
+    let touchStartX = 0;
+    let touchStartY = 0;
+    const swipeThreshold = 50;
 
-document.addEventListener('touchend', (event) => {
-  // Get ending positions
-  const touchEndX = event.changedTouches[0].screenX;
-  const touchEndY = event.changedTouches[0].screenY;
-  handleGesture(touchEndX, touchEndY);
-});
+    document.addEventListener('touchstart', (event) => {
+      touchStartX = event.changedTouches[0].screenX;
+      touchStartY = event.changedTouches[0].screenY;
+    });
 
-function handleGesture(touchEndX, touchEndY) {
-  const diffX = touchEndX - touchStartX;
-  const diffY = touchEndY - touchStartY;
+    document.addEventListener('touchend', (event) => {
+      const touchEndX = event.changedTouches[0].screenX;
+      const touchEndY = event.changedTouches[0].screenY;
+      handleGesture(touchEndX, touchEndY);
+    });
 
-  // Determine whether the swipe is more horizontal or vertical
-  if (Math.abs(diffX) > Math.abs(diffY)) {
-    // Horizontal swipe
-    if (diffX > swipeThreshold) {
-      // Swipe right -> go to previous image
-      prevImage();
-    } else if (diffX < -swipeThreshold) {
-      // Swipe left -> go to next image
-      nextImage();
+    function handleGesture(touchEndX, touchEndY) {
+      const diffX = touchEndX - touchStartX;
+      const diffY = touchEndY - touchStartY;
+
+      if (Math.abs(diffX) > Math.abs(diffY)) {
+        if (diffX > swipeThreshold) {
+          if (isMobile && currentSteps.length > 0) {
+            prevStep();
+          } else {
+            prevImage();
+          }
+        } else if (diffX < -swipeThreshold) {
+          if (isMobile && currentSteps.length > 0) {
+            nextStep();
+          } else {
+            nextImage();
+          }
+        }
+      }
     }
-  } else {
-    // Vertical swipe
-    if (diffY > swipeThreshold) {
-      // Swipe down -> go to previous image
-      // prevImage();
-    } else if (diffY < -swipeThreshold) {
-      // Swipe up -> go to next image
-      // nextImage();
-    }
-  }
-}
 
     document.addEventListener('keydown', (event) => {
-      if (currentImages.length <= 1) return;
+      if (currentImages.length <= 1 && !currentRecipe) return;
       if (event.key === 'ArrowLeft') {
-        prevImage();
+        if (currentSteps.length > 0) prevStep();
+        else prevImage();
       } else if (event.key === 'ArrowRight') {
-        nextImage();
+        if (currentSteps.length > 0) nextStep();
+        else nextImage();
       } else if (event.key === 'ArrowUp') {
         nextImage();
-      }else if (event.key === 'ArrowDown') {
+      } else if (event.key === 'ArrowDown') {
         prevImage();
+      } else if (event.key === 'Escape') {
+        closeRecipeDetails();
+        hideInfo();
       }
     });
 
-    window.onload = generateImages;
+    function showInfo() {
+      if (currentImages.length === 0 || currentIndex >= currentImages.length) {
+        console.log('No images or invalid index:', currentImages, currentIndex);
+        return;
+      }
+
+      const currentImage = currentImages[currentIndex];
+      console.log('Current Image:', currentImage);
+      console.log('Available menuItems keys:', Object.keys(menuItems));
+
+      const hasMenuItem = Object.keys(menuItems).includes(currentImage);
+      if (!hasMenuItem) {
+        console.log(`No menu item found for ${currentImage}. Hiding step-by-step section.`);
+        document.getElementById('menuItemName').textContent = 'メニュー情報なし';
+        document.getElementById('ingredientTableContainer').innerHTML = '';
+        document.getElementById('stepSection').style.display = 'none';
+        document.getElementById('videoSection').style.display = 'none';
+        document.getElementById('infoOverlay').style.display = 'flex';
+        return;
+      }
+
+      const item = menuItems[currentImage];
+      console.log('Selected Item:', item);
+
+      document.getElementById('menuItemName').textContent = item.name;
+
+      const ingredientTableContainer = document.getElementById('ingredientTableContainer');
+      ingredientTableContainer.innerHTML = '';
+      if (Object.keys(item.ingredients).length > 0) {
+        const table = document.createElement('table');
+        table.className = 'ingredient-table';
+        const thead = document.createElement('thead');
+        const tbody = document.createElement('tbody');
+        const headerRow = document.createElement('tr');
+        headerRow.innerHTML = '<th>材料</th><th>量</th>';
+        thead.appendChild(headerRow);
+        for (const [ingredient, amount] of Object.entries(item.ingredients)) {
+          const row = document.createElement('tr');
+          row.innerHTML = `<td>${ingredient}</td><td>${amount}</td>`;
+          tbody.appendChild(row);
+        }
+        table.appendChild(thead);
+        table.appendChild(tbody);
+        ingredientTableContainer.appendChild(table);
+      }
+
+      currentSteps = item.steps || [];
+      currentStepIndex = 0;
+      console.log('Current Steps:', currentSteps);
+
+      const stepSection = document.getElementById('stepSection');
+      const stepContainer = document.getElementById('stepImageContainer');
+      const stepImage = document.getElementById('stepImage');
+      const stepCounter = document.getElementById('stepCounter');
+      const stepper = document.getElementById('stepper');
+      const stepText = document.getElementById('stepText');
+
+      if (currentSteps.length > 0) {
+        stepSection.style.display = 'block';
+        stepContainer.style.display = 'block';
+        stepImage.src = imageFolder + currentSteps[currentStepIndex];
+        console.log('Step Image Source:', stepImage.src);
+        stepCounter.textContent = `${currentStepIndex + 1}/${currentSteps.length}`;
+
+        // Render stepper dots
+        stepper.innerHTML = '';
+        currentSteps.forEach((_, index) => {
+          const dot = document.createElement('span');
+          dot.className = 'step-dot';
+          dot.setAttribute('aria-label', `ステップ ${index + 1}`);
+          dot.onclick = () => goToStep(index);
+          if (index === currentStepIndex) dot.classList.add('active');
+          stepper.appendChild(dot);
+        });
+      } else {
+        stepSection.style.display = 'none';
+        stepContainer.style.display = 'none';
+        stepCounter.textContent = '';
+        stepper.innerHTML = '';
+      }
+      stepText.innerHTML = parseStepText(item.stepText);
+
+      const videoSection = document.getElementById('videoSection');
+      videoSection.innerHTML = '<h3>レシピ動画</h3>';
+      if (item.videoLink) {
+        const videoLink = document.createElement('a');
+        videoLink.href = item.videoLink;
+        videoLink.target = '_blank';
+        videoLink.textContent = 'レシピ動画を見る';
+        videoSection.appendChild(videoLink);
+        videoSection.style.display = 'block';
+      } else {
+        videoSection.style.display = 'none';
+      }
+
+      const additionalInfo = document.getElementById('additionalInfo');
+      additionalInfo.innerHTML = '';
+      additionalInfo.style.display = 'block';
+      if (item.additionalInfo && item.additionalInfo.length > 0) {
+        item.additionalInfo.forEach(info => {
+          const details = document.createElement('details');
+          const summary = document.createElement('summary');
+          summary.textContent = info.title;
+          const content = document.createElement('p');
+          content.textContent = info.content;
+          details.appendChild(summary);
+          details.appendChild(content);
+          additionalInfo.appendChild(details);
+        });
+      } else {
+        additionalInfo.innerHTML = '<p>追加情報がありません</p>';
+      }
+
+      document.getElementById('infoOverlay').style.display = 'flex';
+    }
+
+    function parseStepText(text) {
+      if (!text || typeof text !== 'string') return '<p>ステップ情報がありません</p>';
+      let content = text.replace(/^"""/, '').replace(/"*"*$/, '').trim();
+      const lines = content.split('\n').map(line => line.trim());
+      let html = '';
+      lines.forEach(line => {
+        if (line.match(/^\d+\./)) {
+          html += `<p><strong>${line}</strong></p>`;
+        } else if (line) {
+          let formatted = line.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
+                             .replace(/\*(.*?)\*/g, '<i>$1</i>');
+          html += `<p>${formatted}</p>`;
+        }
+      });
+      return html;
+    }
+
+    function hideInfo() {
+      document.getElementById('infoOverlay').style.display = 'none';
+      currentStepIndex = 0;
+      currentSteps = [];
+    }
+
+    function prevStep() {
+      if (currentSteps.length === 0) return;
+      currentStepIndex = (currentStepIndex - 1 + currentSteps.length) % currentSteps.length;
+      updateStepDisplay();
+    }
+
+    function nextStep() {
+      if (currentSteps.length === 0) return;
+      currentStepIndex = (currentStepIndex + 1) % currentSteps.length;
+      updateStepDisplay();
+    }
+
+    function goToStep(index) {
+      if (index < 0 || index >= currentSteps.length) return;
+      currentStepIndex = index;
+      updateStepDisplay();
+    }
+
+    function updateStepDisplay() {
+      // Determine the context (menu or recipe) based on whether infoOverlay or recipeDetails is visible
+      const isMenuTab = document.getElementById('infoOverlay').style.display === 'flex';
+      const isRecipeTab = document.getElementById('recipeDetails').style.display === 'block' || document.getElementById('recipeDetailsModal').style.display === 'flex';
+
+      let stepImage, stepCounter, stepper;
+      if (isMenuTab) {
+        stepImage = document.getElementById('stepImage');
+        stepCounter = document.getElementById('stepCounter');
+        stepper = document.getElementById('stepper');
+      } else if (isRecipeTab) {
+        const container = isMobile ? document.getElementById('recipeModalContent') : document.getElementById('recipeDetails');
+        stepImage = container.querySelector('.step-image');
+        stepCounter = container.querySelector('.step-counter');
+        stepper = container.querySelector('.stepper');
+      }
+
+      if (stepImage && currentSteps.length > 0) {
+        stepImage.src = imageFolder + currentSteps[currentStepIndex];
+      }
+      if (stepCounter) {
+        stepCounter.textContent = `${currentStepIndex + 1}/${currentSteps.length}`;
+      }
+      if (stepper) {
+        const dots = stepper.querySelectorAll('.step-dot');
+        dots.forEach((dot, index) => {
+          dot.classList.toggle('active', index === currentStepIndex);
+        });
+      }
+    }
+
+    function navigateToPriceDatabase() {
+      document.getElementById('menuPage').classList.remove('active');
+      document.getElementById('priceDatabasePage').classList.add('active');
+      displayPriceDatabase();
+      setupCategoryFilters();
+    }
+
+    function navigateToMenu() {
+      document.getElementById('priceDatabasePage').classList.remove('active');
+      document.getElementById('recipeDatabasePage').classList.remove('active');
+      document.getElementById('menuPage').classList.add('active');
+      // reset search results
+      searchBar.value = "";
+      recipeSearchBar.value = "";
+      generateImages();
+    }
+
+    function navigateToRecipeDatabase() {
+      document.getElementById('menuPage').classList.remove('active');
+      document.getElementById('recipeDatabasePage').classList.add('active');
+      displayRecipeDatabase();
+      document.getElementById('recipeDetails').style.display = 'none';
+      document.getElementById('recipeDetailsModal').style.display = 'none';
+      currentRecipe = null;
+      isMobile = window.innerWidth <= 768;
+    }
+
+    function displayPriceDatabase() {
+      const itemList = document.getElementById('itemList');
+      if (!itemList) return;
+      itemList.innerHTML = '';
+
+      const items = Object.values(menuItems);
+      items.sort((a, b) => a.category.localeCompare(b.category));
+
+      const categorizedItems = {};
+      items.forEach(item => {
+        if (!categorizedItems[item.category]) categorizedItems[item.category] = [];
+        categorizedItems[item.category].push(item);
+      });
+
+      for (const category in categorizedItems) {
+        const categoryDiv = document.createElement('div');
+        categoryDiv.className = 'category';
+        const categoryHeader = document.createElement('h3');
+        categoryHeader.textContent = category || 'その他';
+        categoryDiv.appendChild(categoryHeader);
+
+        categorizedItems[category].forEach(item => {
+  const div = document.createElement('div');
+  div.className = 'item';
+  div.innerHTML = `
+    <span class="name">${item.name}</span>
+    <div class="price-container">
+      <span class="price">${item.price}</span>
+      ${item.lunchPrice ? `<span class="lunch-price">(ランチ: ${item.lunchPrice})</span>` : ''}
+    </div>
+  `;
+  categoryDiv.appendChild(div);
+});
+
+        itemList.appendChild(categoryDiv);
+      }
+    }
+
+    function filterItems() {
+      const searchBar = document.getElementById('searchBar');
+      const showLunchOnly = document.getElementById('showLunchOnly');
+      const itemList = document.getElementById('itemList');
+
+      if (!searchBar || !showLunchOnly || !itemList) return;
+
+      const searchText = searchBar.value.toLowerCase();
+      const lunchOnly = showLunchOnly.checked;
+      const items = Object.values(menuItems);
+
+      itemList.innerHTML = '';
+
+      const filteredItems = items.filter(item => {
+        const searchTerms = [
+          item.name.toLowerCase(),
+          ...(item.nicknames || []).map(n => n.toLowerCase())
+        ];
+        const matchesSearch = searchText ? searchTerms.some(term => term.includes(searchText)) : true;
+        const matchesCategory = currentCategoryFilter ? item.category === currentCategoryFilter : true;
+        const matchesLunch = lunchOnly ? item.lunchPrice && item.lunchPrice !== '' : true;
+        return matchesSearch && matchesCategory && matchesLunch;
+      });
+
+      const categorizedItems = {};
+      filteredItems.forEach(item => {
+        if (!categorizedItems[item.category]) categorizedItems[item.category] = [];
+        categorizedItems[item.category].push(item);
+      });
+
+      for (const category in categorizedItems) {
+        const categoryDiv = document.createElement('div');
+        categoryDiv.className = 'category';
+        const categoryHeader = document.createElement('h3');
+        categoryHeader.textContent = category || 'その他';
+        categoryDiv.appendChild(categoryHeader);
+
+        categorizedItems[category].forEach(item => {
+          const div = document.createElement('div');
+          div.className = 'item';
+          div.innerHTML = `
+            <span class="name">${item.name}</span>
+            <span class="price">${item.price}</span>
+            ${item.lunchPrice ? `<span class="lunch-price">(ランチ: ${item.lunchPrice})</span>` : ''}
+          `;
+          categoryDiv.appendChild(div);
+        });
+
+        itemList.appendChild(categoryDiv);
+      }
+    }
+
+    function setupCategoryFilters() {
+      const filterButtons = document.querySelectorAll('.category-filter');
+      if (filterButtons.length === 0) return;
+
+      filterButtons.forEach(button => {
+        const newButton = button.cloneNode(true);
+        button.parentNode.replaceChild(newButton, button);
+
+        newButton.addEventListener('click', () => {
+          const category = newButton.getAttribute('data-category');
+          const updatedFilterButtons = document.querySelectorAll('.category-filter');
+
+          updatedFilterButtons.forEach(btn => btn.classList.remove('selected'));
+
+          if (currentCategoryFilter === category && category !== '') {
+            currentCategoryFilter = '';
+          } else {
+            currentCategoryFilter = category;
+            if (category !== '') newButton.classList.add('selected');
+          }
+
+          filterItems();
+        });
+      });
+    }
+
+    function displayRecipeDatabase() {
+      const recipeList = document.getElementById('recipeList');
+      if (!recipeList) return;
+      recipeList.innerHTML = '';
+
+      const items = Object.values(recipeItems);
+      items.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'recipe-card';
+        div.setAttribute('role', 'listitem');
+        div.setAttribute('tabindex', '0');
+        const thumbnailSrc = item.steps && item.steps.length > 0 ? `${imageFolder}${item.steps[0]}` : null;
+        div.innerHTML = `
+          ${thumbnailSrc ? `<img src="${thumbnailSrc}" class="thumbnail" alt="${item.name}のサムネイル">` : '<div class="placeholder">画像なし</div>'}
+          <div class="content">
+            <div class="name">${item.name}</div>
+            <div class="tags">${(item.tags || []).join(' • ')}</div>
+          </div>
+        `;
+        div.onclick = () => selectRecipe(item);
+        div.onkeydown = (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            selectRecipe(item);
+          }
+        };
+        recipeList.appendChild(div);
+      });
+    }
+
+    function filterRecipes() {
+      const searchBar = document.getElementById('recipeSearchBar');
+      const recipeList = document.getElementById('recipeList');
+      if (!searchBar || !recipeList) return;
+
+      const searchText = searchBar.value.toLowerCase();
+      const items = Object.values(recipeItems);
+
+      recipeList.innerHTML = '';
+
+      const filteredItems = items.filter(item => {
+        const searchTerms = [
+          item.name.toLowerCase(),
+          ...(item.nicknames || []).map(n => n.toLowerCase())
+        ];
+        return searchText ? searchTerms.some(term => term.includes(searchText)) : true;
+      });
+
+      filteredItems.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'recipe-card';
+        div.setAttribute('role', 'listitem');
+        div.setAttribute('tabindex', '0');
+        const thumbnailSrc = item.steps && item.steps.length > 0 ? `${imageFolder}${item.steps[0]}` : null;
+        div.innerHTML = `
+          ${thumbnailSrc ? `<img src="${thumbnailSrc}" class="thumbnail" alt="${item.name}のサムネイル">` : '<div class="placeholder">画像なし</div>'}
+          <div class="content">
+            <div class="name">${item.name}</div>
+            <div class="tags">${(item.tags || []).join(' • ')}</div>
+          </div>
+        `;
+        div.onclick = () => selectRecipe(item);
+        div.onkeydown = (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            selectRecipe(item);
+          }
+        };
+        recipeList.appendChild(div);
+      });
+    }
+
+    function selectRecipe(item) {
+      currentRecipe = item;
+      const cards = document.querySelectorAll('.recipe-card');
+      cards.forEach(card => card.classList.remove('selected'));
+      const selectedCard = Array.from(cards).find(card => card.querySelector('.name').textContent === item.name);
+      if (selectedCard) selectedCard.classList.add('selected');
+      showRecipeInfo();
+    }
+
+    function showRecipeInfo() {
+      if (!currentRecipe) return;
+
+      currentSteps = currentRecipe.steps || [];
+      currentStepIndex = 0;
+
+      const content = `
+        <h2>${currentRecipe.name}</h2>
+        ${renderIngredients()}
+        ${renderSteps()}
+        ${renderVideo()}
+      `;
+
+      if (isMobile) {
+        const modalContent = document.getElementById('recipeModalContent');
+        modalContent.innerHTML = content;
+        document.getElementById('recipeDetailsModal').style.display = 'flex';
+        document.getElementById('recipeDetails').style.display = 'none';
+      } else {
+        const recipeDetails = document.getElementById('recipeDetails');
+        recipeDetails.innerHTML = content;
+        recipeDetails.style.display = 'block';
+        document.getElementById('recipeDetailsModal').style.display = 'none';
+      }
+
+      updateStepDisplay();
+    }
+
+    function renderIngredients() {
+      if (!Object.keys(currentRecipe.ingredients || {}).length) return '';
+      let html = '<h3>材料</h3><table class="ingredient-table"><thead><tr><th>材料</th><th>量</th></tr></thead><tbody>';
+      for (const [ingredient, amount] of Object.entries(currentRecipe.ingredients)) {
+        html += `<tr><td>${ingredient}</td><td>${amount}</td></tr>`;
+      }
+      html += '</tbody></table>';
+      return html;
+    }
+
+    function renderSteps() {
+      let html = '<div class="step-by-step"><h3>作り方</h3>';
+      if (currentSteps.length > 0) {
+        html += `
+          <div class="stepper">
+            ${currentSteps.map((_, index) => `<span class="step-dot${index === 0 ? ' active' : ''}" onclick="goToStep(${index})" aria-label="ステップ${index + 1}"></span>`).join('')}
+          </div>
+          <div class="step-image-container">
+            <img class="step-image" src="${imageFolder + currentSteps[0]}" alt="ステップ画像">
+            <button class="step-nav step-prev" onclick="prevStep()" aria-label="前のステップ">◄</button>
+            <button class="step-nav step-next" onclick="nextStep()" aria-label="次のステップ">►</button>
+          </div>
+          <div class="step-counter">${currentStepIndex + 1}/${currentSteps.length}</div>
+        `;
+      }
+      html += `<div class="step-text">${parseStepText(currentRecipe.stepText || '"""ステップ情報がありません"""')}</div></div>`;
+      return html;
+    }
+
+    function renderVideo() {
+      if (!currentRecipe.videoLink) return '';
+      return `
+        <div class="video-section">
+          <h3>レシピ動画</h3>
+          <a href="${currentRecipe.videoLink}" target="_blank" rel="noopener noreferrer">レシピ動画を見る</a>
+        </div>
+      `;
+    }
+
+    function closeRecipeDetails() {
+      document.getElementById('recipeDetails').style.display = 'none';
+      document.getElementById('recipeDetailsModal').style.display = 'none';
+      currentRecipe = null;
+      currentStepIndex = 0;
+      currentSteps = [];
+      const cards = document.querySelectorAll('.recipe-card');
+      cards.forEach(card => card.classList.remove('selected'));
+    }
+
+    window.addEventListener('resize', () => {
+      const wasMobile = isMobile;
+      isMobile = window.innerWidth <= 768;
+      if (wasMobile !== isMobile && currentRecipe) {
+        closeRecipeDetails();
+        showRecipeInfo();
+      }
+    });
+
+    window.onload = () => {
+      generateImages();
+      setupCategoryFilters();
+    };
   </script>
 </body>
 </html>

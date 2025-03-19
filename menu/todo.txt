@@ -1,0 +1,18 @@
+- for spreadsheet: also add the sasha drink keywords into the drink names
+ーTODO: fix the "dangerous" data!! everywhere where you have to ask something. 
+
+
+-ASK 静 about サングリア prices?? like why are they more expensive, i think outside it also says something about 500yen?? like what xd
+- ASK about the Champagne prices. what is the~~~~~~ ????
+
+when displaying the names in the pricing list you want them to have interchanging different background colors to easier process the data. 
+
+buttons: （今週の）おすすめ、限定パスタ
+
+- ADD Lunch prices to menu items that also dont have changing price but simply appear on the lunch menu. 
+- Ask 静 to review the data when she has time. 
+
+- add way to add all to like a shopping list and then calculate the price automatically???? idk yet. this can go wrong. 
+
+
+wine menu button ワイン表示 but also just write multiple prices
