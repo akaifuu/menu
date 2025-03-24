@@ -1,869 +1,1105 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content">
-    <title>メニュー</title>
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Poppins', Arial, sans-serif;
+
+<head>
+  <meta charset="UTF-8">
+  <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content">
+  <title>メニュー</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', Arial, sans-serif;
+    }
+
+    body {
+      background-color: #f5f5f5;
+      color: #333;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .page {
+      display: none;
+      width: 100%;
+      height: 100vh;
+    }
+
+    .page.active {
+      display: flex;
+    }
+
+    .settings-panel {
+      width: 250px;
+      background: #fff;
+      padding: 15px;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    #tableContainer {
+      text-align: center;
+      background: #ecf0f1;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 15px;
+    }
+
+    #guestNumber {
+      font-size: 1rem;
+      margin-bottom: 5px;
+      color: #2c3e50;
+    }
+
+    .table-img {
+      width: 100px;
+      height: 150px;
+      object-fit: contain;
+      border-radius: 5px;
+    }
+
+    .checkbox-group {
+      margin-bottom: 15px;
+    }
+
+    .checkbox-group strong {
+      display: block;
+      font-size: 1rem;
+      color: #2c3e50;
+      margin-bottom: 5px;
+    }
+
+    .checkbox-group label {
+      display: flex;
+      align-items: center;
+      margin: 5px 0;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: color 0.3s;
+    }
+
+    .checkbox-group label:hover {
+      color: #2980b9;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      margin-right: 8px;
+      accent-color: #2980b9;
+    }
+
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: auto;
+    }
+
+    button {
+      padding: 8px 15px;
+      background: #2980b9;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+      font-size: 0.9rem;
+    }
+
+    .buttonfullspace {
+      flex: 1;
+    }
+
+    button:hover {
+      background: #3498db;
+    }
+
+    button:focus {
+      outline: 2px solid #2980b9;
+      outline-offset: 2px;
+    }
+
+    select {
+      padding: 6px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      font-size: 0.9rem;
+    }
+
+    .image-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      background: #fff;
+      margin-left: 10px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+
+    #imageContainer {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      position: relative;
+    }
+
+    #imageContainer img {
+      max-width: 80vw;
+      max-height: 75vh;
+      object-fit: contain;
+      border-radius: 5px;
+    }
+
+    #flagEmoji {
+      font-size: 2rem;
+      position: absolute;
+      top: 0px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+    }
+
+    .radio-group label input[type="radio"] {
+      margin-right: 5px;
+    }
+
+    #imageCounter {
+      font-size: 1rem;
+      color: #2c3e50;
+      margin-top: 10px;
+    }
+
+    #infoOverlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #infoContent {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+
+    #infoContent h2 {
+      margin-bottom: 15px;
+      color: #2c3e50;
+    }
+
+    #infoContent p {
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    #closeOverlay {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      border: none;
+      background: #ff4444;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    #closeOverlay:hover {
+      background: #cc0000;
+    }
+
+    .step-by-step {
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .step-by-step h3 {
+      margin-bottom: 10px;
+      color: #2c3e50;
+    }
+
+    .step-image-container {
+      position: relative;
+      max-width: 100%;
+      height: 200px;
+      overflow: hidden;
+    }
+
+    .step-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 5px;
+    }
+
+    .step-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      transition: background 0.3s;
+    }
+
+    .step-nav:hover {
+      background: rgba(0, 0, 0, 0.8);
+    }
+
+    .step-prev {
+      left: 10px;
+    }
+
+    .step-next {
+      right: 10px;
+    }
+
+    .step-counter {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: #2c3e50;
+    }
+
+    .stepper {
+      display: flex;
+      justify-content: center;
+      margin: 10px 0;
+    }
+
+    .step-dot {
+      width: 10px;
+      height: 10px;
+      background: #ddd;
+      border-radius: 50%;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .step-dot:hover {
+      background: #a0c4ff;
+    }
+
+    .step-dot.active {
+      background: #2980b9;
+    }
+
+    .step-text p {
+      margin: 10px 0;
+      font-size: 1rem;
+    }
+
+    .step-text b {
+      font-weight: bold;
+    }
+
+    .step-text i {
+      font-style: italic;
+    }
+
+    .step-text ul {
+      margin-left: 20px;
+      list-style-type: disc;
+    }
+
+    .video-section {
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .video-section h3 {
+      margin-bottom: 10px;
+      color: #2c3e50;
+    }
+
+    .video-section a {
+      color: #2980b9;
+      text-decoration: none;
+      font-size: 1rem;
+    }
+
+    .video-section a:hover {
+      text-decoration: underline;
+    }
+
+    .video-section iframe {
+      width: 100%;
+      height: 315px;
+      border: none;
+      border-radius: 5px;
+    }
+
+    .additional-info {
+      margin: 20px 0;
+    }
+
+    .additional-info details {
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 10px;
+    }
+
+    .additional-info summary {
+      cursor: pointer;
+      font-weight: bold;
+      color: #2c3e50;
+      padding: 5px;
+      outline: none;
+    }
+
+    .additional-info summary:hover {
+      color: #2980b9;
+    }
+
+    .additional-info details[open] summary {
+      border-bottom: 1px solid #ddd;
+      margin-bottom: 10px;
+    }
+
+    .additional-info p {
+      padding: 5px;
+    }
+
+    #priceDatabase {
+      flex-direction: column;
+      padding: 0 20px 20px;
+      /* Changed from 20px to 0 20px 20px */
+    }
+
+    #priceDatabase h2 {
+      margin-bottom: 15px;
+      color: #2c3e50;
+    }
+
+    @media (max-width: 768px) {
+      #priceDatabase {
+        padding: 0 10px 10px;
+        /* Adjusted from 0 to match reduced spacing */
       }
+
+      .price-header {
+        padding: 10px;
+        /* Match reduced padding */
+      }
+    }
+
+    #searchBar {
+      width: 100%;
+      max-width: 400px;
+      padding: 8px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    #filters {
+      margin-bottom: 15px;
+      padding: 10px;
+    }
+
+    #filters button {
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+
+    #showLunchOnly {
+      margin-left: 10px;
+      padding: 5px 10px;
+
+    }
+
+    label {
+      font-size: 0.78rem;
+    }
+
+    #itemList {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .searchba {
+      padding: 10px;
+    }
+
+    .category {
+      margin-bottom: 20px;
+    }
+
+    .category h3 {
+      color: #2c3e50;
+      margin-bottom: 10px;
+      padding-left: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .bordercontainer {
+      display: flex;
+      gap: 10px;
+      padding: 10px;
+      background-color: #ECF7FF;
+      border-radius: 4px;
+    }
+
+    .bordercontainer.no-background {
+      background-color: transparent;
+    }
+
+    .item {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .item:hover {
+      background-color: #f9f9f9;
+    }
+
+    .item .name {
+      font-weight: bold;
+      flex: 1;
+    }
+
+    .item .price {
+      color: #2980b9;
+    }
+
+    .item .lunch-price {
+      color: #e74c3c;
+      margin-left: 10px;
+    }
+
+    .item .price-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .category .item:nth-child(even) {
+      background-color: #F7F7F7;
+    }
+
+    .category .item:nth-child(even):hover {
+      background-color: #f9f9f9;
+    }
+
+    .category-filter {
+      padding: 4px 8px;
+      background: #2980b9;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+      font-size: 0.78rem;
+    }
+
+    .category-filter:hover {
+      background: #3498db;
+    }
+
+    .category-filter.selected {
+      background-color: #1a2a44;
+      color: white;
+    }
+
+    .category-filter.selected:hover {
+      background-color: #14263a;
+    }
+
+    #recipeDatabase {
+      flex-direction: column;
+      padding: 0;
+      height: 100%;
+      background: #f5f5f5;
+    }
+
+    #recipeDatabaseHeader {
+      position: sticky;
+      top: 0;
+      background: #fff;
+      padding: 15px 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    #recipeDatabase h2 {
+      color: #2c3e50;
+      font-size: 1.5rem;
+      margin: 0;
+    }
+
+    #recipeSearchBar {
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+      width: 250px;
+      transition: border-color 0.3s;
+    }
+
+    #recipeSearchBar:focus {
+      border-color: #2980b9;
+      outline: none;
+    }
+
+    #recipeBackButton {
+      padding: 8px 15px;
+    }
+
+    #recipeContainer {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+      padding: 20px;
+    }
+
+    #recipeList {
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 15px;
+    }
+
+    .recipe-card {
+      display: flex;
+      align-items: center;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      margin-bottom: 15px;
+      padding: 15px;
+      cursor: pointer;
+      transition: background 0.3s;
+      position: relative;
+    }
+
+    .recipe-card:hover {
+      background: #f0f8ff;
+    }
+
+    .recipe-card.selected {
+      background: #e6f0fa;
+      border: 1px solid #2980b9;
+    }
+
+    .recipe-card .thumbnail {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 5px;
+      margin-right: 15px;
+    }
+
+    .recipe-card .placeholder {
+      width: 50px;
+      height: 50px;
+      background: #ddd;
+      border-radius: 5px;
+      margin-right: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      color: #666;
+    }
+
+    .recipe-card .content {
+      flex: 1;
+    }
+
+    .recipe-card .name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 5px;
+    }
+
+    .recipe-card .tags {
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    #recipeDetails {
+      flex: 2;
+      padding: 20px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      margin-left: 20px;
+      overflow-y: auto;
+      display: none;
+      position: relative;
+    }
+
+    #recipeDetails h2 {
+      font-size: 1.8rem;
+      color: #2c3e50;
+      margin-bottom: 15px;
+    }
+
+    .ingredient-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 15px;
+    }
+
+    .ingredient-table th,
+    .ingredient-table td {
+      padding: 10px;
+      text-align: left;
+      border: 1px solid #ddd;
+    }
+
+    .ingredient-table th {
+      background-color: #2980b9;
+      color: white;
+    }
+
+    .step-by-step {
+      margin: 20px 0;
+    }
+
+    .step-by-step h3 {
+      font-size: 1.4rem;
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+
+    .stepper {
+      display: flex;
+      justify-content: center;
+      margin: 10px 0;
+    }
+
+    .step-dot {
+      width: 10px;
+      height: 10px;
+      background: #ddd;
+      border-radius: 50%;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .step-dot:hover {
+      background: #a0c4ff;
+    }
+
+    .step-dot.active {
+      background: #2980b9;
+    }
+
+    .step-text p {
+      margin: 10px 0;
+      font-size: 1rem;
+    }
+
+    .step-text b {
+      font-weight: bold;
+    }
+
+    .step-text i {
+      font-style: italic;
+    }
+
+    .step-text ul {
+      margin-left: 20px;
+      list-style-type: disc;
+    }
+
+    .hey {
+      display: flex;
+
+    }
+
+    .heyitem {
+      padding: 10px;
+      display: grid;
+      justify-content: space-between;
+      grid-auto-flow: column;
+      /* Forces a horizontal layout */
+    }
+
+    .price-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      /* Puts space between h3 and button */
+      padding: 10px 20px;
+      /* Matches #priceDatabase padding */
+    }
+
+    .close-price {
+      padding: 5px 10px;
+      /* Smaller than regular buttons */
+      background: #ff4444;
+      /* Red, like close buttons */
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+      font-size: 0.8rem;
+      /* Slightly smaller text */
+    }
+
+    .close-price:hover {
+      background: #cc0000;
+      /* Darker red on hover */
+    }
+
+    #recipeDetailsModal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #recipeDetailsModalContent {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateY(-50px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    #closeDetails {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      border: none;
+      background: #ff4444;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    #closeDetails:hover {
+      background: #cc0000;
+    }
+
+    @media (max-width: 768px) {
       body {
-        background-color: #f5f5f5;
-        color: #333;
-        line-height: 1.6;
+        flex-direction: column;
+      }
+
+      .page.active {
+        flex-direction: column;
+        height: auto;
         min-height: 100vh;
       }
-      .page {
-        display: none;
-        width: 100%;
-        height: 100vh;
-      }
-      .page.active {
-        display: flex;
-      }
+
       .settings-panel {
-        width: 250px;
-        background: #fff;
-        padding: 15px;
-        box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-        display: flex;
-        flex-direction: column;
-        height: 100vh;
-        overflow-y: auto;
-      }
-      #tableContainer {
-        text-align: center;
-        background: #ecf0f1;
+        width: 100%;
+        height: auto;
         padding: 10px;
-        border-radius: 5px;
-        margin-bottom: 15px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        flex-shrink: 0;
       }
-      #guestNumber {
-        font-size: 1rem;
-        margin-bottom: 5px;
-        color: #2c3e50;
-      }
-      .table-img {
-        width: 100px;
-        height: 150px;
-        object-fit: contain;
-        border-radius: 5px;
-      }
-      .checkbox-group {
-        margin-bottom: 15px;
-      }
-      .checkbox-group strong {
-        display: block;
-        font-size: 1rem;
-        color: #2c3e50;
-        margin-bottom: 5px;
-      }
-      .checkbox-group label {
-        display: flex;
-        align-items: center;
-        margin: 5px 0;
-        cursor: pointer;
-        font-size: 0.9rem;
-        transition: color 0.3s;
-      }
-      .checkbox-group label:hover {
-        color: #2980b9;
-      }
-      .checkbox-group input[type="checkbox"] {
-        margin-right: 8px;
-        accent-color: #2980b9;
-      }
-      .controls {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        margin-top: auto;
-      }
-      button {
-        padding: 8px 15px;
-        background: #2980b9;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background 0.3s;
-        font-size: 0.9rem;
-      }
-      .buttonfullspace {
-        flex: 1;
-      }
-      button:hover {
-        background: #3498db;
-      }
-      button:focus {
-        outline: 2px solid #2980b9;
-        outline-offset: 2px;
-      }
-      select {
-        padding: 6px;
-        border-radius: 5px;
-        border: 1px solid #ddd;
-        font-size: 0.9rem;
-      }
+
       .image-panel {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 20px;
-        background: #fff;
-        margin-left: 10px;
-        border-radius: 10px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        position: relative;
-      }
-      #imageContainer {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
         width: 100%;
-        position: relative;
-      }
-      #imageContainer img {
-        max-width: 80vw;
-        max-height: 75vh;
-        object-fit: contain;
-        border-radius: 5px;
-      }
-      #flagEmoji {
-        font-size: 2rem;
-        position: absolute;
-        top: 0px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 1000;
-      }
-      .radio-group label input[type="radio"] {
-        margin-right: 5px;
-      }
-      #imageCounter {
-        font-size: 1rem;
-        color: #2c3e50;
+        margin-left: 0;
         margin-top: 10px;
+        padding: 10px;
+        flex: 0 1 auto;
+        min-height: 0;
       }
-      #infoOverlay {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
+
+      #imageContainer {
         width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.7);
-        z-index: 2000;
-        justify-content: center;
+        height: auto;
+        max-height: 65vh;
+        display: flex;
+        flex-direction: column;
         align-items: center;
-      }
-      #infoContent {
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        max-width: 600px;
-        width: 90%;
-        max-height: 80vh;
-        overflow-y: auto;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        position: relative;
-      }
-      #infoContent h2 {
-        margin-bottom: 15px;
-        color: #2c3e50;
-      }
-      #infoContent p {
-        margin-bottom: 10px;
-        line-height: 1.5;
-      }
-      #closeOverlay {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        border: none;
-        background: #ff4444;
-        color: white;
-        padding: 5px 10px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background 0.3s;
-      }
-      #closeOverlay:hover {
-        background: #cc0000;
-      }
-      .step-by-step {
-        margin: 20px 0;
-        text-align: center;
-      }
-      .step-by-step h3 {
-        margin-bottom: 10px;
-        color: #2c3e50;
-      }
-      .step-image-container {
-        position: relative;
-        max-width: 100%;
-        height: 200px;
+        justify-content: center;
         overflow: hidden;
       }
-      .step-image {
-        width: 100%;
-        height: 100%;
+
+      #imageContainer img {
+        max-width: 90vw;
+        max-height: 60vh;
+        width: auto;
+        height: auto;
         object-fit: contain;
         border-radius: 5px;
       }
-      .step-nav {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        background: rgba(0, 0, 0, 0.5);
-        color: white;
-        border: none;
-        padding: 10px;
-        cursor: pointer;
-        border-radius: 50%;
-        font-size: 1.2rem;
-        transition: background 0.3s;
+
+      #imageCounter {
+        margin-top: 5px;
       }
-      .step-nav:hover {
-        background: rgba(0, 0, 0, 0.8);
+
+      #flagEmoji {
+        position: static;
+        transform: none;
+        margin-bottom: 5px;
       }
-      .step-prev {
-        left: 10px;
+
+      .controls {
+        flex-direction: column;
+        /* Stack containers vertically on mobile */
+        gap: 10px;
+        /* Space between containers */
       }
-      .step-next {
-        right: 10px;
-      }
-      .step-counter {
-        margin-top: 10px;
-        font-size: 0.9rem;
-        color: #2c3e50;
-      }
-      .stepper {
-        display: flex;
-        justify-content: center;
-        margin: 10px 0;
-      }
-      .step-dot {
-        width: 10px;
-        height: 10px;
-        background: #ddd;
-        border-radius: 50%;
-        margin: 0 5px;
-        cursor: pointer;
-        transition: background 0.3s;
-      }
-      .step-dot:hover {
-        background: #a0c4ff;
-      }
-      .step-dot.active {
-        background: #2980b9;
-      }
-      .step-text p {
-        margin: 10px 0;
-        font-size: 1rem;
-      }
-      .step-text b {
-        font-weight: bold;
-      }
-      .step-text i {
-        font-style: italic;
-      }
-      .step-text ul {
-        margin-left: 20px;
-        list-style-type: disc;
-      }
-      .video-section {
-        margin: 20px 0;
-        text-align: center;
-      }
-      .video-section h3 {
-        margin-bottom: 10px;
-        color: #2c3e50;
-      }
-      .video-section a {
-        color: #2980b9;
-        text-decoration: none;
-        font-size: 1rem;
-      }
-      .video-section a:hover {
-        text-decoration: underline;
-      }
-      .video-section iframe {
+
+      .bordercontainer {
         width: 100%;
-        height: 315px;
-        border: none;
-        border-radius: 5px;
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+        padding: 5px;
       }
-      .additional-info {
-        margin: 20px 0;
+
+      .buttonfullspace {
+        flex: 1;
+        min-width: 0;
       }
-      .additional-info details {
-        margin-bottom: 10px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
+
+      #infoContent {
+        width: 85%;
+      }
+
+      .step-image-container {
+        height: 150px;
+      }
+
+      .video-section iframe {
+        height: 200px;
+      }
+
+      #priceDatabase,
+      #recipeDatabase {
+        padding: 0;
+      }
+
+      #recipeDatabaseHeader {
+        flex-direction: column;
+        align-items: flex-start;
         padding: 10px;
       }
-      .additional-info summary {
-        cursor: pointer;
-        font-weight: bold;
-        color: #2c3e50;
-        padding: 5px;
-        outline: none;
+
+      #recipeSearchBar {
+        width: 100%;
+        margin-top: 10px;
       }
-      .additional-info summary:hover {
-        color: #2980b9;
+
+      #recipeBackButton {
+        margin-top: 10px;
       }
-      .additional-info details[open] summary {
-        border-bottom: 1px solid #ddd;
-        margin-bottom: 10px;
+
+      #recipeContainer {
+        flex-direction: column;
+        padding: 10px;
       }
-      .additional-info p {
-        padding: 5px;
+
+      #recipeList {
+        padding-right: 0;
       }
+
+      .recipe-card {
+        padding: 10px;
+      }
+
+      .recipe-card .thumbnail {
+        width: 40px;
+        height: 40px;
+      }
+
+      .recipe-card .placeholder {
+        width: 40px;
+        height: 40px;
+        font-size: 0.7rem;
+      }
+
+      .recipe-card .name {
+        font-size: 1.1rem;
+      }
+
+      /* Ensure #priceDatabase fills the viewport but allows flexibility */
       #priceDatabase {
         flex-direction: column;
-        padding: 0 20px 20px; /* Changed from 20px to 0 20px 20px */
+        padding: 0 20px 20px;
+        display: flex;
+        height: 100vh;
+        /* Full height of the viewport */
       }
-      
-      #priceDatabase h2 {
-        margin-bottom: 15px;
-        color: #2c3e50;
+
+      /* Keep the header compact */
+      .price-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 20px;
+
+        /* position: sticky; 
+  top: 0;
+  z-index: 10; */
       }
-      @media (max-width: 768px) {
-  #priceDatabase {
-    padding: 0 10px 10px; /* Adjusted from 0 to match reduced spacing */
-  }
-  .price-header {
-    padding: 10px; /* Match reduced padding */
-  }
-}
+
+      /* Style the search bar to stay above the list */
       #searchBar {
         width: 100%;
         max-width: 400px;
         padding: 8px;
-        margin-bottom: 15px;
+        margin-bottom: 10px;
         border: 1px solid #ddd;
         border-radius: 5px;
         font-size: 1rem;
+        /* position: sticky; 
+  top: 50px; 
+  z-index: 10; */
       }
+
+      /* Filters stay compact */
       #filters {
-        margin-bottom: 15px;
-        padding: 10px;
-      }
-      #filters button {
-        margin-right: 10px;
         margin-bottom: 10px;
       }
-      #showLunchOnly {
-        margin-left: 10px;
-        padding: 5px 10px;
-      }
+
+      /* Make itemList take remaining space and scroll */
       #itemList {
         flex: 1;
+        /* Takes remaining space */
         overflow-y: auto;
+        /* Scrollable */
+        max-height: calc(100vh - 120px);
+        /* Adjust based on header + search bar height */
+        padding-bottom: 20px;
+        /* Prevent content from being too close to bottom */
       }
-      .searchba{
-        padding: 10px;
+
+      /* Mobile adjustments */
+      @media (max-width: 768px) {
+        #priceDatabase {
+          padding: 0 10px 10px;
+          height: auto;
+          /* Allow natural height on mobile */
+          min-height: 100vh;
+        }
+
+        #searchBar {
+          top: 40px;
+          /* Adjust for smaller header */
+        }
+
+        #itemList {
+          max-height: calc(100vh - 100px);
+          /* Tighter fit on mobile */
+        }
       }
-      .category {
-        margin-bottom: 20px;
-      }
-      .category h3 {
-        color: #2c3e50;
-        margin-bottom: 10px;
-        padding-left: 10px;
-        border-bottom: 1px solid #ddd;
-      }
-      .bordercontainer {
-        display: flex;
-        gap: 10px;
-        padding: 10px;
-        background-color: #ECF7FF;
-        border-radius: 4px;
-      }
-      .bordercontainer.no-background {
-        background-color: transparent;
-      }
+
       .item {
         display: flex;
         align-items: center;
+        /* Keep items centered vertically */
         padding: 10px;
         border-bottom: 1px solid #eee;
+        font-size: 0.78rem;
       }
-      .item:hover {
-        background-color: #f9f9f9;
-      }
+
       .item .name {
         font-weight: bold;
         flex: 1;
+
+        /* Takes up remaining space on the left */
       }
-      .item .price {
-        color: #2980b9;
-      }
-      .item .lunch-price {
-        color: #e74c3c;
-        margin-left: 10px;
-      }
+
       .item .price-container {
         display: flex;
         align-items: center;
+        /* Align price and shorthand horizontally */
+        gap: 8px;
+        /* Space between price, shorthand, and lunch price */
       }
-      .category .item:nth-child(even) {
-        background-color: #F7F7F7;
+
+      .item .price-container .price {
+        color: #2980b9;
+        /* Existing price color */
       }
-      .category .item:nth-child(even):hover {
-        background-color: #f9f9f9;
+
+      .item .price-container .lunch-price {
+        color: #e74c3c;
+        /* Existing lunch price color */
       }
-      .category-filter {
-        padding: 4px 8px;
-        background: #2980b9;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background 0.3s;
-        font-size: 0.85rem;
-      }
-      .category-filter:hover {
-        background: #3498db;
-      }
-      .category-filter.selected {
-        background-color: #1a2a44;
-        color: white;
-      }
-      .category-filter.selected:hover {
-        background-color: #14263a;
-      }
-      #recipeDatabase {
-        flex-direction: column;
-        padding: 0;
-        height: 100%;
-        background: #f5f5f5;
-      }
-      #recipeDatabaseHeader {
-        position: sticky;
-        top: 0;
-        background: #fff;
-        padding: 15px 20px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        z-index: 100;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-      #recipeDatabase h2 {
-        color: #2c3e50;
-        font-size: 1.5rem;
-        margin: 0;
-      }
-      #recipeSearchBar {
-        padding: 8px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        font-size: 1rem;
-        width: 250px;
-        transition: border-color 0.3s;
-      }
-      #recipeSearchBar:focus {
-        border-color: #2980b9;
-        outline: none;
-      }
-      #recipeBackButton {
-        padding: 8px 15px;
-      }
-      #recipeContainer {
-        display: flex;
-        flex: 1;
-        overflow: hidden;
-        padding: 20px;
-      }
-      #recipeList {
-        flex: 1;
-        overflow-y: auto;
-        padding-right: 15px;
-      }
-      .recipe-card {
-        display: flex;
-        align-items: center;
-        background: #fff;
-        border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        margin-bottom: 15px;
-        padding: 15px;
-        cursor: pointer;
-        transition: background 0.3s;
-        position: relative;
-      }
-      .recipe-card:hover {
-        background: #f0f8ff;
-      }
-      .recipe-card.selected {
-        background: #e6f0fa;
-        border: 1px solid #2980b9;
-      }
-      .recipe-card .thumbnail {
-        width: 50px;
-        height: 50px;
-        object-fit: cover;
-        border-radius: 5px;
-        margin-right: 15px;
-      }
-      .recipe-card .placeholder {
-        width: 50px;
-        height: 50px;
-        background: #ddd;
-        border-radius: 5px;
-        margin-right: 15px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.8rem;
+
+      .item .price-container .shorthand {
+        font-size: 0.75rem;
+        /* Small text size */
         color: #666;
-      }
-      .recipe-card .content {
-        flex: 1;
-      }
-      .recipe-card .name {
-        font-size: 1.2rem;
-        font-weight: 600;
-        color: #2c3e50;
-        margin-bottom: 5px;
-      }
-      .recipe-card .tags {
-        font-size: 0.9rem;
-        color: #666;
-      }
-      #recipeDetails {
-        flex: 2;
-        padding: 20px;
-        background: #fff;
-        border-radius: 10px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        margin-left: 20px;
-        overflow-y: auto;
-        display: none;
-        position: relative;
-      }
-      #recipeDetails h2 {
-        font-size: 1.8rem;
-        color: #2c3e50;
-        margin-bottom: 15px;
-      }
-      .ingredient-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 15px;
-      }
-      .ingredient-table th,
-      .ingredient-table td {
-        padding: 10px;
-        text-align: left;
+        /* Subtle color */
+        background-color: #ffffff;
+        /* Light gray background for tag effect */
         border: 1px solid #ddd;
-      }
-      .ingredient-table th {
-        background-color: #2980b9;
-        color: white;
-      }
-      .step-by-step {
-        margin: 20px 0;
-      }
-      .step-by-step h3 {
-        font-size: 1.4rem;
-        color: #2c3e50;
-        margin-bottom: 10px;
-      }
-      .stepper {
-        display: flex;
-        justify-content: center;
-        margin: 10px 0;
-      }
-      .step-dot {
-        width: 10px;
-        height: 10px;
-        background: #ddd;
-        border-radius: 50%;
-        margin: 0 5px;
-        cursor: pointer;
-        transition: background 0.3s;
-      }
-      .step-dot:hover {
-        background: #a0c4ff;
-      }
-      .step-dot.active {
-        background: #2980b9;
-      }
-      .step-text p {
-        margin: 10px 0;
-        font-size: 1rem;
-      }
-      .step-text b {
-        font-weight: bold;
-      }
-      .step-text i {
-        font-style: italic;
-      }
-      .step-text ul {
-        margin-left: 20px;
-        list-style-type: disc;
-      }
-      .hey {
-        display: flex;
-
-      }
-      .heyitem {
-        padding: 10px;
-        display: grid;
-        justify-content: space-between;
-        grid-auto-flow: column; /* Forces a horizontal layout */
+        /* Subtle border */
+        border-radius: 4px;
+        /* Rounded corners */
+        padding: 2px 6px;
+        /* Padding for tag-like appearance */
+        white-space: nowrap;
+        /* Prevent text wrapping */
       }
 
-      .price-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between; /* Puts space between h3 and button */
-        padding: 10px 20px; /* Matches #priceDatabase padding */
-      }
-      .close-price {
-        padding: 5px 10px; /* Smaller than regular buttons */
-        background: #ff4444; /* Red, like close buttons */
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background 0.3s;
-        font-size: 0.8rem; /* Slightly smaller text */
-      }
 
-      .close-price:hover {
-        background: #cc0000; /* Darker red on hover */
-      }
-      #recipeDetailsModal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.7);
-        z-index: 2000;
-        justify-content: center;
-        align-items: center;
-      }
-      #recipeDetailsModalContent {
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        max-width: 90%;
-        max-height: 90vh;
-        overflow-y: auto;
-        position: relative;
-        animation: slideIn 0.3s ease-out;
-      }
-      @keyframes slideIn {
-        from { transform: translateY(-50px); opacity: 0; }
-        to { transform: translateY(0); opacity: 1; }
-      }
-      #closeDetails {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        border: none;
-        background: #ff4444;
-        color: white;
-        padding: 5px 10px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background 0.3s;
-      }
-      #closeDetails:hover {
-        background: #cc0000;
-      }
-      @media (max-width: 768px) {
-        body {
-          flex-direction: column;
-        }
-        .page.active {
-          flex-direction: column;
-          height: auto;
-          min-height: 100vh;
-        }
-        .settings-panel {
-          width: 100%;
-          height: auto;
-          padding: 10px;
-          box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-          flex-shrink: 0;
-        }
-        .image-panel {
-          width: 100%;
-          margin-left: 0;
-          margin-top: 10px;
-          padding: 10px;
-          flex: 0 1 auto;
-          min-height: 0;
-        }
-        #imageContainer {
-          width: 100%;
-          height: auto;
-          max-height: 65vh;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          overflow: hidden;
-        }
-        #imageContainer img {
-          max-width: 90vw;
-          max-height: 60vh;
-          width: auto;
-          height: auto;
-          object-fit: contain;
-          border-radius: 5px;
-        }
-        #imageCounter {
-          margin-top: 5px;
-        }
-        #flagEmoji {
-          position: static;
-          transform: none;
-          margin-bottom: 5px;
-        }
-        .controls {
-          flex-direction: column; /* Stack containers vertically on mobile */
-          gap: 10px; /* Space between containers */
-        }
-        .bordercontainer {
-          width: 100%;
-          display: flex;
-          flex-direction: row;
-          gap: 5px;
-          padding: 5px;
-        }
-        .buttonfullspace {
-          flex: 1;
-          min-width: 0;
-        }
-        #infoContent {
-          width: 85%;
-        }
-        .step-image-container {
-          height: 150px;
-        }
-        .video-section iframe {
-          height: 200px;
-        }
-        #priceDatabase, #recipeDatabase {
-          padding: 0;
-        }
-        #recipeDatabaseHeader {
-          flex-direction: column;
-          align-items: flex-start;
-          padding: 10px;
-        }
-        #recipeSearchBar {
-          width: 100%;
-          margin-top: 10px;
-        }
-        #recipeBackButton {
-          margin-top: 10px;
-        }
-        #recipeContainer {
-          flex-direction: column;
-          padding: 10px;
-        }
-        #recipeList {
-          padding-right: 0;
-        }
-        .recipe-card {
-          padding: 10px;
-        }
-        .recipe-card .thumbnail {
-          width: 40px;
-          height: 40px;
-        }
-        .recipe-card .placeholder {
-          width: 40px;
-          height: 40px;
-          font-size: 0.7rem;
-        }
-        .recipe-card .name {
-          font-size: 1.1rem;
-        }
+    }
+  </style>
+</head>
 
-        /* Ensure #priceDatabase fills the viewport but allows flexibility */
-#priceDatabase {
-  flex-direction: column;
-  padding: 0 20px 20px;
-  display: flex;
-  height: 100vh; /* Full height of the viewport */
-}
-
-/* Keep the header compact */
-.price-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 20px;
-
-  /* position: sticky; 
-  top: 0;
-  z-index: 10; */
-}
-
-/* Style the search bar to stay above the list */
-#searchBar {
-  width: 100%;
-  max-width: 400px;
-  padding: 8px;
-  margin-bottom: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 1rem;
-  /* position: sticky; 
-  top: 50px; 
-  z-index: 10; */
-}
-
-/* Filters stay compact */
-#filters {
-  margin-bottom: 10px;
-}
-
-/* Make itemList take remaining space and scroll */
-#itemList {
-  flex: 1; /* Takes remaining space */
-  overflow-y: auto; /* Scrollable */
-  max-height: calc(100vh - 120px); /* Adjust based on header + search bar height */
-  padding-bottom: 20px; /* Prevent content from being too close to bottom */
-}
-
-/* Mobile adjustments */
-@media (max-width: 768px) {
-  #priceDatabase {
-    padding: 0 10px 10px;
-    height: auto; /* Allow natural height on mobile */
-    min-height: 100vh;
-  }
-  #searchBar {
-    top: 40px; /* Adjust for smaller header */
-  }
-  #itemList {
-    max-height: calc(100vh - 100px); /* Tighter fit on mobile */
-  }
-}
-      }
-    </style>
-  </head>
 <body>
   <div class="page active" id="menuPage">
     <div class="settings-panel">
@@ -874,15 +1110,18 @@
         <strong>食べ物</strong>
         <div class="radio-group">
           <label>
-            <input type="radio" id="lunchWeekdays" name="food" value="lunchWeekdays" style="margin-right: 8px;" onchange="document.getElementById('pasta').disabled = true; document.getElementById('pasta').checked = false;">
+            <input type="radio" id="lunchWeekdays" name="food" value="lunchWeekdays" style="margin-right: 8px;"
+              onchange="document.getElementById('pasta').disabled = true; document.getElementById('pasta').checked = false;">
             ランチ（平）
           </label>
           <label>
-            <input type="radio" id="lunchWeekend" name="food" value="lunchWeekend" style="margin-right: 8px;" onchange="document.getElementById('pasta').disabled = false;">
+            <input type="radio" id="lunchWeekend" name="food" value="lunchWeekend" style="margin-right: 8px;"
+              onchange="document.getElementById('pasta').disabled = false;">
             ランチ（祝、末）
           </label>
           <label>
-            <input type="radio" id="dinner" name="food" value="dinner" style="margin-right: 8px;" onchange="document.getElementById('pasta').disabled = false;">
+            <input type="radio" id="dinner" name="food" value="dinner" style="margin-right: 8px;"
+              onchange="document.getElementById('pasta').disabled = false;">
             ディナー
           </label>
         </div>
@@ -925,13 +1164,14 @@
   </div>
 
   <div class="page" id="priceDatabasePage">
-  <div id="priceDatabase">
-    <div class="price-header">
-      <h3>値段</h3>
-      <button class="close-price" onclick="navigateToMenu()">閉じる</button>
-    </div>
+    <div id="priceDatabase">
+      <div class="price-header">
+        <h3>値段</h3>
+        <button class="close-price" onclick="navigateToMenu()">閉じる</button>
+      </div>
       <div class="searchba">
-        <input type="text" id="searchBar" placeholder="メニューを検索..." oninput="filterItems()" autocorrect="off" autocomplete="off" spellcheck="false">
+        <input type="text" id="searchBar" placeholder="メニューを検索..." oninput="filterItems()" autocorrect="off"
+          autocomplete="off" spellcheck="false">
       </div>
       <div id="filters">
         <button class="category-filter" data-category="">全部</button>
@@ -951,7 +1191,8 @@
     <div id="recipeDatabase">
       <div id="recipeDatabaseHeader">
         <h2>レシピ</h2>
-        <input type="text" id="recipeSearchBar" placeholder="レシピを検索..." oninput="filterRecipes()"　autocorrect="off" autocomplete="off" spellcheck="false">
+        <input type="text" id="recipeSearchBar" placeholder="レシピを検索..." oninput="filterRecipes()" 　autocorrect="off"
+          autocomplete="off" spellcheck="false">
         <button id="recipeBackButton" onclick="navigateToMenu()">メニューに戻る</button>
       </div>
       <div id="recipeContainer">
@@ -996,8 +1237,9 @@
 
     const menuItems = {
       'm1.avif': {
-        name: '鶏もも肉のグリル　ポルチーニクリームソース',
-        nicknames: ['鶏', 'にわとり', 'ニワトリ','チキン','chicken','ちきん', 'momo','chikin','chikkin'],
+        name: '鶏もも肉のグリル',
+        shorthand: 'チキン', // Added shorthand property
+        nicknames: ['鶏', 'にわとり', 'ニワトリ', 'チキン', 'chicken', 'ちきん', 'momo', 'chikin', 'chikkin', 'ポルチーニクリームソース'],
         category: 'Main Dish',
         price: '2380円',
         steps: ['step1-duck.jpg', 'step2-duck.jpg', 'step3-duck.jpg'],
@@ -1025,8 +1267,9 @@
         """`
       },
       'm2.avif': {
-        name: 'ラムランプのグリル　レモン胡椒タップナード',
-        nicknames: ['ランプ', 'ラム','ラムランプ','ramu', 'ranpu','ramuranpu', 'grill','グリル'],
+        name: 'ラムランプのグリル',
+        shorthand: 'ラム', // Added shorthand property
+        nicknames: ['ランプ', 'ラム', 'ラムランプ', 'ramu', 'ranpu', 'ramuranpu', 'grill', 'グリル', 'レモン胡椒タップナード'],
         category: 'Main Dish',
         price: '2380円',
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
@@ -1045,8 +1288,9 @@
         """`
       },
       'm3.avif': {
-        name: '牛ハラミのロースト　生姜バルサミコソース',
-        nicknames: ['ハラミ', '牛','beef','harami','gyuharami','gyuuharami','ぎゅうはらみ','うし','ぎゅ','roast','ロースト'],
+        name: '牛ハラミのロースト',
+        shorthand: 'ハラミ',
+        nicknames: ['ハラミ', '牛', 'beef', 'harami', 'gyuharami', 'gyuuharami', 'ぎゅうはらみ', 'うし', 'ぎゅ', 'roast', 'ロースト', '生姜バルサミコソース'],
         category: 'Main Dish',
         price: '3100円',
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
@@ -1065,8 +1309,9 @@
         """`
       },
       'm4.avif': {
-        name: 'メカジキのグリル　海塩とレモン',
-        nicknames: ['メカジキ', 'Mekajiki','grill','グリル','guriru'],
+        name: 'メカジキのグリル',
+        shorthand: 'カジキ',
+        nicknames: ['メカジキ', 'Mekajiki', 'grill', 'グリル', 'guriru', '海塩とレモン'],
         category: 'Main Dish',
         price: '1980円',
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
@@ -1087,7 +1332,8 @@
       ,
       'p1.avif': {
         name: '青じそと小海老',
-        nicknames: ['青じそ', '青えび', '青海老', 'あおえび','あお海老','Aoebi','ebi','Aojiso'],
+        shorthand: '青えび',
+        nicknames: ['青じそ', '青えび', '青海老', 'あおえび', 'あお海老', 'Aoebi', 'ebi', 'Aojiso'],
         category: 'Pasta',
         price: '1100円',
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
@@ -1107,8 +1353,9 @@
       }
       ,
       'p2.avif': {
-        name: 'バジリコとアンチョビとパルメサン',
-        nicknames: ['ばジアン', 'バジあん', 'バジリコ', 'アンチョビ','あんちょび'],
+        name: 'バジリコとアンチョビ',
+        shorthand: 'バジアン',
+        nicknames: ['ばジアン', 'バジあん', 'バジリコ', 'アンチョビ', 'あんちょび', 'パルメサン', 'bajian', 'bajiriko', 'anchobi'],
         category: 'Pasta',
         price: '1380円',
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
@@ -1128,8 +1375,9 @@
       }
       ,
       'p3.avif': {
-        name: '釜揚げしらすと大葉とトマト',
-        nicknames: ['釜揚げ', 'かまあげ', 'しらす', '大葉','おおば','kamaage','shirasu', 'ooba'],
+        name: '釜揚げしらすと大葉',
+        shorthand: 'しらす',
+        nicknames: ['釜揚げ', 'かまあげ', 'しらす', '大葉', 'おおば', 'kamaage', 'shirasu', 'ooba', 'トマト', 'とトマト', 'tomato'],
         category: 'Pasta',
         price: '1380円',
         lunchPrice: '1100円',
@@ -1151,7 +1399,8 @@
       ,
       'p4.avif': {
         name: '帆立と水菜と生海苔',
-        nicknames: ['ホタテ', '帆立', 'ほたて', '生ノリ','namanori','nori','なまのり','mizuna','水菜'],
+        shorthand: '生ノリ',
+        nicknames: ['ホタテ', '帆立', 'ほたて', '生ノリ', 'namanori', 'nori', 'なまのり', 'mizuna', '水菜'],
         category: 'Pasta',
         price: '1540円',
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
@@ -1171,8 +1420,9 @@
       }
       ,
       'p5.avif': {
-        name: 'ズワイ蟹と青唐辛子とちりめんじゃこ',
-        nicknames: ['かに', '蟹', 'ズワイ', 'ちり','zuwai','zwei','kani'],
+        name: 'ズワイ蟹と青唐辛子',
+        shorthand: 'ズワイ',
+        nicknames: ['かに', '蟹', 'ズワイ', 'ちり', 'zuwai', 'zwei', 'kani', 'ちりめんじゃこ'],
         category: 'Pasta',
         price: '1540円',
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
@@ -1193,9 +1443,10 @@
       ,
       'p6.avif': {
         name: '真ダコとパクチー',
-        nicknames: ['パクチ', 'ぱくち', 'マダコ', 'まだこ','真蛸', 'madako', 'pakuchi','タコパク','たこぱく', 'takopaku'],
+        shorthand: 'タコパク',
+        nicknames: ['パクチ', 'ぱくち', 'マダコ', 'まだこ', '真蛸', 'madako', 'pakuchi', 'タコパク', 'たこぱく', 'takopaku'],
         category: 'Pasta',
-        price: '1100円',
+        price: '15800円',
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
         videoLink: 'https://www.youtube.com/watch?v=example2',
         ingredients: {
@@ -1213,8 +1464,9 @@
       }
       ,
       'p7.avif': {
-        name: 'アラビアータ　辛いトマトソース',
-        nicknames: ['アラビアータ', 'Arabi', 'アラビ', 'Arabiata'],
+        name: 'アラビアータ',
+        shorthand: 'アラビ',
+        nicknames: ['アラビアータ', 'Arabi', 'アラビ', 'Arabiata', '辛いトマトソース'],
         category: 'Pasta',
         price: '1100円',
         lunchPrice: '950円',
@@ -1236,7 +1488,8 @@
       ,
       'p8.avif': {
         name: '熟成ベーコンのアマトリチャーナ',
-        nicknames: ['マトリ', 'まとり', 'matori', 'アマトリ', 'あまとり','amatori','アマトリチャーナ','マトリチャーナ','まとりちゃーな','あまとりちゃーな','アマトリチャナ','あまとりちゃな'],
+        shorthand: 'マトリ',
+        nicknames: ['マトリ', 'まとり', 'matori', 'アマトリ', 'あまとり', 'amatori', 'アマトリチャーナ', 'マトリチャーナ', 'まとりちゃーな', 'あまとりちゃーな', 'アマトリチャナ', 'あまとりちゃな'],
         category: 'Pasta',
         price: '1580円',
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
@@ -1257,7 +1510,8 @@
       ,
       'p9.avif': {
         name: 'バジルとモッツァレラのトマトソース',
-        nicknames: ['バジトマト', 'ばじとまと', 'bajitomato', 'tomato', 'mozza','トマト','とまと','モッツァレラ','もっつぁれら'],
+        shorthand: 'バジトマト',
+        nicknames: ['バジトマト', 'ばじとまと', 'bajitomato', 'tomato', 'mozza', 'トマト', 'とまと', 'モッツァレラ', 'もっつぁれら'],
         category: 'Pasta',
         price: '1600円',
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
@@ -1277,8 +1531,9 @@
       }
       ,
       'p10.avif': {
-        name: 'クラシック　カルボナーラ',
-        nicknames: ['カルボ', 'かるぼ', 'karubon', 'carbo','カルボーナラ','かるぼーなら','カルボナーラ','かるぼなーら','karbo'],
+        name: 'カルボナーラ',
+        shorthand: 'カルボ',
+        nicknames: ['カルボ', 'かるぼ', 'karubon', 'carbo', 'カルボーナラ', 'かるぼーなら', 'カルボナーラ', 'かるぼなーら', 'karbo', 'クラシック'],
         category: 'Pasta',
         price: '1540円',
         lunchPrice: '1250円',
@@ -1299,8 +1554,9 @@
       }
       ,
       'p11.avif': {
-        name: 'クラシック　ボロネーズ',
-        nicknames: ['ボロ', 'ぼろ', 'ボロネーズ', 'ぼろねーず','boro','boronezu'],
+        name: 'ボロネーズ',
+        shorthand: 'ボロ',
+        nicknames: ['ボロ', 'ぼろ', 'ボロネーズ', 'ぼろねーず', 'boro', 'boronezu', 'クラシック'],
         category: 'Pasta',
         price: '1580円',
         lunchPrice: '1350円',
@@ -1322,7 +1578,8 @@
       ,
       'p12.avif': {
         name: '北海大あさりのボンゴレビアンコ',
-        nicknames: ['大あさり', 'あさり', 'アサリ', 'asari','ooasari','bianko','ぼんごれ','ボンゴレ','bongore','大アサリ','大漁り'],
+        shorthand: 'ボンゴレ',
+        nicknames: ['大あさり', 'あさり', 'アサリ', 'asari', 'ooasari', 'bianko', 'ぼんごれ', 'ボンゴレ', 'bongore', '大アサリ', '大漁り'],
         category: 'Pasta',
         price: '1680円',
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
@@ -1343,7 +1600,8 @@
       ,
       'p13.avif': {
         name: 'ゴルゴンゾーラ　クリームソース',
-        nicknames: ['ゴルゴン', 'gorugon','ごるごん','gogogon','ごろごん','ゴロゴン'],
+        shorthand: 'ゴルゴン',
+        nicknames: ['ゴルゴン', 'gorugon', 'ごるごん', 'gogogon', 'ごろごん', 'ゴロゴン'],
         category: 'Pasta',
         price: '1600円',
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
@@ -1364,7 +1622,8 @@
       ,
       'p14.avif': {
         name: 'うにとヤリイカと明太子',
-        nicknames: ['めんたいこ', '明太子','ヤリイカ','やりいか','uni','yariika','mentaiko','uniika','ういいか','うにイカ','ウニイカ'
+        shorthand: 'うにイカ',
+        nicknames: ['めんたいこ', '明太子', 'ヤリイカ', 'やりいか', 'uni', 'yariika', 'mentaiko', 'uniika', 'ういいか', 'うにイカ', 'ウニイカ'
         ],
         category: 'Pasta',
         price: '1780円',
@@ -1387,7 +1646,8 @@
       ,
       'p15.avif': {
         name: '海老のジェノベーゼ',
-        nicknames: ['えび', '海老','ジェノベ','じぇのべ','jenobe','genobe','ebi'
+        shorthand: 'ジェノベ',
+        nicknames: ['えび', '海老', 'ジェノベ', 'じぇのべ', 'jenobe', 'genobe', 'ebi'
         ],
         category: 'Pasta',
         price: '1680円',
@@ -1410,7 +1670,8 @@
       ,
       'p16.avif': {
         name: 'しらすとしめじの生海苔カルボナーラ',
-        nicknames: ['しらす', 'しめじ','のりぼ','ノリボ','noribo','shirasu','shimeji'
+        shorthand: 'ノリボ',
+        nicknames: ['しらす', 'しめじ', 'のりぼ', 'ノリボ', 'noribo', 'shirasu', 'shimeji', 'karubo', 'カルボ', 'かるぼ'
         ],
         category: 'Pasta',
         price: '1580円',
@@ -1432,7 +1693,8 @@
       ,
       'p17.avif': {
         name: '半熟卵と3種チーズと黒胡椒',
-        nicknames: ['ペッパ', 'ぺっぱ','peppa','pepper','tamago','卵','玉子','たまご'
+        shorthand: 'ペッパ',
+        nicknames: ['ペッパ', 'ぺっぱ', 'peppa', 'pepper', 'tamago', '卵', '玉子', 'たまご'
         ],
         category: 'Pasta',
         price: '1680円',
@@ -1454,7 +1716,8 @@
       ,
       'p18.avif': {
         name: '帆立とオクラとフレッシュトマト',
-        nicknames: ['帆立', 'ほたて','ホタテ','オクラ','okura','hotate'],
+        shorthand: '帆立',
+        nicknames: ['帆立', 'ほたて', 'ホタテ', 'オクラ', 'okura', 'hotate'],
         category: 'Pasta',
         price: '',
         lunchPrice: '1100円',
@@ -1475,7 +1738,8 @@
       },
       'p19.avif': {
         name: '今週のパスタ(03/10-03/15)',
-        nicknames: ['今週', 'こんしゅ','todays','today','tod'
+        shorthand: 'Todays',
+        nicknames: ['今週', 'こんしゅ', 'todays', 'today', 'tod'
         ],
         category: 'Pasta',
         price: '',
@@ -1497,8 +1761,9 @@
       }
       ,
       'c1.avif': {
-        name: '切りたて生ハム２種盛り',
-        nicknames: ['きりたて', '切り立て','2しゅ','2','２','shu','hamumori','ハム盛り','ハムモリ','はむもり','meat','kiritate'
+        name: '生ハム２種盛り',
+        shorthand: 'ハムモリ',
+        nicknames: ['きりたて', '切り立て', '2しゅ', '2', '２', 'shu', 'hamumori', 'ハム盛り', 'ハムモリ', 'はむもり', 'meat', 'kiritate', '切りたて'
         ],
         category: 'Charcuterie',
         price: '1760円',
@@ -1506,21 +1771,24 @@
       ,
       'c2.avif': {
         name: 'コッパ',
-        nicknames: ['コッパ', 'こっぱ','koppa','kopa','meat'
+        shorthand: 'コッパ',
+        nicknames: ['コッパ', 'こっぱ', 'koppa', 'kopa', 'meat'
         ],
         category: 'Charcuterie',
         price: '880円',
-      } ,
+      },
       'c3.avif': {
         name: 'サラミ',
-        nicknames: ['サラミ', 'さらみ','salami','sarami','meat'
+        shorthand: 'サラミ',
+        nicknames: ['サラミ', 'さらみ', 'salami', 'sarami', 'meat'
         ],
         category: 'Charcuterie',
         price: '880円',
       },
       'd1.avif': {
         name: '生ビール',
-        nicknames: ['なま', '生', 'ビル', 'ビール', 'びる', 'びーる', 'biru', 'bi-ru', 'beer','nama'],
+        shorthand: '生',
+        nicknames: ['なま', '生', 'ビル', 'ビール', 'びる', 'びーる', 'biru', 'bi-ru', 'beer', 'nama'],
         category: 'Drink',
         price: '770円',
         lunchPrice: '770円',
@@ -1528,6 +1796,7 @@
       ,
       'd2.avif': {
         name: 'プリチェンヘル',
+        shorthand: 'ヘル',
         nicknames: ['ビル', 'ビール', 'びる', 'びーる', 'biru', 'bi-ru', 'heru', 'hell', 'ヘル', 'へる', 'purichen', 'puri', 'purichenheru', 'プリ', 'ぷり', 'ぷりちぇん'],
         category: 'Drink',
         price: '1200円',
@@ -1535,50 +1804,57 @@
       ,
       'd3.avif': {
         name: 'シャンディガフ',
+        shorthand: 'ガフ',
         nicknames: ['ビル', 'ビール', 'びる', 'びーる', 'biru', 'bi-ru', 'shanti', 'schanti', 'シャンディ', 'しゃんでぃ', 'schandi', 'shandi', 'ガフ', 'がふ', 'gafu'],
         category: 'Drink',
         price: '880円',
       }
       ,
       'd4.avif': {
-        name: 'サッポロ　ノーアル！',
+        name: 'サッポロ　ノーアル',
+        shorthand: 'ノーアル',
         nicknames: ['ビル', 'ビール', 'びる', 'びーる', 'biru', 'bi-ru', '札幌', 'サッポロ', 'サポ', 'さぽ', 'さぽろ', 'さっぽろ', 'saporo', 'sapporo', 'non', 'alcohol', 'arukoru', 'non aru', 'ノアル', 'のある'],
         category: 'Drink',
         price: '700円',
       }
       ,
       'd5.avif': {
-        name: '自家製サングリア（赤）',
-        nicknames: ['san', 'sangria', 'sun', 'sanguria', 'jikka', '実家', 'さん', 'サン', 'サングリ', '赤', 'あか', 'アカ', 'aka'],
+        name: 'サングリア（赤）',
+        shorthand: 'サン赤',
+        nicknames: ['san', 'sangria', 'sun', 'sanguria', 'jikka', '実家', 'さん', 'サン', 'サングリ', '赤', 'あか', 'アカ', 'aka', '自家製'],
         category: 'Drink',
         price: '850円',
-        lunchPrice: '880円',
+        lunchPrice: '850円',
       }
       ,
       'd6.avif': {
-        name: '自家製サングリア（白）',
-        nicknames: ['san', 'sangria', 'sun', 'sanguria', 'jikka', '実家', 'さん', 'サン', 'サングリ', '白', 'しろ', 'シロ', 'shiro'],
+        name: 'サングリア（白）',
+        shorthand: 'サン白',
+        nicknames: ['san', 'sangria', 'sun', 'sanguria', 'jikka', '実家', 'さん', 'サン', 'サングリ', '白', 'しろ', 'シロ', 'shiro', '自家製'],
         category: 'Drink',
         price: '850円',
         lunchPrice: '880円',
       }
       ,
       'd7.avif': {
-        name: 'クラフトジンジャーハイボール',
-        nicknames: ['kurafuto', 'ginger', 'ginja', 'haiboru', 'hai', 'boru', 'ginjahai', 'high', 'highball', 'はいぼろ', 'ハイボール', 'はいぼーる', 'gbh', 'GBH', 'cgbh'],
+        name: 'ジンジャーハイボール',
+        shorthand: 'GHB',
+        nicknames: ['kurafuto', 'ginger', 'ginja', 'haiboru', 'hai', 'boru', 'ginjahai', 'high', 'highball', 'はいぼろ', 'ハイボール', 'はいぼーる', 'gbh', 'GBH', 'cgbh', 'クラフト'],
         category: 'Drink',
         price: '850円',
       }
       ,
       'd8.avif': {
-        name: 'クラフトコーラハイボール',
-        nicknames: ['kurafuto', 'kora', 'cola', 'コーラ', 'ハイボール', 'こーら', 'ハイボル', 'はいぼーる', 'はいぼる', 'highball', 'haiboru', 'コーラHB', 'こーらHB', 'CHB','khb'],
+        name: 'コーラハイボール',
+        shorthand: 'コーラHB',
+        nicknames: ['kurafuto', 'kora', 'cola', 'コーラ', 'ハイボール', 'こーら', 'ハイボル', 'はいぼーる', 'はいぼる', 'highball', 'haiboru', 'コーラHB', 'こーらHB', 'CHB', 'khb', 'クラフト'],
         category: 'Drink',
         price: '850円',
       }
       ,
       'd9.avif': {
         name: 'カシスティーソーダ',
+        shorthand: 'CTS',
         nicknames: ['kashishisuti', 'soda', 'ソーダ', 'そーだ', 'ソダ', 'そだ', 'CTS'],
         category: 'Drink',
         price: '850円',
@@ -1586,6 +1862,7 @@
       ,
       'd10.avif': {
         name: 'カンパリソーダ',
+        shorthand: 'カンパリ',
         nicknames: ['kanpari', 'soda', 'ソーダ', 'そーだ', 'ソダ', 'そだ', 'カンパリ'],
         category: 'Drink',
         price: '850円',
@@ -1593,6 +1870,7 @@
       ,
       'd11.avif': {
         name: 'ハイボール',
+        shorthand: 'HB',
         nicknames: ['high', 'highball', 'はいぼろ', 'ハイボール', 'はいぼーる', 'haiboru', 'HB'],
         category: 'Drink',
         price: '770円',
@@ -1600,27 +1878,31 @@
       ,
       'd12.avif': {
         name: 'レモンサワー',
+        shorthand: 'Lサワー',
         nicknames: ['remonsawa', 'lemonsawa', 'lemon', 'sour', 'れもん', 'れもんさわ', 'サワー', 'さわ', 'Lさわー', 'Lサワー'],
         category: 'Drink',
         price: '770円',
       }
       ,
       'd13.avif': {
-        name: 'クラフトジンジャーエール',
-        nicknames: ['kurafuto', 'ginger', 'ginja', 'gingerale', 'ジンジャーエール', 'ジンジャーエル', 'じんじゃーえーる', 'じんじゃーえる', 'エル', 'える', 'ale', 'あれ', 'アレ', 'GA'],
+        name: 'ジンジャーエール',
+        shorthand: 'GA',
+        nicknames: ['kurafuto', 'ginger', 'ginja', 'gingerale', 'ジンジャーエール', 'ジンジャーエル', 'じんじゃーえーる', 'じんじゃーえる', 'エル', 'える', 'ale', 'あれ', 'アレ', 'GA', 'クラフト'],
         category: 'Drink',
         price: '800円',
       }
       ,
       'd14.avif': {
-        name: '自家製クラフトコーラ',
-        nicknames: ['kurafuto', 'kora', 'cola', 'コーラ', 'jikasei', 'こーら', 'こら', 'コラ'],
+        name: 'コーラ',
+        shorthand: 'コーラ',
+        nicknames: ['kurafuto', 'kora', 'cola', 'コーラ', 'jikasei', 'こーら', 'こら', 'コラ', 'クラフト', '自家製'],
         category: 'Drink',
         price: '800円',
       }
       ,
       'd15.avif': {
         name: 'シチリアレモンソーダ',
+        shorthand: 'Lソーダ',
         nicknames: ['soda', 'ソーダ', 'そーだ', 'ソダ', 'そだ', 'しちりあ', 'sicilia', 'レモン', 'れもん', 'lemonsoda', 'lemon soda'],
         category: 'Drink',
         price: '850円',
@@ -1628,36 +1910,41 @@
       ,
       'd16.avif': {
         name: 'ブラッドオレンジジュース',
+        shorthand: 'BOJ',
         nicknames: ['blood orange juice', 'orangejuice', 'orange juice', 'blood', 'ジュース', 'ジューズ', 'じゅーす', 'じゅーず', 'オレンジ', 'おれんじ', 'boj', 'oj'],
         category: 'Drink',
         price: '700円',
       }
       ,
       'd17.avif': {
-        name: '完熟りんごジュース',
-        nicknames: ['ringo', 'ringo juice', 'apple juice', 'ringo jusu', 'jusu', 'ジュース', 'ジューズ', 'じゅーす', 'じゅーず', 'りんご', 'リンゴ'],
+        name: 'りんごジュース',
+        shorthand: 'りんご',
+        nicknames: ['ringo', 'ringo juice', 'apple juice', 'ringo jusu', 'jusu', 'ジュース', 'ジューズ', 'じゅーす', 'じゅーず', 'りんご', 'リンゴ', '完熟'],
         category: 'Drink',
         price: '700円',
       }
       ,
       'd18.avif': {
         name: 'サンペレグリノ',
-        nicknames: ['water', '水', 'みず', 'sparkling water', 'sparkling', 'スパークリング', 'さんぺれぐりの', 'saint pellegrino',  'sparkeling water', 'sparkeling'],
+        shorthand: 'サンペレグリノ',
+        nicknames: ['water', '水', 'みず', 'sparkling water', 'sparkling', 'スパークリング', 'さんぺれぐりの', 'saint pellegrino', 'sparkeling water', 'sparkeling'],
         category: 'Drink',
         price: '900円',
       }
       ,
       'd19.avif': {
-        name: 'グラス　シャンパーニュ',
-        nicknames: ['champagne', 'chanpagne', 'シャンパン', 'しゃんぱん', 'シャンパーニュ'],
+        name: 'シャンパーニュ',
+        shorthand: 'シャンパン',
+        nicknames: ['champagne', 'chanpagne', 'シャンパン', 'しゃんぱん', 'シャンパーニュ', 'グラス'],
         category: 'Drink',
         price: '1800円〜',
         lunchPrice: '1500円〜',
       }
       ,
       'd20.avif': {
-        name: 'アットゥアーレ　スプマンテ',
-        nicknames: ['supumante', 'spumante', 'sparkling wine', 'sparkeling wine', 'スパークリングワイン', 'ワイン', 'スプマンテ', 'すぷまんて'],
+        name: 'スプマンテ',
+        shorthand: 'スプ',
+        nicknames: ['supumante', 'spumante', 'sparkling wine', 'sparkeling wine', 'スパークリングワイン', 'ワイン', 'スプマンテ', 'すぷまんて', 'アットゥアーレ'],
         category: 'Drink',
         price: '990円',
         lunchPrice: '990円',
@@ -1665,6 +1952,7 @@
       ,
       'd21.avif': {
         name: 'イタリアンミモザ',
+        shorthand: 'ミモサ',
         nicknames: ['italian mimosa', 'italian mimoza', 'ミモザ', 'みもさ', 'ミモサ', 'みもざ'],
         category: 'Drink',
         price: '990円',
@@ -1672,6 +1960,7 @@
       ,
       'd22.avif': {
         name: 'りんごスプマンテ',
+        shorthand: 'りんごスプ',
         nicknames: ['リンゴスプマンテ', 'すぷまんて', 'スプマンテ', 'ringo', 'apple', 'ringo supumante', 'supumante', 'spumante', 'リンゴ', 'りんご'],
         category: 'Drink',
         price: '990円',
@@ -1679,6 +1968,7 @@
       ,
       'd23.avif': {
         name: 'バージンベリーニ',
+        shorthand: 'Vベリニ',
         nicknames: ['virgin bellini', 'bajinberini', 'バジンベリニ', 'ばじんべりに', 'ベリニ', 'べりに', 'bellini', 'Vベリーに', 'Vベリーニ'],
         category: 'Drink',
         price: '850円',
@@ -1686,6 +1976,7 @@
       ,
       'd24.avif': {
         name: 'ストロベリーパンチ',
+        shorthand: 'パンチ',
         nicknames: ['strawberry punch', 'punch', 'パンチ', 'ぱんち', 'ベリー', 'べりー', 'sutoroberi'],
         category: 'Drink',
         price: '850円',
@@ -1693,7 +1984,8 @@
       ,
       'd25.avif': {
         name: 'コーヒー（Hot・Ice）',
-        nicknames: ['kohi', 'こーひー', 'ice', 'hot', 'アイス', 'ホット', 'coffe', 'coffee', 'coofe', 'koohi','こひ','コヒ'],
+        shorthand: 'コーヒ',
+        nicknames: ['kohi', 'こーひー', 'ice', 'hot', 'アイス', 'ホット', 'coffe', 'coffee', 'coofe', 'koohi', 'こひ', 'コヒ'],
         category: 'Drink',
         price: '550円',
         lunchPrice: '550円',
@@ -1701,6 +1993,7 @@
       ,
       'd26.avif': {
         name: 'エスプレッソ',
+        shorthand: 'エスプレッソ',
         nicknames: ['espresso', 'coffe', 'coffee', 'coofe', 'koohi', 'kohi', 'こーひー'],
         category: 'Drink',
         price: '550円',
@@ -1709,6 +2002,7 @@
       ,
       'd27.avif': {
         name: 'カフェラテ（Hot・Ice）',
+        shorthand: 'ラテ',
         nicknames: ['kohi', 'こーひー', 'ice', 'hot', 'アイス', 'ホット', 'coffe', 'coffee', 'coofe', 'koohi', 'ラテ', 'らて', 'latte', 'rate', 'ratte', 'ラッテ', 'らって', 'milk'],
         category: 'Drink',
         price: '700円',
@@ -1716,8 +2010,17 @@
       }
       ,
       'd28.avif': {
-        name: 'アイスティ・アイスウーロン',
+        name: 'アイスティ',
+        shorthand: 'IT',
         nicknames: ['ice tea', 'ulon', 'oolong', 'iceulon', 'ice', 'ウーロン', 'IT'],
+        category: 'Drink',
+        price: '550円',
+        lunchPrice: '550円',
+      },
+      'd28a.avif': {
+        name: 'アイスウーロン茶',
+        shorthand: 'Iウーロン',
+        nicknames: ['ice tea', 'ulon', 'oolong', 'iceulon', 'ice', 'ウーロン', 'IT', '茶', 'ちゃ', 'cha'],
         category: 'Drink',
         price: '550円',
         lunchPrice: '550円',
@@ -1725,6 +2028,7 @@
       ,
       'd29.avif': {
         name: '実家製チャイ（Hot・Ice）',
+        shorthand: 'チャイ',
         nicknames: ['ice', 'hot', 'アイス', 'ホット', 'chai', 'ちゃい', 'チャイ', 'milk'],
         category: 'Drink',
         price: '700円',
@@ -1733,6 +2037,7 @@
       ,
       'g1.avif': {
         name: '生牡蠣　西洋わさびとレモン🍋',
+        shorthand: 'カキ　レ',
         nicknames: ['kaki', 'namakaki', 'namagaki', 'かき', 'カキ', 'がき', 'ガキ', '生カキ', '生ガキ', '生かき', '生がき', 'なまかき', 'ナマカキ'],
         category: '前菜',
         price: '550円',
@@ -1741,6 +2046,7 @@
       ,
       'g2.avif': {
         name: '生牡蠣　青唐辛子トマトサルサ🫑',
+        shorthand: 'カキ　サ',
         nicknames: ['kaki', 'namakaki', 'namagaki', 'かき', 'カキ', 'がき', 'ガキ', '生カキ', '生ガキ', '生かき', '生がき', 'なまかき', 'ナマカキ'],
         category: '前菜',
         price: '550円',
@@ -1748,6 +2054,7 @@
       ,
       'g3.avif': {
         name: '軽く炙った赤海老　ガンベロロッソ',
+        shorthand: 'ガンベロ',
         nicknames: ['ガンベロ', 'ganbero', '赤海老', 'あかえび', 'えび', '海老', 'エビ', 'akaebi', 'ebi', 'がんべろ', 'ガンベロロッソ', 'がんべろろっそ'],
         category: '前菜',
         price: '550円',
@@ -1756,6 +2063,7 @@
       ,
       'g4.avif': {
         name: '北海真だことアボカド　タコポキソース',
+        shorthand: 'タコポキ',
         nicknames: ['madako', 'abokado', 'avocado', 'takopoki', '真蛸', 'マダコ', 'まだこ', 'アボカド', 'あぼかど'],
         category: '前菜',
         price: '880円',
@@ -1763,6 +2071,7 @@
       ,
       'g5.avif': {
         name: '北海真だ　青唐辛子トマトサルサ',
+        shorthand: 'タコマリネ',
         nicknames: ['たこマリネ', 'タコマリネ', '真蛸', '真だこ', '真ダコ', '真タコ', '真たこ', 'takomarine', 'tomato', 'salsa', 'tomato salsa', 'tomatosalsa', '青唐辛子'],
         category: '前菜',
         price: '880円',
@@ -1770,6 +2079,7 @@
       ,
       'g6.avif': {
         name: '帆立のカルパッチョ　バジルと柚子ケッカソース',
+        shorthand: 'ホタテ',
         nicknames: ['hotate karupaccho', '帆立', 'ホタテ', 'ほたて', 'カルパッチョ', 'かるぱっちょ'],
         category: '前菜',
         price: '880円',
@@ -1777,6 +2087,7 @@
       ,
       'h1.avif': {
         name: '塩辛のローストポテトサラダ',
+        shorthand: 'ポテサラ',
         nicknames: ['potetosarada', 'ポテトサラダ', 'ぽてとさらだ', 'sarada', 'salad', 'サラダ', 'さらだ', 'ポテト', 'ぽてと'],
         category: 'Hot/Oven',
         price: '880円',
@@ -1784,6 +2095,7 @@
       ,
       'h2.avif': {
         name: '釜揚げしらすと海老のアヒージョ',
+        shorthand: 'アヒージョ',
         nicknames: ['アヒージョ', 'しらーじょ', 'しらージョ', 'ahijo', 'shirajo', 'shirasu', 'しらす', 'ebi', 'えび', 'エビ', '海老'],
         category: 'Hot/Oven',
         price: '1050円',
@@ -1791,6 +2103,7 @@
       ,
       'h3.avif': {
         name: '月島明太カマンベール',
+        shorthand: 'カマンベル',
         nicknames: ['kamanberu', 'カマンベール', 'かまんべーる', 'mentaiko', '明太子', 'カマンベル', 'かまんベる'],
         category: 'Hot/Oven',
         price: '1280円',
@@ -1798,6 +2111,7 @@
       ,
       'h4.avif': {
         name: '牛ハチノスの煮込み　トリッパ',
+        shorthand: 'トリッパ',
         nicknames: ['tripper', 'torippa', 'hachinosu', 'とりぱ', 'トリパ', 'トリッパ', 'とりっぱ', 'hachisosu', 'そす', 'ソス', 'のす', 'ノス', 'beef', 'gyuuhachinosu', 'gyuhachinosu'],
         category: 'Hot/Oven',
         price: '1100円',
@@ -1805,20 +2119,23 @@
       ,
       'h5.avif': {
         name: '北海大あさりのワイン蒸し',
+        shorthand: 'あさり',
         nicknames: ['wain', 'wine', 'wine mushi', 'wain mushi', 'asari', 'ooasari', 'わいんむし', 'ワイン蒸し', 'ワインムシ', '大アサリ', 'おおあさり', '大漁り', 'おおあさり', 'あさり', 'アサリ'],
         category: 'Hot/Oven',
         price: '1540円',
       }
       ,
       'h6.avif': {
-        name: 'お肉屋さんのグリルドソーセージアソート',
-        nicknames: ['gurirudo soseji', 'sosejiasoto', 'niku', 'grill', 'グリル', 'sauce', 'sosu', 'asort', 'asoto', 'そせじ', 'ソーセージ', 'そーせーじ', 'アソート', 'あそーと'],
+        name: 'グリルドソーセージアソート',
+        shorthand: 'ソーセージ',
+        nicknames: ['gurirudo soseji', 'sosejiasoto', 'niku', 'grill', 'グリル', 'sauce', 'sosu', 'asort', 'asoto', 'そせじ', 'ソーセージ', 'そーせーじ', 'アソート', 'あそーと', 'お肉屋さんの'],
         category: 'Hot/Oven',
         price: '1280円',
       }
       ,
       'h7.avif': {
         name: '白モツの辛いトマト煮　モツアラビアータ',
+        shorthand: 'モツ',
         nicknames: ['motsu', 'shiromutsu', 'motsuarabiata', 'arabiata', 'モツ', 'もつ', 'アラビアタ', 'アラビアータ', 'あらびあーた', '白モツ', '白もつ', 'karaitomato', 'からいとまと', 'カライトマト'],
         category: 'Hot/Oven',
         price: '1100円',
@@ -1826,6 +2143,7 @@
       ,
       'h8.avif': {
         name: 'うにとクレソンのガーリックソテー',
+        shorthand: 'うにクレソン',
         nicknames: ['uni', 'kureson', 'garlic sote', 'garikkusote', 'Kress', 'クレソン', 'くれそん', 'ガーリック', 'がーりっく', 'そてー', 'ソテー'],
         category: 'Hot/Oven',
         price: '1350円',
@@ -1833,6 +2151,7 @@
       ,
       'h9.avif': {
         name: '4種チーズとマッシュポテトのオーブン焼き',
+        shorthand: 'チーズオーブン',
         nicknames: ['cheese', 'mash potato', 'masshupoteto', 'obunyaki', 'ovenyaki', 'mashpotato', '4cheese', '4chizu', '4chiizu', 'チーズ', '4チーズ', '4種', 'マッシュポテト', 'まっしゅぽてと', 'おぶんやき', 'オブン', 'オーブン', 'オーブン焼き', 'おーぶんやき'],
         category: 'Hot/Oven',
         price: '1280円',
@@ -1840,6 +2159,7 @@
       ,
       'h10.avif': {
         name: '白トリュフバタートースト　2P',
+        shorthand: 'トリュフ',
         nicknames: ['truffletoast', 'buttertruffle', 'shirotruffle', 'truffle toast', 'トリュフ', 'バタートースト', 'トースト'],
         category: 'Hot/Oven',
         price: '400円',
@@ -1847,6 +2167,7 @@
       ,
       'h11.avif': {
         name: '小さなガーリックトースト　2P',
+        shorthand: 'ガート',
         nicknames: ['garlic toast', 'garlictoast', 'ガート', 'がーと', 'ガーリック', 'がーりっく', 'gato', 'garikkutosuto', 'garikku tost', 'garikku tosuto', 'トースト', 'とーすと'],
         category: 'Hot/Oven',
         price: '300円',
@@ -1854,13 +2175,15 @@
       ,
       'hon1.avif': {
         name: '牛ツラミのカルパッチョ',
-        nicknames: ['tsurami', 'karupacco', 'carpaccio', 'ツラミ', 'つらみ', 'カルパチョ', 'カルパッチョー', 'かるぱっちょー','turami'],
+        shorthand: 'ツラミ',
+        nicknames: ['tsurami', 'karupacco', 'carpaccio', 'ツラミ', 'つらみ', 'カルパチョ', 'カルパッチョー', 'かるぱっちょー', 'turami'],
         category: '本日のおすすめ',
         price: '1380円',
       }
       ,
       'hon2.avif': {
         name: '桜海老',
+        shorthand: '桜えび・Monthly',
         nicknames: ['sakuraebi', 'ebi', 'さくらえび', 'サクラエビ', '桜えび', 'sakura ebi'],
         category: '本日のおすすめ',
         price: '1800円',
@@ -1868,6 +2191,7 @@
       ,
       'hon3.avif': {
         name: '実家製ティラミス',
+        shorthand: 'ティラミス',
         nicknames: ['jikasei', 'tiramisu', 'ティラミス', 'てぃらみす'],
         category: '本日のおすすめ',
         price: '650円',
@@ -1875,6 +2199,7 @@
       ,
       's1.avif': {
         name: 'クラシックシーザーサラダ',
+        shorthand: 'シーザー',
         nicknames: ['caesar', 'salad', 'sarada', 'shizasarada', 'classic', 'シーザーサラダ', 'しーざーさらだ', 'シザサラダ', 'しざさらだ', 'シーザサラダ', 'しーざさらだ', 'シザーサラダ', 'しざーさらだ', 'half', 'full', 'ハーフ', 'フル', 'はーふ', 'ふる'],
         category: 'Salad',
         price: 'H980・F1380円',
@@ -1882,6 +2207,7 @@
       ,
       's2.avif': {
         name: '生ハムグリーンサラダ',
+        shorthand: 'グリーン',
         nicknames: ['gurinsarada', 'sarada', 'hamu', 'namahamu', 'グリン', 'ぐりん', 'グリーン', 'グーリン', 'ぐりーん', 'ぐーりん', 'さらだ', 'サラダ', 'salad', 'half', 'full', 'ハーフ', 'フル', 'はーふ', 'ふる'],
         category: 'Salad',
         price: 'H1150・F1430円',
@@ -1889,6 +2215,7 @@
       ,
       's3.avif': {
         name: '蟹とアボカドのコブサラダ',
+        shorthand: 'コブ',
         nicknames: ['salad', 'sarada', 'abokado', 'kobusarada', 'kani', 'half', 'full', 'ハーフ', 'フル', 'はーふ', 'ふる', 'アボカド', 'こぶ', 'コブ', 'さらだ', 'サラダ'],
         category: 'Salad',
         price: 'H1150・F1430円',
@@ -1896,6 +2223,7 @@
       ,
       's4.avif': {
         name: 'クレソンとベーコンの温かいサラダ',
+        shorthand: 'クレソンサラダ',
         nicknames: ['bacon', 'kureson', 'kreson', 'bekon', 'sarada', 'atatakaisarada'],
         category: 'Salad',
         price: '1430円',
@@ -1903,6 +2231,7 @@
       ,
       'set0.avif': {
         name: '週末セット',
+        shorthand: 'B',
         nicknames: ['shumatsu set', 'set', 'lunch set', 'セット', 'せっと'],
         category: 'Lunch Set',
         price: '',
@@ -1911,6 +2240,7 @@
       ,
       'set1.avif': {
         name: 'Aセット　デリ、パン',
+        shorthand: 'A',
         nicknames: ['set', 'lunch set', 'セット', 'せっと', 'デリ', 'パン', 'ぱん', 'でり'],
         category: 'Lunch Set',
         price: '',
@@ -1919,6 +2249,7 @@
       ,
       'set2.avif': {
         name: 'Bセット　スープ、デリ、パン',
+        shorthand: 'B',
         nicknames: ['set', 'lunch set', 'セット', 'せっと', 'スープ', 'デリ', 'パン', 'すーぷ', 'でり', 'ぱん'],
         category: 'Lunch Set',
         price: '',
@@ -1927,6 +2258,7 @@
       ,
       'set3.avif': {
         name: 'Cセット　スープ、サラダ、パン',
+        shorthand: 'C',
         nicknames: ['set', 'lunch set', 'セット', 'せっと', 'すーぷ', 'さらだ', 'ぱん', 'スープ', 'さらだ', 'ぱん'],
         category: 'Lunch Set',
         price: '',
@@ -1935,6 +2267,7 @@
       ,
       't1.avif': {
         name: 'ツナと人参のマリネ　キャロットラペ',
+        shorthand: '人参',
         nicknames: ['ninjin', 'ninjintsuna', 'kyarottorape', 'carrot', 'tsuna', 'tuna', '人参', 'キャロットラペ', 'マリネ', 'ツナ', 'にんじん', 'ニンジン', 'きゃろっとらぺ', 'ラペ', 'らぺ', 'つな'],
         category: '前菜',
         price: '650円',
@@ -1943,6 +2276,7 @@
       ,
       't2.avif': {
         name: 'いいだことヤリイカの地中海風マリネ',
+        shorthand: 'いいだこ',
         nicknames: ['yariika', 'chichukaifu marine', 'マリネ', '地中海風', 'マリネ', 'まりね', 'いいダコ', 'いいだこ', 'イイダコ', '飯蛸', '飯ダコ', '飯だこ', '飯タコ', '飯たこ'],
         category: '前菜',
         price: '990円',
@@ -1951,6 +2285,7 @@
       ,
       't3.avif': {
         name: '無花果とナッツのハニーチーズ豆腐',
+        shorthand: 'ハニー',
         nicknames: ['honey', 'cheese', 'honeycheese', 'tofu', 'ichijika', 'natsu', 'nuts', 'なつ', 'ナツ', 'ナッツ', 'なっつ', 'ハニーチーズ', 'はにーちーず', 'チーズ', 'チズ', 'ちず', 'ちーず', 'ハニチズ', 'はにちず', 'はにちーず', 'ハニチーズ'],
         category: '前菜',
         price: '980円',
@@ -1958,6 +2293,7 @@
       ,
       't4.avif': {
         name: '生ハムとブラータチーズ',
+        shorthand: 'ブラータ',
         nicknames: ['burata', 'brata', 'burrata', 'cheese', 'namahamu', 'ブラータ', 'チーズ', 'チズ', 'ちず', 'ちーず', 'ブラタ', 'ぶらた', 'ぶらーた', 'hamu', 'はむ', 'ハム', 'chizu', 'chiizu', 'chis'],
         category: '前菜',
         price: '1480円',
@@ -1965,6 +2301,7 @@
       ,
       't5.avif': {
         name: 'チーズ盛り合わせ',
+        shorthand: 'チーモリ',
         nicknames: ['moriawase', 'cheese', 'チーズ', 'チズ', 'ちず', 'ちーず', 'chizu', 'chiizu', 'chis', 'もり', 'モリ', 'もりあわせ', 'モリアワセ'],
         category: '前菜',
         price: '1480円',
@@ -1972,6 +2309,7 @@
       ,
       't6.avif': {
         name: '自家製ピクルス',
+        shorthand: 'ピクルス',
         nicknames: ['pikurusu', 'pickels', 'pickles', 'jikasei', 'ピクルス', 'ピックルス', 'ピクルッス', 'ぴくるす', 'ぴっくるす', 'ぴくるっす'],
         category: '前菜',
         price: '600円',
@@ -1979,6 +2317,7 @@
       ,
       't7.avif': {
         name: '自家製2種オリーブ',
+        shorthand: 'オリーブ',
         nicknames: ['oribu', 'olives', 'jikasei', 'おりぶ', 'オリブ', 'オーリブ', 'オリーブ', 'おりぶ', 'おーりぶ', 'おりーぶ', '2shu', '2種', '2種オリーブ', '2種おりーぶ'],
         category: '前菜',
         price: '600円',
@@ -1986,6 +2325,7 @@
       ,
       'tan1.avif': {
         name: '丸パン',
+        shorthand: 'パン',
         nicknames: ['pan', 'yakitate', 'maru', 'set', 'lunch set', 'セット', 'せっと', 'ぱん', 'パン', '焼きたて', 'やきたて', '焼き立て', 'ヤキタテ'],
         category: '単品',
         price: '150円',
@@ -1994,6 +2334,7 @@
       ,
       'tan2.avif': {
         name: 'デリ',
+        shorthand: 'デリ',
         nicknames: ['deli', 'vegetable', 'daily', 'set', 'lunch set', 'セット', 'せっと', 'でり', 'デリ'],
         category: '単品',
         price: '150円',
@@ -2002,6 +2343,7 @@
       ,
       'tan3.avif': {
         name: 'スープ',
+        shorthand: 'スープ',
         nicknames: ['set', 'lunch set', 'soup', 'supu', 'suupu', 'セット', 'せっと', 'スープ', 'すぷ', 'スプ', 'すーぷ'],
         category: '単品',
         price: '200円',
@@ -2010,6 +2352,7 @@
       ,
       'tan4.avif': {
         name: 'サラダ',
+        shorthand: 'サラダ',
         nicknames: ['salad', 'tuna', 'set', 'lunch set', 'sarada', 'セット', 'せっと', 'さらだ', 'サラダ'],
         category: '単品',
         price: '500円',
@@ -2017,8 +2360,9 @@
       }
       ,
       'w0.avif': {
-        name: 'グラスワイン',
-        nicknames: ['glass wine', 'wine', 'gurasu', 'ワイン', 'わいん','wain'],
+        name: 'ワイン',
+        shorthand: 'W',
+        nicknames: ['glass wine', 'wine', 'gurasu', 'ワイン', 'わいん', 'wain', 'グラス'],
         category: 'Wine',
         price: '990円',
         lunchPrice: '990円',
@@ -2026,101 +2370,116 @@
       ,
       'w1.avif': {
         name: 'ピッコロ 1,2',
-        nicknames: ['pikkoro', 'piccolo', 'ワイン', 'わいん', 'ぴころ', 'ピコロ', 'ぴっころ','wain','pikolo'],
+        shorthand: 'ピ',
+        nicknames: ['pikkoro', 'piccolo', 'ワイン', 'わいん', 'ぴころ', 'ピコロ', 'ぴっころ', 'wain', 'pikolo'],
         category: 'Wine',
         price: '芽育、河合、松田、坂東：1620円',
       }
       ,
       'w11.avif': {
         name: 'ピッコロ 3,4',
-        nicknames: ['pikkoro', 'piccolo', 'ワイン', 'わいん', 'ぴころ', 'ピコロ', 'ぴっころ','wain','pikolo'],
+        shorthand: 'ピ',
+        nicknames: ['pikkoro', 'piccolo', 'ワイン', 'わいん', 'ぴころ', 'ピコロ', 'ぴっころ', 'wain', 'pikolo'],
         category: 'Wine',
         price: 'みちょぱ 、森、水上、小田：1930円',
       }
       ,
       'w12.avif': {
         name: 'ピッコロ 5,6',
-        nicknames: ['pikkoro', 'piccolo','ワイン', 'わいん', 'ぴころ', 'ピコロ', 'ぴっころ','wain','pikolo'],
+        shorthand: 'ピ',
+        nicknames: ['pikkoro', 'piccolo', 'ワイン', 'わいん', 'ぴころ', 'ピコロ', 'ぴっころ', 'wain', 'pikolo'],
         category: 'Wine',
         price: '有村、高畑、玉森、岡田：2420円',
       }
       ,
       'w13.avif': {
         name: 'ピッコロ 7,8',
-        nicknames: ['pikkoro', 'piccolo', 'ワイン', 'わいん', 'ぴころ', 'ピコロ', 'ぴっころ','wain','pikolo'],
+        shorthand: 'ピ',
+        nicknames: ['pikkoro', 'piccolo', 'ワイン', 'わいん', 'ぴころ', 'ピコロ', 'ぴっころ', 'wain', 'pikolo'],
         category: 'Wine',
         price: '長谷川、吉瀬、永山、鈴木：2850円',
       }
       ,
       'w14.avif': {
         name: 'ピッコロ 9',
-        nicknames: ['pikkoro', 'piccolo','ワイン', 'わいん', 'ぴころ', 'ピコロ', 'ぴっころ','wain','pikolo'],
+        shorthand: 'ピ',
+        nicknames: ['pikkoro', 'piccolo', 'ワイン', 'わいん', 'ぴころ', 'ピコロ', 'ぴっころ', 'wain', 'pikolo'],
         category: 'Wine',
         price: '山口智子 、リリー・フランキー：3470円',
       }
       ,
       'w2.avif': {
         name: 'デキャンタ 1,2',
-        nicknames: ['dekyanta', 'dekyanter', 'dekanter', 'ワイン', 'わいん', 'できゃんた','wain'],
+        shorthand: 'デ',
+        nicknames: ['dekyanta', 'dekyanter', 'dekanter', 'ワイン', 'わいん', 'できゃんた', 'wain'],
         category: 'Wine',
         price: '芽育、河合、松田、坂東：2990円',
       }
       ,
       'w21.avif': {
         name: 'デキャンタ 3,4',
-        nicknames: ['dekyanta', 'dekyanter', 'dekanter', 'ワイン', 'わいん', 'できゃんた','wain'],
+        shorthand: 'デ',
+        nicknames: ['dekyanta', 'dekyanter', 'dekanter', 'ワイン', 'わいん', 'できゃんた', 'wain'],
         category: 'Wine',
         price: 'みちょぱ 、森、水上、小田：3650円',
       }
       ,
       'w22.avif': {
         name: 'デキャンタ 5,6',
-        nicknames: ['dekyanta', 'dekyanter', 'dekanter', 'ワイン', 'わいん', 'できゃんた','wain'],
+        shorthand: 'デ',
+        nicknames: ['dekyanta', 'dekyanter', 'dekanter', 'ワイン', 'わいん', 'できゃんた', 'wain'],
         category: 'Wine',
         price: '有村、高畑、玉森、岡田：4600円',
       }
       ,
       'w23.avif': {
         name: 'デキャンタ 7,8',
-        nicknames: ['dekyanta', 'dekyanter', 'dekanter', 'ワイン', 'わいん', 'できゃんた','wain'],
+        shorthand: 'デ',
+        nicknames: ['dekyanta', 'dekyanter', 'dekanter', 'ワイン', 'わいん', 'できゃんた', 'wain'],
         category: 'Wine',
         price: '長谷川、吉瀬、永山、鈴木：5450円',
       }
       ,
       'w24.avif': {
         name: 'デキャンタ 9',
-        nicknames: ['dekyanta', 'dekyanter', 'dekanter','ワイン', 'わいん', 'できゃんた','wain'],
+        shorthand: 'デ',
+        nicknames: ['dekyanta', 'dekyanter', 'dekanter', 'ワイン', 'わいん', 'できゃんた', 'wain'],
         category: 'Wine',
         price: '山口智子 、リリー・フランキー：6650円',
       }
       ,
       'w3.avif': {
         name: 'ボトル 1,2',
-        nicknames: ['botoru','bottoru', 'bottle', 'bottle wine', 'ワイン', 'わいん', 'ぼとる','wain'],
+        shorthand: 'ボ',
+        nicknames: ['botoru', 'bottoru', 'bottle', 'bottle wine', 'ワイン', 'わいん', 'ぼとる', 'wain'],
         category: 'Wine',
         price: '芽育、河合、松田、坂東：3990円',
       },
       'w31.avif': {
         name: 'ボトル 3,4',
-        nicknames: ['botoru', 'bottoru','bottle', 'bottle wine', 'ワイン', 'わいん', 'ぼとる','wain'],
+        shorthand: 'ボ',
+        nicknames: ['botoru', 'bottoru', 'bottle', 'bottle wine', 'ワイン', 'わいん', 'ぼとる', 'wain'],
         category: 'Wine',
         price: 'みちょぱ 、森、水上、小田：4950円',
       },
       'w32.avif': {
         name: 'ボトル 5,6',
-        nicknames: ['botoru','bottoru', 'bottle', 'bottle wine', 'ワイン', 'わいん', 'ぼとる','wain'],
+        shorthand: 'ボ',
+        nicknames: ['botoru', 'bottoru', 'bottle', 'bottle wine', 'ワイン', 'わいん', 'ぼとる', 'wain'],
         category: 'Wine',
         price: '有村、高畑、玉森、岡田：6400円',
       },
       'w33.avif': {
         name: 'ボトル 7,8',
-        nicknames: ['botoru', 'bottoru','bottle', 'bottle wine', 'ワイン', 'わいん', 'ぼとる','wain'],
+        shorthand: 'ボ',
+        nicknames: ['botoru', 'bottoru', 'bottle', 'bottle wine', 'ワイン', 'わいん', 'ぼとる', 'wain'],
         category: 'Wine',
         price: '長谷川、吉瀬、永山、鈴木：7650円',
       },
       'w34.avif': {
         name: 'ボトル 9',
-        nicknames: ['botoru','bottoru', 'bottle', 'bottle wine', 'ワイン', 'わいん', 'ぼとる','wain'],
+        shorthand: 'ボ',
+        nicknames: ['botoru', 'bottoru', 'bottle', 'bottle wine', 'ワイン', 'わいん', 'ぼとる', 'wain'],
         category: 'Wine',
         price: '山口智子 、リリー・フランキー：9450円',
       }
@@ -2477,7 +2836,7 @@
           '砂糖(グラニュー)': '130g',
           'マスカルポーネ': '?',
         },
-        steps: ['tiramisu.avif','tiramisu1.avif','tiramisu2.avif'],
+        steps: ['tiramisu.avif', 'tiramisu1.avif', 'tiramisu2.avif'],
         stepText: `"""
         1. クッキー生地をバットに並べる
         - 写真の感じ
@@ -2537,7 +2896,7 @@
           'お湯': '200g',
           'ごま油': '450g',
           '白ごま': '50g'
-          
+
         },
         stepText: `"""
         1. 粉末調味料とすりおろしにんにくを入れてお湯で溶かし混ぜる
@@ -2687,63 +3046,527 @@
         """`
       },
       '30.avif': {
-        name: '',
-        category: '',
-        tags: ['？mins', ''],
+        name: 'スープ仕込み',
+        category: 'スープ',
+        tags: ['？mins', 'スープ'],
         ingredients: {
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': ''
+          'ポタージュベース': '1pc',
+          '(野菜)ポタージ沿の素': '1pc',
+          '水': '280cc',
+          '生クリーム': '200cc',
+          'チキンコンソメ': '60g'
         },
         stepText: `"""
-        1. 
+        1. (できたら) ポタージュベース、 野菜ポタージュの素を溶かしておく。
+        2. 全部をなべに入れ、弱火で煮つめる。
+        3. 溶けにくい場合はウィーンをしてなめらかにする!
+
+        Point
+        野菜ポタージュの素の違いで味にバラつきが出るので塩気やコクなどの味をチェックすると遅
         """`
       },
-      '.avif': {
-        name: '',
-        category: '',
-        tags: ['？mins', ''],
+      '31.avif': {
+        name: 'ジンジャーシロップ',
+        category: 'シロップ',
+        tags: ['？mins', 'シロップ'],
         ingredients: {
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': ''
+          '生姜': '2kg',
+          'グラニュー糖': '1kg',
+          'レモンジュース': '350cc',
+          '水': '1.2l'
         },
         stepText: `"""
-        1. 
+        （1. しょうがの皮むいて適当に細かく切る）
+        （2. 水1.2lとしょうが2kgをミキサーにかけてペーストにしてこす）
+        3. レモンジュース入れる
+        4. ③を鍋に入れて、グラニュー糖入れ、 火にかけて溶けたら完成。
+        5. しょうが2kg分手をしぼる。
+        (Point)
+        (しょうがくずは絶対捨てない!)
+
         """`
       },
-      '.avif': {
-        name: '',
-        category: '',
-        tags: ['？mins', ''],
+      '32.avif': {
+        name: 'サングリア白（新2025）',
+        category: 'サングリア',
+        tags: ['？mins', 'サングリア'],
         ingredients: {
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': ''
+          '白ワイン': '1500cc',
+          'キウィシロップ': '100cc',
+          'ピーチシロップ': '200cc',
+          'パイン缶(シロップ入れる)': '1缶',
+          '・グレープフルーツジュース': '200cc'
         },
         stepText: `"""
-        1. 
+        1. パイン缶をウィーンする
+        2. 他の材料を入れ、容器に移す
+        容器は1度ゆすぎましょう!
         """`
       },
-      '.avif': {
-        name: '',
+      '33.avif': {
+        name: 'サングリア赤（新2025）',
+        category: 'ドリンク',
+        tags: ['？mins', 'ドリンク'],
+        ingredients: {
+          '赤ワイン': '1500cc',
+          '（みかん）オレンジジュース100%': '1l',
+          'みかん缶(シロップ入れる)': '1缶',
+          'ピーチ缶(シロップ入れる)': '1缶',
+          '🅰 ガムシロ': '100cc'
+        },
+        stepText: `"""
+        0. 🅰 ガムシロなしで作ってみて！！
+        1. みかん缶、ピーチ缶をウィーンする
+        2. 全てを混ぜる。
+        容器はゆすぎましょう!
+
+        """`
+      },
+      '34.avif': {
+        name: '自家製コーラ',
+        category: 'ドリンク',
+        tags: ['？mins', 'ドリンク'],
+        ingredients: {
+          'シナモン': '3本',
+          'グローブ': '10g',
+          'カルダモン': '10g',
+          '三温糖': '1kg',
+          'レモン': '4個',
+          '水': '1.5l',
+          'バニラエキストラ': '？'
+        },
+        stepText: `"""
+        1. シナモンスティックを割る
+        2. カルダモンを押して割れ目を入れて中のタネを取り出す
+        3. 上記を全部入れて沸くまで火を全開間 (レモン、バニラム以外)
+        4. レモンは端を大きめに切って 3mmスライスにする (場のレモンは後に絞る)
+        5. 沸騰させたら中火にしてレモンも投入 (その後強火)
+        6. また沸騰したらしっかり弱火にして7分
+        7. その間にレモンを絞る
+        8. 鍋の粗熱を30分程とる
+        9. バニラエキストラ 10ふりとレモン投入・
+        10.ダルでこして液体だけ容器に入れる
+        11.3オンス90ccスライスレモン絞って炭酸入れて出来上がり
+        12.チャイは60ccとシナモンパウダー牛乳
+        """`
+      },
+      '35.avif': {
+        name: 'アマトリチャーナソース（パスタソース）',
+        category: 'ソース',
+        tags: ['？mins', 'ソース'],
+        ingredients: {
+          'ベーコン(1cm角切)': '3kg',
+          '玉ねぎ': '1.5kg',
+          'ニンニク(みじん切り)': '120g',
+          'ロッソ': '3缶',
+          '唐辛子(輪切り)': '12g',
+          'ピュアオイル': '180cc',
+          '白ワイン': '450cc',
+          'ローリュ': '15枚',
+          '塩': '18g',
+          '黒糖': '56g',
+        },
+        stepText: `"""
+        1. 鍋にピュアオイルとベーコンを入れて火にかける
+        2. ベーコンにこげめが付き、なべはだに軽くこげついてきたらニンニク、唐辛子を入れる
+        3. ニンニクが色付いたらタマネギを入れる
+        4. タマネギが透き通ったら、白ワインを入れてアルコール分を飛ばす
+        5.ロッソ、ローリエ、塩、黒糖を入れて煮込んで完成。
+        Point
+        ベーコンをしっかり炒めて焦げ目や焼色を付けないと旨味が出ないので気を付ける。
+        ③④の工程でなべはだの焦げ目を食材の水分でこそぎ落とす。
+        ⑤の工程はなべに焦げが付きやすいので注意する
+        """`
+      },
+      '36.avif': {
+        name: 'ボロネーゼソース（パスタソース）',
+        category: 'ソース',
+        tags: ['？mins', 'ソース'],
+        ingredients: {
+          '牛挽肉': '4kg',
+          'ニンニク(みじん切り)': '120g',
+          'ピュアオイル': '480cc',
+          '玉ネギ(みじん切り)': '3.2kg',
+          'しいたけ(みじん切り)': '4pc',
+          'マッシュルーム': '2.5pc',
+          '人参(みじん切り)': '2kg',
+          'セロリ(筋はとる)(みじん切れ)': '800g',
+          'ロッソ': '3.2kg',
+          '赤ワイン': '240cc',
+          'ケチャップ': '200g',
+          'ビーフコンソメ': '80g',
+          'チャツネ': '400g',
+          'フォン・ド・ボー': '600g',
+          '塩': '40g'
+        },
+        stepText: `"""
+        1. 野菜をすべてミキサーにかけてみじん切りにする(野菜は全て合わせてOK)
+        2. 大鍋にピュアオイル・ニンニクを入れて火にかける
+        3. ニンニクが色付いてきたらみじん切りにした野菜を入れる
+        4. ③と同時進行で鉄鍋に強火にかけて牛挽肉を炒める (焦げ日、焼き目を付けていく)
+        5. ③の野菜が水分が抜けてきたら④の牛肉を鍋に入れていく
+        6. 鉄鍋にこびついた焦げをワインを加えて、こそぎ落として大鍋に入れる
+        7. 残ったワインを大鍋にいれてアルコールを飛ばす
+        8. ロッソや他の材料を加えて弱火で煮詰める (焦げやすいので定期期間にまぜる)
+        """`
+      },
+      '37.avif': {
+        name: 'タプナードソース（新２０２５）',
+        category: 'ソース',
+        tags: ['？mins', 'ソース'],
+        ingredients: {
+          '黒オリーブ': '1缶（170g）',
+          'アンチョビ': '42.5g',
+          'ゲッパー': '28.5g',
+          'にんにくみじん切り': '22.5g',
+          'ピュアオイル': '28g'
+        },
+        stepText: `"""
+        1. アンチョビ、ケッパー、にんにくをミキサーにかけ、ペースト状にする。 
+        2. ①にオリーブを入れ、あらみじんぐらいの大きさにする。
+        Point
+        ウィーーーン ❌
+        ウィン・ウィン・ウィン⭕️)
+        """`
+      },
+      '38.avif': {
+        name: 'ジンジャーソイソース',
+        category: 'ソース',
+        tags: ['？mins', 'ソース'],
+        ingredients: {
+          '丸大豆正沖': '900cc',
+          '本みりん': '600cc',
+          '上白糖': '105g',
+          'しょうがしぼり汁': '180cc',
+          'にんにく(すりおろし)': '105g',
+          '唐辛子(輪切り)': '3ケ',
+          'ひまわり油': '90cc',
+          '長ネギ': '3本',
+          '日本酒': '450cc'
+        },
+        stepText: `"""
+        1. しょうがをすりおろして絞り汁を作っておく
+        2. 鍋にひまわり油、長ギを入れ弱火にかけ、色がついたら日本酒を入れてこ沸かす
+        3. 沸いたらバーたで火をつけ、 火が消えたら火を止める
+        4. 残りの具材を③に入れ沸かす
+        5. 一晩寝かしたら漉して完成
+        """`
+      },
+      '39.avif': {
+        name: 'ガーリックバター',
+        category: 'バター',
+        tags: ['？mins', 'バター'],
+        ingredients: {
+          'バター': '450g(250g)',
+          'ニンニク(みじん切り)': '90g(50g)',
+          'すりおろしニンニク': '9g(5g)',
+          '塩': '5.5g(3g)',
+          'ピュアオイル': '54g(30g)'
+        },
+        stepText: `"""
+        1. バターを室温で柔かい状態に戻しておく
+        2. 全ての材料をミキサーで ②して完成
+        """`
+      },
+      '40.avif': {
+        name: 'トリッパ',
+        category: '料理',
+        tags: ['？mins', '料理'],
+        ingredients: {
+          'ハチノス': '2kg',
+          'セロリ': '400g',
+          'サルサポモドーロ': '2kg',
+          'ひよこ豆': '400g',
+          'にんにく(みじん切り)': '80g',
+          'ピュアオイル': '240cc',
+          '白ワイン': '400cc',
+          '唐辛子(ホール)': '4本',
+          '塩': '8cc??',
+          'WP': '適量'
+        },
+        stepText: `"""
+        1. ハチノスをセロリの葉を入れた水で 3~4時間茹で、茹で上がったら7mm幅に切る
+        2. 鍋にオイル・ハチノスを入れて火にかけ焼色がついたらセロリをいれる
+        2.1) にんにく（きつね色）
+        2.2) セロリ（透きとおってきたら）
+        2.3) 塩->まぜ
+        2.4) 白ワイン
+        2.5) サルサポモ+ロッソ0.5ほ、ひよこ豆
+        2.6) 唐辛子→煮込む→水入れる
+        3. セロリが透き通ってきたらにんにく、塩 WP、唐辛子を入れる
+        4. にんにくに色がついたらワインを入れてアルコールを飛ばしてサルサポモドーロを入れて煮詰める
+        5. 2/3に煮詰まったらひよこ豆を加えて和える
+        """`
+      },
+      '41.avif': {
+        name: 'ローストポテト',
+        category: 'ポテト',
+        tags: ['？mins', 'ポテト'],
+        ingredients: {
+          'じゃがいも': '2kg',
+          '塩大さじ': '1？',
+          '昆布茶大さじ': '/？',
+          'ブラックペッパー': '12ガリ',
+          'ピュアオリーブ': '60？'
+        },
+        stepText: `"""
+        1. スポンジで洗い芽を取る
+        2. くし切り1/6~1/8にする
+        3. 上記を全て馴染ませてクッキンダペーパーを敷いた大きいットに重ならないよう並べてく(残りのしもかける)
+        4. オーブンの上の段にいれて10分
+        5. 裏返して15分+7分くらい
+        6. 火が通ってるか確認して出来上がり
+
+        """`
+      },
+      '42.avif': {
+        name: 'コブドレッシング',
+        category: 'ドレッシング',
+        tags: ['？mins', 'ドレッシング'],
+        ingredients: {
+          '赤パプリカ': '1ケ(2ケ)',
+          '黄パプリカ': '1ケ(2ケ)',
+          'キュウリ': '1本(2本)',
+          '玉ネギ': '30g(60g)',
+          'すりおろしドレッシング': '150cc(300cc)',
+          'コブドレッシング': '300cc(600cc)'
+        },
+        stepText: `"""
+        0. 2倍量で1回戦分
+        1. 野菜をミキサーにかけるので下処理し、一口大に切っておく
+        2. ミキサーに全ての材料を入れて混ぜ合ったら完成
+        """`
+      },
+      '43.avif': {
+        name: '生ハムサラダドレッシング',
+        category: 'ドレッシング',
+        tags: ['？mins', 'ドレッシング'],
+        ingredients: {
+          '白バルサミコ': '85cc',
+          'ひまわりオイル': '65cc',
+          '塩': '4g',
+          'はちみつ': '10g'
+        },
+        steps: ['wakan.avif'],
+        stepText: `"""　
+        Point
+        写真を確認！！
+
+        1. 全て混ぜて完成
+        2. 乳化しないように泡立て器で！
+        """`
+      },
+      '44.avif': {
+        name: 'シーザードレッシング',
+        category: 'ドレッシング',
+        tags: ['？mins', 'ドレッシング'],
+        ingredients: {
+          '🅰アンチョビ': '120g',
+          '🅰ケッパ': '90g',
+          '🅱マヨネーズ': '720g',
+          '🅱にんにく(すりおろし)': '30g',
+          '🅱バルサミコ(赤)': '120cc',
+          '🅱粒マスタード': '120g',
+          '🅱粉チーズ': '120g',
+          '🅱レモンジュース': '60cc',
+          '🅱水': '60cc'
+        },
+        stepText: `"""
+        1. 🅰の材料を包丁で細かくたたく(ウィーンも可)
+        2. 🅰と🅱をボらルでよく混ぜ合わせて完成(全部ウィーンしてなめらかに)
+        """`
+      },
+      '45.avif': {
+        name: 'ホタテカルパッチョドレッシング 新2025',
+        category: 'ドレッシング',
+        tags: ['？mins', 'ドレッシング'],
+        ingredients: {
+          '柚子': '16g',
+          '生ハムドレ': '200g',
+          'ドライバジル': '1g(1gだけどしてっこう多いよ!)'
+        },
+        stepText: `"""
+        1. 柚子を小さいポットやいれこに入れて、ウィンする。
+        2. 生ハムドレ、バジルを入れて完成
+        3. シュイクして、保完する。(ドライバジルが浮きやすいため、 水分をふくませて沈んでもらえるように)
+        
+        Point
+        柚子がウィンの機械にくっつきやすいのでスプーンでとったり、生ハムドしでしゃかしゃかしてとると...
+
+        ⭕️作り方
+        1. 帆立了個電貝柱を包丁を使って優しくとる
+        2. 軽めに塩・こしょう
+        3. ホタテドレをシュイクしてかける
+        4. ベニーナひとつまみをパラパラ
+        5. レオイルちょう
+
+        """`
+      },
+      '46.avif': {
+        name: 'ピクルスマリナード',
+        category: 'マリネ',
+        tags: ['？mins', 'マリネ'],
+        ingredients: {
+          '白ワイン': '500ml',
+          '水': '750ml',
+          '白ワインビネガー': '180cc',
+          'はちみつ': '175cc',
+          '砂糖': '50g',
+          '塩': '33g',
+          'ローリェ': '1枚',
+          'BPホール': '5',
+        },
+        stepText: `"""
+        1. 白ワインは先に鍋に入れる、アルコールを飛ばす
+        2. 他の材料を全て入れて煮立たせたら完成
+        ※はちみつは火を入れると甘くなるので 1回沸騰させる
+        ※ピクルスマリナードは必ず熱い状態でピクルス材料にかける 
+        """`
+      },
+      '47.avif': {
+        name: 'ピクルスジュレ',
         category: '',
         tags: ['？mins', ''],
         ingredients: {
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': '',
+          '白バルサミコ': '170cc',
+          '水': '130cc',
+          '塩': '4g',
+          'はちみつ': '60g',
+          'ゼラチン': '半分4枚'
+        },
+        stepText: `"""
+        1. ゼラチン以外の材料をなべてあたためる
+        2. ゼラチンを入れて冷やしたら完成
+
+        Point 
+        常温まで室温に置いておき、 冷蔵庫
+        """`
+      },
+      '48.avif': {
+        name: '無花果とナッツのハニーチーズ豆腐',
+        category: 'デザート',
+        tags: ['？mins', 'デザート'],
+        ingredients: {
+          'クリームチーズ': '1pc',
+          '絹豆腐': '1pc',
+          '上白糖': '30g',
+          'ゼラチン(半分5枚)': '9.5g',
+          '牛乳': '100cc',
+          '生クリーム': '100cc',
+          'ナッツ': '45g',
+          '無花果': '35g',
+          'ドライフルーツ（マンゴ、クランべり）': '35g'
+        },
+        stepText: `"""
+        ハニー準備
+        1. いれこに、上白糖をぐるぐるラップして入れる
+        2. 無花果などのドライフルーツを荒みじんにする
+        3. ナッツを真はかり、2と合わせて、 ほぐしながら混ぜ、入れこに入れる
+        4. ゼラチン、①、③を入れてラップする。
+        
+        ハニー仕込み
+        1. 豆腐の水気を切り、クリームチーズと一緒にウィーンし、なめらかにする
+        2. ゼラチンを氷水に入れ、柔らかくなるまで戻す
+        3. 鍋に、牛乳、生クリーム、上白糖を入れ、 ゆすりながら、人肌より少し熱いくらい (47度)になるまで温める
+        4. 温めたろに、戻したゼラチンを入れ、 ゴムベラでよく混ぜる。
+        5. ハニー準備の3をあさい長方形のタッパた半分しきつめる。
+        6.④と①を合わせ、ウィーンしたら、⑤に入れる。
+        7.容器を上から落とし空気を抜く。 (バーナーもあり)
+        8. 残りのドライフルーツを上に散らす。
+        9. 冷蔵庫で冷やし、完成。
+        """`
+      },
+      '49.avif': {
+        name: 'タコポキ',
+        category: '前菜',
+        tags: ['？mins', '前菜'],
+        ingredients: {
+          'タコ': '1kg',
+          '赤タマネギ(スライス)': '0.5ケ',
+          '玉ネギ(みじん切り)': '',
+          '正油': '150g',
+          'ごま油': '150g',
+          'にんにく(すりおろし)': '25g',
+          'レモンジュース': '50g',
+          '-白ごま': '25g',
+          'とびっこ': '100g',
+        },
+        stepText: `"""
+        1. 赤玉ネギはスライス、玉ネギはみじん切りにして水でさらしておく
+        2. タコはぶつ切りにする(乱切り) (隠し包丁入れる)
+        3. 調味料を合わせてよく混ぜる
+        """`
+      },
+      '50.avif': {
+        name: 'イイダコとヤリイカの地中海風マリネ',
+        category: '',
+        tags: ['？mins', ''],
+        ingredients: {
+          'イイダコ': '2kg',
+          'ヤリイカ(半分に切る)': '1kg',
+          'アンチョビ': '130g',
+          'ピチュアオイル': '400cc',
+          '黒オリーブ': '1缶',
+          'グリーンオリーブ': '1缶',
+          'ケッパー': '80g',
+          'タイム': '5本',
+          'ドライトマト': '200g',
+          'にんにく(ホール)': '10ケ',
+        },
+        steps: ['wakan2.avif', 'wakan3.avif'],
+        stepText: `"""
+        1. ニンニクを潰して鍋に入れピアオイルも入れて火にかける
+        2. ニンニクが色付いてきたらアンチョビを加えて崩していく
+        3. 水分を切ったオリーブ(両方)、ケッパ、ドライトマト、タイムを入れる。ケッパーだけへらで潰していく、タイムの香りが立ったらイイダコを入れる
+        4.イイダコに8割くらいが入ったらヤリイカを入れる
+        5. イカに半分くらいが入ったら火を止めて、トレイに移して粗熱をとって完成
+
+        Point 
+        写真２番目
+        """`
+      },
+      '51.avif': {
+        name: 'ツナと人参のマリネ',
+        category: '前菜',
+        tags: ['？mins', ''],
+        ingredients: {
+          '人参': '1kg/2kg/3kg',
+          '玉ねぎ(スライス)': '1ケ/2ケ/3ケ',
+          'マヨネーズ': '90g/180g/270g',
+          'ケッパー': '30g/60g/90g',
+          'レモンジュース': '30g/60g/90g',
+          'Vオイル': '30g/60g/90g',
+          '白ワインビネガー': '30g/60g/90g',
+          '正油': '20g/40g/60g',
+          '塩(人参もみこみ用)': '25g/50g/75g',
+          'WP': '適量',
+          'ツナは油をかける': '320g/640g/960g'
+
+
+        },
+        stepText: `"""
+        1.  Point 
+        ボウルにドーナン状に人参を置くと水分の出具合が分かりやすい
+        1. 人参の皮をむきスライサーで長めに干切にする。塩でもみ込み水分を出す(1時間~程度)
+        2. 玉ネギをスライスしてさらしておく
+        3. 人参、玉ネギ以外の材料を全て合わせる
+        
+        4.  Point
+        人参は新しいきれいなダスターを使ってしっかりと水気を切る
+        4. 人参をしっかり絞って調味料と合わせて最後に玉ネギを合わせる
+        """`
+      }
+      ,
+      '52.avif': {
+        name: 'サルサソース',
+        category: 'ソース',
+        tags: ['？mins', 'ソース'],
+        ingredients: {
+          'ニンニク(みじん切り)': '3杯',
+          'ピュアオイル': '',
+          '青唐辛子(輪切り)': '',
+          'トマト': '',
+          '塩': '',
           '': ''
         },
         stepText: `"""
@@ -3072,31 +3895,31 @@
       }
     };
 
-    const flagList = ['p1.avif','p2.avif','p3.avif','p4.avif','p5.avif','p6.avif','p7.avif','p8.avif','p9.avif','p10.avif','p11.avif','p12.avif','p13.avif','p14.avif','p15.avif','p16.avif','p17.avif'];
-    const tableList = ['ta1.avif', 'ta2.avif', 'ta3.avif', 'ta4.avif', 'ta5.avif', 'ta6.avif', 'ta10.avif', 'ta12.avif', 'ta20.avif', 'ta21.avif','ta22.avif','ta23.avif','ta24.avif','ta25.avif','ta26.avif','ta27.avif','ta28.avif','ta29.avif','ta30.avif','ta31.avif','ta32.avif','ta33.avif','ta34.avif','ta35.avif','ta36.avif','ta37.avif','ta38.avif','ta39.avif','ta40.avif','ta41.avif','ta42.avif','ta43.avif','ta44.avif','ta45.avif','ta46.avif','ta47.avif','ta48.avif','ta49.avif','ta50.avif','ta51.avif','ta52.avif'];
-    const table0 = ['ttt1.avif','ttt2.avif','ttt3.avif','ttt4.avif'];
-    const guestNumbersStandard = [1,2];
-    const guestNumbersLarge = [3,4];
-    const guestNumbersEnter = [1,1,1,1,1,1,2,2,2,2,2,3,4,4];
+    const flagList = ['p1.avif', 'p2.avif', 'p3.avif', 'p4.avif', 'p5.avif', 'p6.avif', 'p7.avif', 'p8.avif', 'p9.avif', 'p10.avif', 'p11.avif', 'p12.avif', 'p13.avif', 'p14.avif', 'p15.avif', 'p16.avif', 'p17.avif'];
+    const tableList = ['ta1.avif', 'ta2.avif', 'ta3.avif', 'ta4.avif', 'ta5.avif', 'ta6.avif', 'ta10.avif', 'ta12.avif', 'ta20.avif', 'ta21.avif', 'ta22.avif', 'ta23.avif', 'ta24.avif', 'ta25.avif', 'ta26.avif', 'ta27.avif', 'ta28.avif', 'ta29.avif', 'ta30.avif', 'ta31.avif', 'ta32.avif', 'ta33.avif', 'ta34.avif', 'ta35.avif', 'ta36.avif', 'ta37.avif', 'ta38.avif', 'ta39.avif', 'ta40.avif', 'ta41.avif', 'ta42.avif', 'ta43.avif', 'ta44.avif', 'ta45.avif', 'ta46.avif', 'ta47.avif', 'ta48.avif', 'ta49.avif', 'ta50.avif', 'ta51.avif', 'ta52.avif'];
+    const table0 = ['ttt1.avif', 'ttt2.avif', 'ttt3.avif', 'ttt4.avif'];
+    const guestNumbersStandard = [1, 2];
+    const guestNumbersLarge = [3, 4];
+    const guestNumbersEnter = [1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 4, 4];
 
-    const imageListWinesWhite = ['w1.avif','w2.avif','w3.avif','w4.avif','w5.avif','w6.avif','w7.avif','w8.avif','w9.avif','ww1.avif','ww2.avif','ww3.avif','ww4.avif','ww5.avif','ww6.avif','ww7.avif','ww8.avif','ww9.avif'];
-    const imageListWinesRed = ['w10.avif','w11.avif','w12.avif','w13.avif','w14.avif','w15.avif','w16.avif','w17.avif','w18.avif','ww10.avif','ww11.avif','ww12.avif','ww13.avif','ww14.avif','ww15.avif','ww16.avif','ww17.avif','ww18.avif'];
-    const imageListDrinks = ['d1.avif','d2.avif','d3.avif','d4.avif','d5.avif','d6.avif','d7.avif','d8.avif','d9.avif','d10.avif','d11.avif','d12.avif','d13.avif','d14.avif','d15.avif','d16.avif','d17.avif','d18.avif','d19.avif','d20.avif','d21.avif','d22.avif','d23.avif','d24.avif','d25.avif','d26.avif','d27.avif','d28.avif','d29.avif'];
-    const imageListNoDrink = ['w0.avif','d0.avif'];
-    const imageListLunchDrinkWeekdays = ['ld1.avif','ld2.avif','ld3.avif','ld4.avif','ld5.avif','ld6.avif','ld7.avif', 'ldwine.avif'];
-    const imageListDinnerTodays = ['hon3.avif','hon4.avif','hon5.avif','hon6.avif'];
-    const imageListLunchTodaysWeekdays = ['hon1.avif','hon2.avif','hon2a.avif'];
-    const imageListDinnerGyokai = ['g1.avif','g2.avif','g3.avif','g4.avif','g5.avif','g6.avif'];
-    const imageListDinnerCharcuterie = ['c1.avif','c2.avif','c3.avif'];
-    const imageListDinnerHotOven = ['h1.avif','h2.avif','h3.avif','h4.avif','h5.avif','h6.avif','h7.avif','h8.avif','h9.avif','h10.avif','h11.avif'];
-    const imageListDinnerMainDish = ['m1.avif','m2.avif','m3.avif','m4.avif'];
-    const imageListDinnerPasta = ['p1.avif','p2.avif','p3.avif','p4.avif','p5.avif','p6.avif','p7.avif','p8.avif','p9.avif','p10.avif','p11.avif','p12.avif','p13.avif','p14.avif','p15.avif','p16.avif','p17.avif'];
-    const imageListDinnerSalad = ['s1.avif','s2.avif','s3.avif','s4.avif'];
-    const imageListDinnerTapasCold = ['t1.avif','t2.avif','t3.avif','t4.avif','t5.avif','t6.avif','t7.avif'];
-    const imageListLunchPastaWeekdays = ['rh1.avif','rh2.avif','rh3.avif','rh4.avif','rh5.avif','rh6.avif','rh7.avif','rh8.avif'];
-    const imageListLunchSetWeekdays = ['set1.avif','set2.avif','set3.avif'];
-    const imageListLunchTanpinWeekdays = ['tan1.avif','tan2.avif','tan3.avif','tan4.avif'];
-    const imageListLunchTapasWeekdays = ['tapas1.avif','tapas2.avif','tapas3.avif','tapas4.avif'];
+    const imageListWinesWhite = ['w1.avif', 'w2.avif', 'w3.avif', 'w4.avif', 'w5.avif', 'w6.avif', 'w7.avif', 'w8.avif', 'w9.avif', 'ww1.avif', 'ww2.avif', 'ww3.avif', 'ww4.avif', 'ww5.avif', 'ww6.avif', 'ww7.avif', 'ww8.avif', 'ww9.avif'];
+    const imageListWinesRed = ['w10.avif', 'w11.avif', 'w12.avif', 'w13.avif', 'w14.avif', 'w15.avif', 'w16.avif', 'w17.avif', 'w18.avif', 'ww10.avif', 'ww11.avif', 'ww12.avif', 'ww13.avif', 'ww14.avif', 'ww15.avif', 'ww16.avif', 'ww17.avif', 'ww18.avif'];
+    const imageListDrinks = ['d1.avif', 'd2.avif', 'd3.avif', 'd4.avif', 'd5.avif', 'd6.avif', 'd7.avif', 'd8.avif', 'd9.avif', 'd10.avif', 'd11.avif', 'd12.avif', 'd13.avif', 'd14.avif', 'd15.avif', 'd16.avif', 'd17.avif', 'd18.avif', 'd19.avif', 'd20.avif', 'd21.avif', 'd22.avif', 'd23.avif', 'd24.avif', 'd25.avif', 'd26.avif', 'd27.avif', 'd28.avif', 'd29.avif'];
+    const imageListNoDrink = ['w0.avif', 'd0.avif'];
+    const imageListLunchDrinkWeekdays = ['ld1.avif', 'ld2.avif', 'ld3.avif', 'ld4.avif', 'ld5.avif', 'ld6.avif', 'ld7.avif', 'ldwine.avif'];
+    const imageListDinnerTodays = ['hon3.avif', 'hon4.avif', 'hon5.avif', 'hon6.avif'];
+    const imageListLunchTodaysWeekdays = ['hon1.avif', 'hon2.avif', 'hon2a.avif'];
+    const imageListDinnerGyokai = ['g1.avif', 'g2.avif', 'g3.avif', 'g4.avif', 'g5.avif', 'g6.avif'];
+    const imageListDinnerCharcuterie = ['c1.avif', 'c2.avif', 'c3.avif'];
+    const imageListDinnerHotOven = ['h1.avif', 'h2.avif', 'h3.avif', 'h4.avif', 'h5.avif', 'h6.avif', 'h7.avif', 'h8.avif', 'h9.avif', 'h10.avif', 'h11.avif'];
+    const imageListDinnerMainDish = ['m1.avif', 'm2.avif', 'm3.avif', 'm4.avif'];
+    const imageListDinnerPasta = ['p1.avif', 'p2.avif', 'p3.avif', 'p4.avif', 'p5.avif', 'p6.avif', 'p7.avif', 'p8.avif', 'p9.avif', 'p10.avif', 'p11.avif', 'p12.avif', 'p13.avif', 'p14.avif', 'p15.avif', 'p16.avif', 'p17.avif'];
+    const imageListDinnerSalad = ['s1.avif', 's2.avif', 's3.avif', 's4.avif'];
+    const imageListDinnerTapasCold = ['t1.avif', 't2.avif', 't3.avif', 't4.avif', 't5.avif', 't6.avif', 't7.avif'];
+    const imageListLunchPastaWeekdays = ['rh1.avif', 'rh2.avif', 'rh3.avif', 'rh4.avif', 'rh5.avif', 'rh6.avif', 'rh7.avif', 'rh8.avif'];
+    const imageListLunchSetWeekdays = ['set1.avif', 'set2.avif', 'set3.avif'];
+    const imageListLunchTanpinWeekdays = ['tan1.avif', 'tan2.avif', 'tan3.avif', 'tan4.avif'];
+    const imageListLunchTapasWeekdays = ['tapas1.avif', 'tapas2.avif', 'tapas3.avif', 'tapas4.avif'];
 
     let currentImages = [];
     let currentIndex = 0;
@@ -3163,7 +3986,7 @@
       const guestNumberDiv = document.getElementById('guestNumber');
       const tableContainer = document.getElementById('tableContainer');
       const limit = parseInt(document.getElementById('imageLimit').value);
-      
+
       let tableIndex, guestNumber, tableImage;
       if (isFirstLoad) {
         tableIndex = table0.indexOf(getRandomElement(table0));
@@ -3179,7 +4002,7 @@
           guestNumber = getRandomElement(guestNumbersStandard);
         }
       }
-      
+
       guestNumberDiv.innerHTML = `${guestNumber}名`;
       while (tableContainer.children.length > 1) {
         tableContainer.removeChild(tableContainer.lastChild);
@@ -3439,7 +4262,7 @@
           html += `<p><strong>${line}</strong></p>`;
         } else if (line) {
           let formatted = line.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
-                             .replace(/\*(.*?)\*/g, '<i>$1</i>');
+            .replace(/\*(.*?)\*/g, '<i>$1</i>');
           html += `<p>${formatted}</p>`;
         }
       });
@@ -3550,17 +4373,18 @@
         categoryDiv.appendChild(categoryHeader);
 
         categorizedItems[category].forEach(item => {
-  const div = document.createElement('div');
-  div.className = 'item';
-  div.innerHTML = `
-    <span class="name">${item.name}</span>
-    <div class="price-container">
-      <span class="price">${item.price}</span>
-      ${item.lunchPrice ? `<span class="lunch-price">(ランチ: ${item.lunchPrice})</span>` : ''}
-    </div>
-  `;
-  categoryDiv.appendChild(div);
-});
+          const div = document.createElement('div');
+          div.className = 'item';
+          div.innerHTML = `
+            <span class="name">${item.name}</span>
+            <div class="price-container">
+              <span class="price">${item.price}</span>
+              ${item.shorthand ? `<span class="shorthand">${item.shorthand}</span>` : ''}
+              ${item.lunchPrice ? `<span class="lunch-price">(ランチ: ${item.lunchPrice})</span>` : ''}
+            </div>
+          `;
+          categoryDiv.appendChild(div);
+        });
 
         itemList.appendChild(categoryDiv);
       }
@@ -3608,8 +4432,11 @@
           div.className = 'item';
           div.innerHTML = `
             <span class="name">${item.name}</span>
-            <span class="price">${item.price}</span>
-            ${item.lunchPrice ? `<span class="lunch-price">(ランチ: ${item.lunchPrice})</span>` : ''}
+            <div class="price-container">
+              <span class="price">${item.price}</span>
+              ${item.shorthand ? `<span class="shorthand">${item.shorthand}</span>` : ''}
+              ${item.lunchPrice ? `<span class="lunch-price">(ランチ: ${item.lunchPrice})</span>` : ''}
+            </div>
           `;
           categoryDiv.appendChild(div);
         });
@@ -3617,7 +4444,6 @@
         itemList.appendChild(categoryDiv);
       }
     }
-
     function setupCategoryFilters() {
       const filterButtons = document.querySelectorAll('.category-filter');
       if (filterButtons.length === 0) return;
@@ -3817,40 +4643,41 @@
     };
 
     document.addEventListener('DOMContentLoaded', () => {
-  const searchBar = document.getElementById('searchBar');
-  const itemList = document.getElementById('itemList');
+      const searchBar = document.getElementById('searchBar');
+      const itemList = document.getElementById('itemList');
 
-  // Store initial viewport height
-  let initialHeight = window.innerHeight;
+      // Store initial viewport height
+      let initialHeight = window.innerHeight;
 
-  // When search bar is focused (keyboard appears)
-  searchBar.addEventListener('focus', () => {
-    setTimeout(() => {
-      // Check new height when keyboard is up
-      const newHeight = window.innerHeight;
-      if (newHeight < initialHeight) {
-        // Keyboard is visible, adjust itemList height
-        const keyboardHeight = initialHeight - newHeight;
-        itemList.style.maxHeight = `calc(100vh - ${keyboardHeight + 100}px)`; // 100px for header + search
-        // Scroll search bar into view
-        searchBar.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }, 100); // Delay to ensure keyboard is fully up
-  });
+      // When search bar is focused (keyboard appears)
+      searchBar.addEventListener('focus', () => {
+        setTimeout(() => {
+          // Check new height when keyboard is up
+          const newHeight = window.innerHeight;
+          if (newHeight < initialHeight) {
+            // Keyboard is visible, adjust itemList height
+            const keyboardHeight = initialHeight - newHeight;
+            itemList.style.maxHeight = `calc(100vh - ${keyboardHeight + 100}px)`; // 100px for header + search
+            // Scroll search bar into view
+            searchBar.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 100); // Delay to ensure keyboard is fully up
+      });
 
-  // Reset when keyboard hides
-  searchBar.addEventListener('blur', () => {
-    itemList.style.maxHeight = 'calc(100vh - 100px)'; // Reset to default
-  });
+      // Reset when keyboard hides
+      searchBar.addEventListener('blur', () => {
+        itemList.style.maxHeight = 'calc(100vh - 100px)'; // Reset to default
+      });
 
-  // Handle window resize (e.g., orientation change)
-  window.addEventListener('resize', () => {
-    initialHeight = window.innerHeight; // Update initial height
-    if (!document.activeElement === searchBar) {
-      itemList.style.maxHeight = 'calc(100vh - 100px)'; // Reset if keyboard not active
-    }
-  });
-});
+      // Handle window resize (e.g., orientation change)
+      window.addEventListener('resize', () => {
+        initialHeight = window.innerHeight; // Update initial height
+        if (!document.activeElement === searchBar) {
+          itemList.style.maxHeight = 'calc(100vh - 100px)'; // Reset if keyboard not active
+        }
+      });
+    });
   </script>
 </body>
+
 </html>

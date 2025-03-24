@@ -1,4 +1,39 @@
+束束束束束
+
+42 recheck
+
+review all the text
+
+26 28 debut
+
+Add all the different cuts for things: bacon cut, basil cut etc.? also the plates for serving
+
+
+42 recheck
+45 recheck
+48 what about the fruits: each 35g?? total??
+
+
+ recipe book & steps (at least the menu items i know +++ 仕上げ！！& plate data (have a fun visual for plate data)
+ (recipeItems)
+
+ add copy button to copy all the text. 
+
+Check ob ich die ganzen りゃく übernommen habe & zeig die auch beim 表示 fenster!
+
+Alternating colors for the recipe book items 
+
+In the 値段 tab it should display the りゃく for each item!!!!!! Before the item.. Like a tag??... figure this out. 
+When you open up the 値段 tab it should focus the input field!!!
+
+Implement a changelog feature where I write what I changed w a timestamp of last update. Any way to automate this?
+
 - for spreadsheet: also add the sasha drink keywords into the drink names
+
+Implement changelog feature at top right 
+MAKE FONT SMALLER FOR PHONES & the price design page has to be optimized for mobile! Better button placements, remove the title at top etc. 
+
+
 ーTODO: fix the "dangerous" data!! everywhere where you have to ask something. 
 
 
