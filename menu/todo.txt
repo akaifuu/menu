@@ -1,41 +1,23 @@
-RECIPE BOOK:
+Recipe book: 
+- add shortcut nicknames for finding recipes faster in the searchbar
+- read through all the reciples  & add to spreadsheet the things you dont understand and also try to just have a barebones understanding of each recipe + figure out plating data 
+- Add all Plate data (serving +  serving prep)
+- With Moe go through menu and understand what items are needed for each dish (torizara, knife, what plate etc Like it's basically 仕上げ++) 
+Ask next time  ob wir in Pause durch recipe book durchgehen können (mistakes correcting etc). Vor allem was das ganze Zeug (Worte) bedeutet. Und ob wir das einfach durchgehen können 
+- Add all the different cuts for things (have them in the recipe book): bacon cut, basil cut etc.? also the plates for serving
+z.b. 大葉 is 2mm cut 
+- all the saygyou: even for rosso how you can use 3 cans to fill a big giant can lol 
+
+RECIPE BOOK PROBLEMS:
 Screenshot, the text I got, any questions I have & then the file name so I can easily find it in my code!!!!!
 42 recheck
 45 recheck
 48 what about the fruits: each 35g?? total??
 
 
-束束束束束
-
-heylol
-price
-lunch-price
-
-
-Later:
-With Moe go through menu and understand what items are needed for each dish (torizara, knife, what plate etc Like it's basically 仕上げ++) 
-Ask next time  ob wir in Pause durch recipe book durchgehen können (mistakes correcting etc). Vor allem was das ganze Zeug (Worte) bedeutet. Und ob wir das einfach durchgehen können 
-Put watch so it's easy to check it 
-
-review all the text
-
-26 28 debut
-
-Add all the different cuts for things (have them in the recipe book): bacon cut, basil cut etc.? also the plates for serving
-z.b. 大葉 is 2mm cut 
-
- Plate data (serving +  serving prep)
-
-Check ob ich die ganzen りゃく übernommen habe & zeig die auch beim 表示 fenster!
-
-When you open up the 値段 tab it should focus the input field!!!
-
-Implement a changelog feature where I write what I changed w a timestamp of last update. Any way to automate this?
-
-- for spreadsheet: also add the sasha drink keywords into the drink names
-
-Implement changelog feature at top right 
+表示
+- add all the data (TAKES BIG TIME)
+- zeig ryaku im 表示 fenster!
 
 ーTODO: fix the "dangerous" data!! everywhere where you have to ask something.... pepper how etc. 
 
-when displaying the names in the pricing list you want them to have interchanging different background colors to easier process the data. 

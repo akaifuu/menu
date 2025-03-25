@@ -1183,7 +1183,7 @@
           autocomplete="off" spellcheck="false">
       </div>
       <div id="filters">
-        <button class="category-filter" data-category="">全部</button>
+        <button class="category-filter" data-category="" onclick="zenbu()">リセット</button>
         <button class="category-filter" data-category="前菜">前菜</button>
         <button class="category-filter" data-category="Pasta">パスタ</button>
         <button class="category-filter" data-category="Drink">ドリンク</button>
@@ -2540,7 +2540,7 @@
     const recipeItems = {
       '1.avif': {
         name: '砂肝のコンフィ',
-        // nicknames: ['カレー', 'Chicken Curry'],
+        nicknames: ['konfi', 'コンフィ', 'こんふぃ', '砂肝', 'sunagimo', 'すなぎも', 'スナギモ', 'horumon', 'hormon', 'ホルモン'],
         category: 'ホルモン',
         tags: ['？mins', 'ホルモン'],
         ingredients: {
@@ -2562,7 +2562,7 @@
       },
       '2.avif': {
         name: '5種の豆とベーコンのハニーマスタードマリネ',
-        nicknames: ['マリネ'],
+        nicknames: ['マリネ', 'bacon', 'honey'],
         category: 'マリネ',
         tags: ['？mins', 'マリネ'],
         ingredients: {
@@ -4397,6 +4397,11 @@
       document.getElementById("searchBar").focus();
     }
 
+    function zenbu() {
+      searchBar.value = "";
+      document.getElementById("searchBar").focus();
+    }
+
     function navigateToMenu() {
       document.getElementById('priceDatabasePage').classList.remove('active');
       document.getElementById('recipeDatabasePage').classList.remove('active');
@@ -4424,7 +4429,7 @@
       itemList.innerHTML = '';
 
       const items = Object.values(menuItems);
-      items.sort((a, b) => a.category.localeCompare(b.category));
+      // items.sort((a, b) => a.category.localeCompare(b.category));
 
       const categorizedItems = {};
       items.forEach(item => {
