@@ -478,6 +478,7 @@
       align-items: center;
       padding: 10px;
       border-bottom: 1px solid #eee;
+      line-height: 1.4;
     }
 
     .item:hover {
@@ -490,13 +491,14 @@
     }
 
     .item .price {
-      color: #2980b9;
+      /* color: #2980b9; */
+      color: #000;
     }
 
-    .item .lunch-price {
+    /* .item .lunch-price {
       color: #e74c3c;
       margin-left: 10px;
-    }
+    } */
 
     .item .price-container {
       display: flex;
@@ -644,7 +646,7 @@
       font-size: 1.2rem;
       font-weight: 600;
       color: #2c3e50;
-      margin-bottom: 5px;
+      /* margin-bottom: 5px; */
     }
 
     .recipe-card .tags {
@@ -1047,10 +1049,12 @@
       .item {
         display: flex;
         align-items: center;
+        justify-content: space-between;
         /* Keep items centered vertically */
         padding: 10px;
         border-bottom: 1px solid #eee;
         font-size: 0.78rem;
+
       }
 
       .item .name {
@@ -1064,24 +1068,28 @@
         display: flex;
         align-items: center;
         /* Align price and shorthand horizontally */
-        gap: 8px;
+        /* gap: 8px; */
+        flex-direction: column;
         /* Space between price, shorthand, and lunch price */
       }
 
       .item .price-container .price {
-        color: #2980b9;
+        /* color: #2980b9; */
+        color: #000;
         /* Existing price color */
       }
 
       .item .price-container .lunch-price {
-        color: #e74c3c;
+        /* color: #e74c3c; */
+        color: #23A110;
+
         /* Existing lunch price color */
       }
 
-      .item .price-container .shorthand {
+      .shorthand {
         font-size: 0.75rem;
         /* Small text size */
-        color: #666;
+        color: #000000;
         /* Subtle color */
         background-color: #ffffff;
         /* Light gray background for tag effect */
@@ -1093,6 +1101,7 @@
         /* Padding for tag-like appearance */
         white-space: nowrap;
         /* Prevent text wrapping */
+        font-weight: 700;
       }
 
 
@@ -1215,7 +1224,7 @@
       <h2 id="menuItemName"></h2>
       <div id="ingredientTableContainer"></div>
       <div class="step-by-step" id="stepSection">
-        <h3>作り方</h3>
+        <!-- <h3>作り方</h3> -->
         <div class="step-image-container" id="stepImageContainer">
           <img id="stepImage" class="step-image" src="" alt="Step Image">
           <button class="step-nav step-prev" onclick="prevStep()" aria-label="前のステップ">◄</button>
@@ -2035,6 +2044,26 @@
         lunchPrice: '700円',
       }
       ,
+      'tapas1.avif': {
+        name: '生牡蠣　西洋わさびとレモン🍋',
+        shorthand: 'カキ　レ',
+        nicknames: ['kaki', 'namakaki', 'namagaki', 'かき', 'カキ', 'がき', 'ガキ', '生カキ', '生ガキ', '生かき', '生がき', 'なまかき', 'ナマカキ'],
+        category: '前菜',
+        price: '550円',
+        lunchPrice: '550円',
+        steps: ['kakilemon.avif'],
+        // additionalInfo: [
+        //   { title: '仕上げ', content: '①レモン　②西洋ワサビ' }
+        // ],
+        ingredients: {
+          '生牡蠣': '1pc',
+          'レモン': '１ヶ',
+          '西洋ワサビ': '0.1g',
+        },
+        // stepText: `"""
+        // """`
+      }
+      ,
       'g1.avif': {
         name: '生牡蠣　西洋わさびとレモン🍋',
         shorthand: 'カキ　レ',
@@ -2042,6 +2071,29 @@
         category: '前菜',
         price: '550円',
         lunchPrice: '550円',
+        steps: ['step1-duck.jpg', 'step2-duck.jpg', 'step3-duck.jpg'],
+        videoLink: 'https://www.youtube.com/watch?v=example1',
+        additionalInfo: [
+          { title: '食材', content: '鴨肉、赤ワイン、にんにく、ローズマリー、塩、胡椒' },
+          { title: '調理のコツ', content: '低温で長時間調理することで、鴨肉が柔らかくジューシーに仕上がります。' },
+          { title: '栄養情報', content: 'カロリー: 450kcal、たんぱく質: 30g、脂質: 20g' }
+          ,
+          { title: '仕上げ', content: 'パセリ' }
+        ],
+        ingredients: {
+          '鴨肉': '300g',
+          '赤ワイン': '200ml',
+          'にんにく': '3片',
+          'ローズマリー': '2茎',
+          '塩': '5g',
+          '胡椒': '2g'
+        },
+        stepText: `"""
+        1. 鴨肉を塩と胡椒で下味をつける。
+           - **低温で** 30分ほど置く。
+        2. 鍋に**赤ワイン**、にんにく、ローズマリーを加え、*低温*で煮込む。
+        3. 鴨肉を加え、**2時間**かけてじっくり火を通す。
+        """`
       }
       ,
       'g2.avif': {
@@ -2185,7 +2237,7 @@
         name: '桜海老',
         shorthand: '桜えび・Monthly',
         nicknames: ['sakuraebi', 'ebi', 'さくらえび', 'サクラエビ', '桜えび', 'sakura ebi'],
-        category: '本日のおすすめ',
+        category: 'Pasta',
         price: '1800円',
       }
       ,
@@ -3563,14 +3615,24 @@
         tags: ['？mins', 'ソース'],
         ingredients: {
           'ニンニク(みじん切り)': '3杯',
-          'ピュアオイル': '',
-          '青唐辛子(輪切り)': '',
-          'トマト': '',
-          '塩': '',
-          '': ''
+          'ピュアオイル': '135cc',
+          '青唐辛子(輪切り)': '9本',
+          'トマト': '4ケ',
+          '塩': '4.5杯',
+          'めんつゆ': '15cc'
         },
         stepText: `"""
-        1. 
+        1. トマトはへたとり、皮日に十字に切日を入れて、ゆむきする
+        2. ゆむきしたトマトを横半分に切り種を取り除く。トマトは1cm角に角切り
+        3. ニンニク、ネイル、糖を火にかけて香りを出す。ニンニクはキツネ色手前まで
+        4. 塩を加えてなべの中で混ぜる。 (塩を溶かすイメージ)
+        5. 角切りにしたトマトを加えたら火を止める。かるくなべの中で混ぜる
+
+        ※トマト以外はじゃこパスタ3人前の分量で覚えておくと便利
+
+        ポイント
+        トマトをなべに加えたら火を止める。
+        ・トマトを入れてから混ぜすぎるとトマトがつぶれてしまうのであくまぜる。
         """`
       },
       '.avif': {
@@ -4246,14 +4308,17 @@
           additionalInfo.appendChild(details);
         });
       } else {
-        additionalInfo.innerHTML = '<p>追加情報がありません</p>';
+        // additionalInfo.innerHTML = '<p>追加情報がありません</p>';
+        additionalInfo.innerHTML = '';
       }
 
       document.getElementById('infoOverlay').style.display = 'flex';
     }
 
     function parseStepText(text) {
-      if (!text || typeof text !== 'string') return '<p>ステップ情報がありません</p>';
+      if (!text || typeof text !== 'string')
+        // return '<p>ステップ情報がありません</p>';
+        return '';
       let content = text.replace(/^"""/, '').replace(/"*"*$/, '').trim();
       const lines = content.split('\n').map(line => line.trim());
       let html = '';
@@ -4329,6 +4394,7 @@
       document.getElementById('priceDatabasePage').classList.add('active');
       displayPriceDatabase();
       setupCategoryFilters();
+      document.getElementById("searchBar").focus();
     }
 
     function navigateToMenu() {
@@ -4349,6 +4415,7 @@
       document.getElementById('recipeDetailsModal').style.display = 'none';
       currentRecipe = null;
       isMobile = window.innerWidth <= 768;
+      document.getElementById("recipeSearchBar").focus();
     }
 
     function displayPriceDatabase() {
@@ -4372,15 +4439,17 @@
         categoryHeader.textContent = category || 'その他';
         categoryDiv.appendChild(categoryHeader);
 
+
+
+        // this: <span class="name">${item.name}</span> was below: ${item.shorthand ? `<span class="shorthand">${item.shorthand}</span>` : ''}
         categorizedItems[category].forEach(item => {
           const div = document.createElement('div');
           div.className = 'item';
           div.innerHTML = `
-            <span class="name">${item.name}</span>
+          ${item.shorthand ? `<span class="shorthand">${item.shorthand}</span>` : ''}
             <div class="price-container">
               <span class="price">${item.price}</span>
-              ${item.shorthand ? `<span class="shorthand">${item.shorthand}</span>` : ''}
-              ${item.lunchPrice ? `<span class="lunch-price">(ランチ: ${item.lunchPrice})</span>` : ''}
+              ${item.lunchPrice ? `<span class="lunch-price"> ${item.lunchPrice}</span>` : ''}
             </div>
           `;
           categoryDiv.appendChild(div);
@@ -4430,12 +4499,21 @@
         categorizedItems[category].forEach(item => {
           const div = document.createElement('div');
           div.className = 'item';
-          div.innerHTML = `
-            <span class="name">${item.name}</span>
+          /*
+          Previous inner HTML
+           <span class="name">${item.name}</span>
             <div class="price-container">
               <span class="price">${item.price}</span>
               ${item.shorthand ? `<span class="shorthand">${item.shorthand}</span>` : ''}
               ${item.lunchPrice ? `<span class="lunch-price">(ランチ: ${item.lunchPrice})</span>` : ''}
+            </div>
+          */
+          div.innerHTML = `
+           
+              ${item.shorthand ? `<span class="shorthand">${item.shorthand}</span>` : ''}
+            <div class="price-container">
+              <span class="price">${item.price}</span>
+              ${item.lunchPrice ? `<span class="lunch-price"> ${item.lunchPrice}</span>` : ''}
             </div>
           `;
           categoryDiv.appendChild(div);
@@ -4677,6 +4755,12 @@
         }
       });
     });
+
+
+
+
+
+
   </script>
 </body>
 
