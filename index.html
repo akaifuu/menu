@@ -1184,10 +1184,10 @@
       </div>
       <div id="filters">
         <button class="category-filter" data-category="" onclick="zenbu()">リセット</button>
-        <button class="category-filter" data-category="前菜">前菜</button>
-        <button class="category-filter" data-category="Pasta">パスタ</button>
-        <button class="category-filter" data-category="Drink">ドリンク</button>
-        <button class="category-filter" data-category="Wine">ワイン</button>
+        <button class="category-filter" data-category="前菜" onclick="qfocus()">前菜</button>
+        <button class="category-filter" data-category="Pasta" onclick="qfocus()">パスタ</button>
+        <button class="category-filter" data-category="Drink" onclick="qfocus()">ドリンク</button>
+        <button class="category-filter" data-category="Wine" onclick="qfocus()">ワイン</button>
         <label>
           <input type="checkbox" id="showLunchOnly" onchange="filterItems()"> ランチのみ
         </label>
@@ -4447,6 +4447,10 @@
 
     function zenbu() {
       searchBar.value = "";
+      document.getElementById("searchBar").focus();
+    }
+
+    function qfocus() {
       document.getElementById("searchBar").focus();
     }
 
