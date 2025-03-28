@@ -1,12 +1,10 @@
 Recipe book: 
-- add shortcut nicknames for finding recipes faster in the searchbar
 - read through all the reciples  & add to spreadsheet the things you dont understand and also try to just have a barebones understanding of each recipe + figure out plating data 
-- Add all Plate data (serving +  serving prep)
+- Add all Plate data (serving + serving prep)
 - With Moe go through menu and understand what items are needed for each dish (torizara, knife, what plate etc Like it's basically 仕上げ++) 
 Ask next time  ob wir in Pause durch recipe book durchgehen können (mistakes correcting etc). Vor allem was das ganze Zeug (Worte) bedeutet. Und ob wir das einfach durchgehen können 
 - Add all the different cuts for things (have them in the recipe book): bacon cut, basil cut etc.? also the plates for serving
 z.b. 大葉 is 2mm cut 
-- all the saygyou: even for rosso how you can use 3 cans to fill a big giant can lol 
 
 RECIPE BOOK PROBLEMS:
 Screenshot, the text I got, any questions I have & then the file name so I can easily find it in my code!!!!!

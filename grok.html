@@ -6,1040 +6,6 @@
   <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
   <meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content">
   <title>メニュー</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppins', Arial, sans-serif;
-    }
-
-    body {
-      background-color: #f5f5f5;
-      color: #333;
-      line-height: 1.6;
-      min-height: 100vh;
-    }
-
-    .page {
-      display: none;
-      width: 100%;
-      height: 100vh;
-    }
-
-    .page.active {
-      display: flex;
-    }
-
-    .settings-panel {
-      width: 250px;
-      background: #fff;
-      padding: 15px;
-      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      overflow-y: auto;
-    }
-
-    #tableContainer {
-      text-align: center;
-      background: #ecf0f1;
-      padding: 10px;
-      border-radius: 5px;
-      margin-bottom: 15px;
-    }
-
-    #guestNumber {
-      font-size: 1rem;
-      margin-bottom: 5px;
-      color: #2c3e50;
-    }
-
-    .table-img {
-      width: 100px;
-      height: 150px;
-      object-fit: contain;
-      border-radius: 5px;
-    }
-
-    .checkbox-group {
-      margin-bottom: 15px;
-    }
-
-    .checkbox-group strong {
-      display: block;
-      font-size: 1rem;
-      color: #2c3e50;
-      margin-bottom: 5px;
-    }
-
-    .checkbox-group label {
-      display: flex;
-      align-items: center;
-      margin: 5px 0;
-      cursor: pointer;
-      font-size: 0.9rem;
-      transition: color 0.3s;
-    }
-
-    .checkbox-group label:hover {
-      color: #2980b9;
-    }
-
-    .checkbox-group input[type="checkbox"] {
-      margin-right: 8px;
-      accent-color: #2980b9;
-    }
-
-    .controls {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: auto;
-    }
-
-    button {
-      padding: 8px 15px;
-      background: #2980b9;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.3s;
-      font-size: 0.9rem;
-    }
-
-    .buttonfullspace {
-      flex: 1;
-    }
-
-    button:hover {
-      background: #3498db;
-    }
-
-    button:focus {
-      outline: 2px solid #2980b9;
-      outline-offset: 2px;
-    }
-
-    select {
-      padding: 6px;
-      border-radius: 5px;
-      border: 1px solid #ddd;
-      font-size: 0.9rem;
-    }
-
-    .image-panel {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-      background: #fff;
-      margin-left: 10px;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      position: relative;
-    }
-
-    #imageContainer {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      position: relative;
-    }
-
-    #imageContainer img {
-      max-width: 80vw;
-      max-height: 75vh;
-      object-fit: contain;
-      border-radius: 5px;
-    }
-
-    #flagEmoji {
-      font-size: 2rem;
-      position: absolute;
-      top: 0px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 1000;
-    }
-
-    .radio-group label input[type="radio"] {
-      margin-right: 5px;
-    }
-
-    #imageCounter {
-      font-size: 1rem;
-      color: #2c3e50;
-      margin-top: 10px;
-    }
-
-    #infoOverlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      z-index: 2000;
-      justify-content: center;
-      align-items: center;
-    }
-
-    #infoContent {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      max-width: 600px;
-      width: 90%;
-      max-height: 80vh;
-      overflow-y: auto;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      position: relative;
-    }
-
-    #infoContent h2 {
-      margin-bottom: 15px;
-      color: #2c3e50;
-    }
-
-    #infoContent p {
-      margin-bottom: 10px;
-      line-height: 1.5;
-    }
-
-    #closeOverlay {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      border: none;
-      background: #ff4444;
-      color: white;
-      padding: 5px 10px;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    #closeOverlay:hover {
-      background: #cc0000;
-    }
-
-    .step-by-step {
-      margin: 20px 0;
-      text-align: center;
-    }
-
-    .step-by-step h3 {
-      margin-bottom: 10px;
-      color: #2c3e50;
-    }
-
-    .step-image-container {
-      position: relative;
-      max-width: 100%;
-      height: 200px;
-      overflow: hidden;
-    }
-
-    .step-image {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      border-radius: 5px;
-    }
-
-    .step-nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(0, 0, 0, 0.5);
-      color: white;
-      border: none;
-      padding: 10px;
-      cursor: pointer;
-      border-radius: 50%;
-      font-size: 1.2rem;
-      transition: background 0.3s;
-    }
-
-    .step-nav:hover {
-      background: rgba(0, 0, 0, 0.8);
-    }
-
-    .step-prev {
-      left: 10px;
-    }
-
-    .step-next {
-      right: 10px;
-    }
-
-    .step-counter {
-      margin-top: 10px;
-      font-size: 0.9rem;
-      color: #2c3e50;
-    }
-
-    .stepper {
-      display: flex;
-      justify-content: center;
-      margin: 10px 0;
-    }
-
-    .step-dot {
-      width: 10px;
-      height: 10px;
-      background: #ddd;
-      border-radius: 50%;
-      margin: 0 5px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    .step-dot:hover {
-      background: #a0c4ff;
-    }
-
-    .step-dot.active {
-      background: #2980b9;
-    }
-
-    .step-text p {
-      margin: 10px 0;
-      font-size: 1rem;
-    }
-
-    .step-text b {
-      font-weight: bold;
-    }
-
-    .step-text i {
-      font-style: italic;
-    }
-
-    .step-text ul {
-      margin-left: 20px;
-      list-style-type: disc;
-    }
-
-    .video-section {
-      margin: 20px 0;
-      text-align: center;
-    }
-
-    .video-section h3 {
-      margin-bottom: 10px;
-      color: #2c3e50;
-    }
-
-    .video-section a {
-      color: #2980b9;
-      text-decoration: none;
-      font-size: 1rem;
-    }
-
-    .video-section a:hover {
-      text-decoration: underline;
-    }
-
-    .video-section iframe {
-      width: 100%;
-      height: 315px;
-      border: none;
-      border-radius: 5px;
-    }
-
-    .additional-info {
-      margin: 20px 0;
-    }
-
-    .additional-info details {
-      margin-bottom: 10px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      padding: 10px;
-    }
-
-    .additional-info summary {
-      cursor: pointer;
-      font-weight: bold;
-      color: #2c3e50;
-      padding: 5px;
-      outline: none;
-    }
-
-    .additional-info summary:hover {
-      color: #2980b9;
-    }
-
-    .additional-info details[open] summary {
-      border-bottom: 1px solid #ddd;
-      margin-bottom: 10px;
-    }
-
-    .additional-info p {
-      padding: 5px;
-    }
-
-    #priceDatabase {
-      flex-direction: column;
-      padding: 0 20px 20px;
-      /* Changed from 20px to 0 20px 20px */
-    }
-
-    #priceDatabase h2 {
-      margin-bottom: 15px;
-      color: #2c3e50;
-    }
-
-    @media (max-width: 768px) {
-      #priceDatabase {
-        padding: 0 10px 10px;
-        /* Adjusted from 0 to match reduced spacing */
-      }
-
-      .price-header {
-        padding: 10px;
-        /* Match reduced padding */
-      }
-    }
-
-    #searchBar {
-      width: 100%;
-      max-width: 400px;
-      padding: 8px;
-      margin-bottom: 15px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      font-size: 1rem;
-    }
-
-    #filters {
-      margin-bottom: 15px;
-      padding: 10px;
-    }
-
-    #filters button {
-      margin-right: 10px;
-      margin-bottom: 10px;
-    }
-
-    #showLunchOnly {
-      margin-left: 10px;
-      padding: 5px 10px;
-    }
-
-    #itemList {
-      flex: 1;
-      overflow-y: auto;
-    }
-
-    .searchba {
-      padding: 10px;
-    }
-
-    .category {
-      margin-bottom: 20px;
-    }
-
-    .category h3 {
-      color: #2c3e50;
-      margin-bottom: 10px;
-      padding-left: 10px;
-      border-bottom: 1px solid #ddd;
-    }
-
-    .bordercontainer {
-      display: flex;
-      gap: 10px;
-      padding: 10px;
-      background-color: #ECF7FF;
-      border-radius: 4px;
-    }
-
-    .bordercontainer.no-background {
-      background-color: transparent;
-    }
-
-    .item {
-      display: flex;
-      align-items: center;
-      padding: 10px;
-      border-bottom: 1px solid #eee;
-    }
-
-    .item:hover {
-      background-color: #f9f9f9;
-    }
-
-    .item .name {
-      font-weight: bold;
-      flex: 1;
-    }
-
-    .item .price {
-      color: #2980b9;
-    }
-
-    .item .lunch-price {
-      color: #e74c3c;
-      margin-left: 10px;
-    }
-
-    .item .price-container {
-      display: flex;
-      align-items: center;
-    }
-
-    .category .item:nth-child(even) {
-      background-color: #F7F7F7;
-    }
-
-    .category .item:nth-child(even):hover {
-      background-color: #f9f9f9;
-    }
-
-    .category-filter {
-      padding: 4px 8px;
-      background: #2980b9;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.3s;
-      font-size: 0.85rem;
-    }
-
-    .category-filter:hover {
-      background: #3498db;
-    }
-
-    .category-filter.selected {
-      background-color: #1a2a44;
-      color: white;
-    }
-
-    .category-filter.selected:hover {
-      background-color: #14263a;
-    }
-
-    #recipeDatabase {
-      flex-direction: column;
-      padding: 0;
-      height: 100%;
-      background: #f5f5f5;
-    }
-
-    #recipeDatabaseHeader {
-      position: sticky;
-      top: 0;
-      background: #fff;
-      padding: 15px 20px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    #recipeDatabase h2 {
-      color: #2c3e50;
-      font-size: 1.5rem;
-      margin: 0;
-    }
-
-    #recipeSearchBar {
-      padding: 8px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      font-size: 1rem;
-      width: 250px;
-      transition: border-color 0.3s;
-    }
-
-    #recipeSearchBar:focus {
-      border-color: #2980b9;
-      outline: none;
-    }
-
-    #recipeBackButton {
-      padding: 8px 15px;
-    }
-
-    #recipeContainer {
-      display: flex;
-      flex: 1;
-      overflow: hidden;
-      padding: 20px;
-    }
-
-    #recipeList {
-      flex: 1;
-      overflow-y: auto;
-      padding-right: 15px;
-    }
-
-    .recipe-card {
-      display: flex;
-      align-items: center;
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      margin-bottom: 15px;
-      padding: 15px;
-      cursor: pointer;
-      transition: background 0.3s;
-      position: relative;
-    }
-
-    .recipe-card:hover {
-      background: #f0f8ff;
-    }
-
-    .recipe-card.selected {
-      background: #e6f0fa;
-      border: 1px solid #2980b9;
-    }
-
-    .recipe-card .thumbnail {
-      width: 50px;
-      height: 50px;
-      object-fit: cover;
-      border-radius: 5px;
-      margin-right: 15px;
-    }
-
-    .recipe-card .placeholder {
-      width: 50px;
-      height: 50px;
-      background: #ddd;
-      border-radius: 5px;
-      margin-right: 15px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8rem;
-      color: #666;
-    }
-
-    .recipe-card .content {
-      flex: 1;
-    }
-
-    .recipe-card .name {
-      font-size: 1.2rem;
-      font-weight: 600;
-      color: #2c3e50;
-      margin-bottom: 5px;
-    }
-
-    .recipe-card .tags {
-      font-size: 0.9rem;
-      color: #666;
-    }
-
-    #recipeDetails {
-      flex: 2;
-      padding: 20px;
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      margin-left: 20px;
-      overflow-y: auto;
-      display: none;
-      position: relative;
-    }
-
-    #recipeDetails h2 {
-      font-size: 1.8rem;
-      color: #2c3e50;
-      margin-bottom: 15px;
-    }
-
-    .ingredient-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 15px;
-    }
-
-    .ingredient-table th,
-    .ingredient-table td {
-      padding: 10px;
-      text-align: left;
-      border: 1px solid #ddd;
-    }
-
-    .ingredient-table th {
-      background-color: #2980b9;
-      color: white;
-    }
-
-    .step-by-step {
-      margin: 20px 0;
-    }
-
-    .step-by-step h3 {
-      font-size: 1.4rem;
-      color: #2c3e50;
-      margin-bottom: 10px;
-    }
-
-    .stepper {
-      display: flex;
-      justify-content: center;
-      margin: 10px 0;
-    }
-
-    .step-dot {
-      width: 10px;
-      height: 10px;
-      background: #ddd;
-      border-radius: 50%;
-      margin: 0 5px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    .step-dot:hover {
-      background: #a0c4ff;
-    }
-
-    .step-dot.active {
-      background: #2980b9;
-    }
-
-    .step-text p {
-      margin: 10px 0;
-      font-size: 1rem;
-    }
-
-    .step-text b {
-      font-weight: bold;
-    }
-
-    .step-text i {
-      font-style: italic;
-    }
-
-    .step-text ul {
-      margin-left: 20px;
-      list-style-type: disc;
-    }
-
-    .hey {
-      display: flex;
-
-    }
-
-    .heyitem {
-      padding: 10px;
-      display: grid;
-      justify-content: space-between;
-      grid-auto-flow: column;
-      /* Forces a horizontal layout */
-    }
-
-    .price-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      /* Puts space between h3 and button */
-      padding: 10px 20px;
-      /* Matches #priceDatabase padding */
-    }
-
-    .close-price {
-      padding: 5px 10px;
-      /* Smaller than regular buttons */
-      background: #ff4444;
-      /* Red, like close buttons */
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.3s;
-      font-size: 0.8rem;
-      /* Slightly smaller text */
-    }
-
-    .close-price:hover {
-      background: #cc0000;
-      /* Darker red on hover */
-    }
-
-    #recipeDetailsModal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      z-index: 2000;
-      justify-content: center;
-      align-items: center;
-    }
-
-    #recipeDetailsModalContent {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      max-width: 90%;
-      max-height: 90vh;
-      overflow-y: auto;
-      position: relative;
-      animation: slideIn 0.3s ease-out;
-    }
-
-    @keyframes slideIn {
-      from {
-        transform: translateY(-50px);
-        opacity: 0;
-      }
-
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-
-    #closeDetails {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      border: none;
-      background: #ff4444;
-      color: white;
-      padding: 5px 10px;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    #closeDetails:hover {
-      background: #cc0000;
-    }
-
-    @media (max-width: 768px) {
-      body {
-        flex-direction: column;
-      }
-
-      .page.active {
-        flex-direction: column;
-        height: auto;
-        min-height: 100vh;
-      }
-
-      .settings-panel {
-        width: 100%;
-        height: auto;
-        padding: 10px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        flex-shrink: 0;
-      }
-
-      .image-panel {
-        width: 100%;
-        margin-left: 0;
-        margin-top: 10px;
-        padding: 10px;
-        flex: 0 1 auto;
-        min-height: 0;
-      }
-
-      #imageContainer {
-        width: 100%;
-        height: auto;
-        max-height: 65vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-      }
-
-      #imageContainer img {
-        max-width: 90vw;
-        max-height: 60vh;
-        width: auto;
-        height: auto;
-        object-fit: contain;
-        border-radius: 5px;
-      }
-
-      #imageCounter {
-        margin-top: 5px;
-      }
-
-      #flagEmoji {
-        position: static;
-        transform: none;
-        margin-bottom: 5px;
-      }
-
-      .controls {
-        flex-direction: column;
-        /* Stack containers vertically on mobile */
-        gap: 10px;
-        /* Space between containers */
-      }
-
-      .bordercontainer {
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        gap: 5px;
-        padding: 5px;
-      }
-
-      .buttonfullspace {
-        flex: 1;
-        min-width: 0;
-      }
-
-      #infoContent {
-        width: 85%;
-      }
-
-      .step-image-container {
-        height: 150px;
-      }
-
-      .video-section iframe {
-        height: 200px;
-      }
-
-      #priceDatabase,
-      #recipeDatabase {
-        padding: 0;
-      }
-
-      #recipeDatabaseHeader {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 10px;
-      }
-
-      #recipeSearchBar {
-        width: 100%;
-        margin-top: 10px;
-      }
-
-      #recipeBackButton {
-        margin-top: 10px;
-      }
-
-      #recipeContainer {
-        flex-direction: column;
-        padding: 10px;
-      }
-
-      #recipeList {
-        padding-right: 0;
-      }
-
-      .recipe-card {
-        padding: 10px;
-      }
-
-      .recipe-card .thumbnail {
-        width: 40px;
-        height: 40px;
-      }
-
-      .recipe-card .placeholder {
-        width: 40px;
-        height: 40px;
-        font-size: 0.7rem;
-      }
-
-      .recipe-card .name {
-        font-size: 1.1rem;
-      }
-
-      /* Ensure #priceDatabase fills the viewport but allows flexibility */
-      #priceDatabase {
-        flex-direction: column;
-        padding: 0 20px 20px;
-        display: flex;
-        height: 100vh;
-        /* Full height of the viewport */
-      }
-
-      /* Keep the header compact */
-      .price-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 10px 20px;
-
-        /* position: sticky; 
-  top: 0;
-  z-index: 10; */
-      }
-
-      /* Style the search bar to stay above the list */
-      #searchBar {
-        width: 100%;
-        max-width: 400px;
-        padding: 8px;
-        margin-bottom: 10px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        font-size: 1rem;
-        /* position: sticky; 
-  top: 50px; 
-  z-index: 10; */
-      }
-
-      /* Filters stay compact */
-      #filters {
-        margin-bottom: 10px;
-      }
-
-      /* Make itemList take remaining space and scroll */
-      #itemList {
-        flex: 1;
-        /* Takes remaining space */
-        overflow-y: auto;
-        /* Scrollable */
-        max-height: calc(100vh - 120px);
-        /* Adjust based on header + search bar height */
-        padding-bottom: 20px;
-        /* Prevent content from being too close to bottom */
-      }
-
-      /* Mobile adjustments */
-      @media (max-width: 768px) {
-        #priceDatabase {
-          padding: 0 10px 10px;
-          height: auto;
-          /* Allow natural height on mobile */
-          min-height: 100vh;
-        }
-
-        #searchBar {
-          top: 40px;
-          /* Adjust for smaller header */
-        }
-
-        #itemList {
-          max-height: calc(100vh - 100px);
-          /* Tighter fit on mobile */
-        }
-      }
-    }
-  </style>
 </head>
 
 <body>
@@ -1116,11 +82,11 @@
           autocomplete="off" spellcheck="false">
       </div>
       <div id="filters">
-        <button class="category-filter" data-category="">全部</button>
-        <button class="category-filter" data-category="前菜">前菜</button>
-        <button class="category-filter" data-category="Pasta">パスタ</button>
-        <button class="category-filter" data-category="Drink">ドリンク</button>
-        <button class="category-filter" data-category="Wine">ワイン</button>
+        <button class="category-filter" data-category="" onclick="zenbu()">リセット</button>
+        <button class="category-filter" data-category="前菜" onclick="qfocus()">前菜</button>
+        <button class="category-filter" data-category="Pasta" onclick="qfocus()">パスタ</button>
+        <button class="category-filter" data-category="Drink" onclick="qfocus()">ドリンク</button>
+        <button class="category-filter" data-category="Wine" onclick="qfocus()">ワイン</button>
         <label>
           <input type="checkbox" id="showLunchOnly" onchange="filterItems()"> ランチのみ
         </label>
@@ -1157,7 +123,7 @@
       <h2 id="menuItemName"></h2>
       <div id="ingredientTableContainer"></div>
       <div class="step-by-step" id="stepSection">
-        <h3>作り方</h3>
+        <!-- <h3>作り方</h3> -->
         <div class="step-image-container" id="stepImageContainer">
           <img id="stepImage" class="step-image" src="" alt="Step Image">
           <button class="step-nav step-prev" onclick="prevStep()" aria-label="前のステップ">◄</button>
@@ -1177,10 +143,13 @@
   <script>
     const imageFolder = 'menu/';
 
+    const excludedItems = ['m1.avif']; // Add items to exclude from pricelist here 
+
     const menuItems = {
       'm1.avif': {
-        name: '鶏もも肉のグリル　ポルチーニクリームソース',
-        nicknames: ['鶏', 'にわとり', 'ニワトリ', 'チキン', 'chicken', 'ちきん', 'momo', 'chikin', 'chikkin'],
+        name: '鶏もも肉のグリル',
+        shorthand: 'チキン', // Added shorthand property
+        nicknames: ['鶏', 'にわとり', 'ニワトリ', 'チキン', 'chicken', 'ちきん', 'momo', 'chikin', 'chikkin', 'ポルチーニクリームソース'],
         category: 'Main Dish',
         price: '2380円',
         steps: ['step1-duck.jpg', 'step2-duck.jpg', 'step3-duck.jpg'],
@@ -1212,7 +181,7 @@
     const recipeItems = {
       '1.avif': {
         name: '砂肝のコンフィ',
-        // nicknames: ['カレー', 'Chicken Curry'],
+        nicknames: ['konfi', 'コンフィ', 'こんふぃ', '砂肝', 'sunagimo', 'すなぎも', 'スナギモ', 'horumon', 'hormon', 'ホルモン', 'ワイン', 'wine'],
         category: 'ホルモン',
         tags: ['？mins', 'ホルモン'],
         ingredients: {
@@ -1585,14 +554,17 @@
           additionalInfo.appendChild(details);
         });
       } else {
-        additionalInfo.innerHTML = '<p>追加情報がありません</p>';
+        // additionalInfo.innerHTML = '<p>追加情報がありません</p>';
+        additionalInfo.innerHTML = '';
       }
 
       document.getElementById('infoOverlay').style.display = 'flex';
     }
 
     function parseStepText(text) {
-      if (!text || typeof text !== 'string') return '<p>ステップ情報がありません</p>';
+      if (!text || typeof text !== 'string')
+        // return '<p>ステップ情報がありません</p>';
+        return '';
       let content = text.replace(/^"""/, '').replace(/"*"*$/, '').trim();
       const lines = content.split('\n').map(line => line.trim());
       let html = '';
@@ -1668,6 +640,16 @@
       document.getElementById('priceDatabasePage').classList.add('active');
       displayPriceDatabase();
       setupCategoryFilters();
+      document.getElementById("searchBar").focus();
+    }
+
+    function zenbu() {
+      searchBar.value = "";
+      document.getElementById("searchBar").focus();
+    }
+
+    function qfocus() {
+      document.getElementById("searchBar").focus();
     }
 
     function navigateToMenu() {
@@ -1688,6 +670,7 @@
       document.getElementById('recipeDetailsModal').style.display = 'none';
       currentRecipe = null;
       isMobile = window.innerWidth <= 768;
+      document.getElementById("recipeSearchBar").focus();
     }
 
     function displayPriceDatabase() {
@@ -1695,8 +678,9 @@
       if (!itemList) return;
       itemList.innerHTML = '';
 
-      const items = Object.values(menuItems);
-      items.sort((a, b) => a.category.localeCompare(b.category));
+      const items = Object.values(menuItems).filter(item =>
+        !excludedItems.includes(Object.keys(menuItems).find(key => menuItems[key] === item))
+      );
 
       const categorizedItems = {};
       items.forEach(item => {
@@ -1715,12 +699,12 @@
           const div = document.createElement('div');
           div.className = 'item';
           div.innerHTML = `
-    <span class="name">${item.name}</span>
-    <div class="price-container">
-      <span class="price">${item.price}</span>
-      ${item.lunchPrice ? `<span class="lunch-price">(ランチ: ${item.lunchPrice})</span>` : ''}
-    </div>
-  `;
+        ${item.shorthand ? `<span class="shorthand">${item.shorthand}</span>` : ''}
+        <div class="price-container">
+          <span class="price">${item.price}</span>
+          ${item.lunchPrice ? `<span class="lunch-price"> ${item.lunchPrice}</span>` : ''}
+        </div>
+      `;
           categoryDiv.appendChild(div);
         });
 
@@ -1737,7 +721,9 @@
 
       const searchText = searchBar.value.toLowerCase();
       const lunchOnly = showLunchOnly.checked;
-      const items = Object.values(menuItems);
+      const items = Object.values(menuItems).filter(item =>
+        !excludedItems.includes(Object.keys(menuItems).find(key => menuItems[key] === item))
+      );
 
       itemList.innerHTML = '';
 
@@ -1769,17 +755,18 @@
           const div = document.createElement('div');
           div.className = 'item';
           div.innerHTML = `
-            <span class="name">${item.name}</span>
-            <span class="price">${item.price}</span>
-            ${item.lunchPrice ? `<span class="lunch-price">(ランチ: ${item.lunchPrice})</span>` : ''}
-          `;
+        ${item.shorthand ? `<span class="shorthand">${item.shorthand}</span>` : ''}
+        <div class="price-container">
+          <span class="price">${item.price}</span>
+          ${item.lunchPrice ? `<span class="lunch-price"> ${item.lunchPrice}</span>` : ''}
+        </div>
+      `;
           categoryDiv.appendChild(div);
         });
 
         itemList.appendChild(categoryDiv);
       }
     }
-
     function setupCategoryFilters() {
       const filterButtons = document.querySelectorAll('.category-filter');
       if (filterButtons.length === 0) return;
