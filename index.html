@@ -1128,6 +1128,12 @@
         <strong>食べ物</strong>
         <div class="radio-group">
           <label>
+            <input type="radio" id="lunchWeekdaysPASTA" name="food" value="lunchWeekdaysPASTA"
+              style="margin-right: 8px;"
+              onchange="document.getElementById('pasta').disabled = true; document.getElementById('pasta').checked = false;">
+            ランチ（平）パスタのみ
+          </label>
+          <label>
             <input type="radio" id="lunchWeekdays" name="food" value="lunchWeekdays" style="margin-right: 8px;"
               onchange="document.getElementById('pasta').disabled = true; document.getElementById('pasta').checked = false;">
             ランチ（平）
@@ -4328,6 +4334,7 @@
     const imageListDinnerSalad = ['s1.avif', 's2.avif', 's3.avif', 's4.avif'];
     const imageListDinnerTapasCold = ['t1.avif', 't2.avif', 't3.avif', 't4.avif', 't5.avif', 't6.avif', 't7.avif'];
     const imageListLunchPastaWeekdays = ['rh1.avif', 'rh2.avif', 'rh3.avif', 'rh4.avif', 'rh5.avif', 'rh6.avif', 'rh7.avif', 'rh8.avif'];
+    const imageListLunchPastaWeekdaysNoTodays = ['rh1.avif', 'rh2.avif', 'rh3.avif', 'rh4.avif', 'rh5.avif', 'rh6.avif', 'rh7.avif'];
     const imageListLunchSetWeekdays = ['set1.avif', 'set2.avif', 'set3.avif'];
     const imageListLunchTanpinWeekdays = ['tan1.avif', 'tan2.avif', 'tan3.avif', 'tan4.avif'];
     const imageListLunchTapasWeekdays = ['tapas1.avif', 'tapas2.avif', 'tapas3.avif', 'tapas4.avif'];
@@ -4354,6 +4361,12 @@
 
     function getRandomImagesFromArray(array, maxCount) {
       const count = Math.floor(Math.random() * (maxCount + 1));
+      let shuffled = [...array].sort(() => 0.5 - Math.random());
+      return shuffled.slice(0, count);
+    }
+
+    function getRandomImagesFromArrayMin1(array, maxCount) {
+      const count = Math.floor(Math.random() * maxCount) + 1; // 1 to maxCount
       let shuffled = [...array].sort(() => 0.5 - Math.random());
       return shuffled.slice(0, count);
     }
@@ -4425,14 +4438,19 @@
 
       const allImages = [];
 
+      // LUNCH PASTA NOMI. BEFORE: 1 1 4 1 1 
       if (document.getElementById('lunchWeekdays').checked) {
-        const lunchSetImages = getRandomImagesFromArray(imageListLunchSetWeekdays, 2);
+        const lunchSetImages = getRandomImagesFromArray(imageListLunchSetWeekdays, 1);
         allImages.push(...lunchSetImages);
         const lunchTodayImages = getRandomImagesFromArray(imageListLunchTodaysWeekdays, 1);
         allImages.push(...lunchTodayImages);
         allImages.push(...getRandomImagesFromArray(imageListLunchPastaWeekdays, 4));
         allImages.push(...getRandomImagesFromArray(imageListLunchTanpinWeekdays, 1));
         allImages.push(...getRandomImagesFromArray(imageListLunchTapasWeekdays, 1));
+      }
+
+      if (document.getElementById('lunchWeekdaysPASTA').checked) {
+        allImages.push(...getRandomImagesFromArrayMin1(imageListLunchPastaWeekdaysNoTodays, 4));
       }
 
       if (document.getElementById('lunchWeekend').checked) {
