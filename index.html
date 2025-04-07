@@ -4873,8 +4873,20 @@
       document.getElementById("searchBar").focus();
     }
 
+    // function zenbu() {
+    //   searchBar.value = "";
+    //   document.getElementById("searchBar").focus();
+    // }
+
     function zenbu() {
-      searchBar.value = "";
+      document.getElementById("searchBar").value = "";
+      currentCategoryFilter = '';
+      const filterButtons = document.querySelectorAll('.category-filter');
+      filterButtons.forEach(btn => btn.classList.remove('selected'));
+      Object.values(menuItems).forEach(item => {
+        item.quantity = 1;
+      });
+      filterItems();
       document.getElementById("searchBar").focus();
     }
 
