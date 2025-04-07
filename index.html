@@ -4701,7 +4701,12 @@
       const item = menuItems[currentImage];
       console.log('Selected Item:', item);
 
-      // Display name and shorthand together
+      // Preload popup step images
+      currentSteps = item.steps || [];
+      if (currentSteps.length > 0) {
+        preloadImages(currentSteps);
+      }
+
       menuItemName.innerHTML = `${item.name}${item.shorthand ? `<br><span class="shorthand-popup">${item.shorthand}</span>` : ''}`;
 
       const ingredientTableContainer = document.getElementById('ingredientTableContainer');
@@ -4724,7 +4729,6 @@
         ingredientTableContainer.appendChild(table);
       }
 
-      currentSteps = item.steps || [];
       currentStepIndex = 0;
       console.log('Current Steps:', currentSteps);
 
@@ -4742,7 +4746,6 @@
         console.log('Step Image Source:', stepImage.src);
         stepCounter.textContent = `${currentStepIndex + 1}/${currentSteps.length}`;
 
-        // Render stepper dots
         stepper.innerHTML = '';
         currentSteps.forEach((_, index) => {
           const dot = document.createElement('span');
@@ -5226,6 +5229,11 @@
 
       currentSteps = currentRecipe.steps || [];
       currentStepIndex = 0;
+
+      // Preload recipe step images
+      if (currentSteps.length > 0) {
+        preloadImages(currentSteps);
+      }
 
       let additionalInfoHtml = '';
       if (currentRecipe.additionalInfo && currentRecipe.additionalInfo.length > 0) {
