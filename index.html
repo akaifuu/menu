@@ -4514,7 +4514,6 @@
       displayImage();
     }
 
-    // Modify generateImages to preload images after setting currentImages
     function generateImages() {
       const guestNumberDiv = document.getElementById('guestNumber');
       const tableContainer = document.getElementById('tableContainer');
@@ -4617,9 +4616,8 @@
       shuffleArray(currentImages);
       currentIndex = 0;
 
-      // Preload all current images
-      preloadImages(currentImages);
-
+      console.log('Generated currentImages:', currentImages); // Log to confirm array contents
+      preloadImages(currentImages); // Preload all images immediately
       displayImage();
     }
 
@@ -5439,15 +5437,18 @@
       itemElement.querySelector('.quantity').textContent = item.quantity || 1;
     }
 
+    // Add this function (unchanged from previous response, but with a console log)
     function preloadImages(imageArray) {
       const preloadContainer = document.createElement('div');
-      preloadContainer.style.display = 'none'; // Keep it hidden
+      preloadContainer.style.display = 'none';
       document.body.appendChild(preloadContainer);
 
+      console.log('Preloading images:', imageArray); // Log to verify all images are preloaded
+
       imageArray.forEach(image => {
-        const img = new Image(); // Use Image constructor for preloading
-        img.src = imageFolder + image; // Set src to trigger loading
-        preloadContainer.appendChild(img); // Add to hidden container
+        const img = new Image();
+        img.src = imageFolder + image;
+        preloadContainer.appendChild(img);
       });
     }
   </script>
