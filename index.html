@@ -4479,9 +4479,8 @@
       return shuffled.slice(0, count);
     }
 
-    function displayImage() {
+    function displayImage(loadedImages = new Set()) {
       const imageContainer = document.getElementById('imageContainer');
-      const flagEmoji = document.getElementById('flagEmoji');
       imageContainer.innerHTML = '';
 
       if (currentImages.length === 0) {
@@ -4500,18 +4499,24 @@
 
       const counter = document.createElement('div');
       counter.id = 'imageCounter';
-      counter.innerHTML = `${currentIndex + 1}/${currentImages.length}`;
+      counter.innerHTML = `${currentIndex + 1}/${currentImages.length} (Loaded: ${loadedImages.size}/${currentImages.length})`;
       imageContainer.appendChild(counter);
     }
 
     function prevImage() {
-      currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
-      displayImage();
+      const loadedCount = document.getElementById('imageCounter').textContent.match(/Loaded: (\d+)/)[1];
+      if (currentIndex > 0) {
+        currentIndex--;
+        displayImage(new Set(currentImages.slice(0, loadedCount)));
+      }
     }
 
     function nextImage() {
-      currentIndex = (currentIndex + 1) % currentImages.length;
-      displayImage();
+      const loadedCount = document.getElementById('imageCounter').textContent.match(/Loaded: (\d+)/)[1];
+      if (currentIndex < loadedCount - 1) {
+        currentIndex++;
+        displayImage(new Set(currentImages.slice(0, loadedCount)));
+      }
     }
 
     function generateImages() {
@@ -4619,13 +4624,13 @@
       const imageContainer = document.getElementById('imageContainer');
       imageContainer.innerHTML = '<p>Loading images...</p>'; // Initial placeholder
 
-      preloadImagesDynamic(currentImages, (loadedImages) => {
-        // Update display with loaded images
-        if (loadedImages.size > 0) {
-          const availableImages = currentImages.filter(img => loadedImages.has(img));
-          currentImages = availableImages; // Restrict to loaded images
-          if (currentIndex >= currentImages.length) currentIndex = 0; // Adjust index if needed
-          displayImage();
+      let loadedCount = 0;
+      preloadImagesDynamic(currentImages, (loadedImages, fullArray) => {
+        loadedCount = loadedImages.size;
+        if (loadedCount > 0) {
+          // Ensure currentIndex stays within loaded range
+          if (currentIndex >= loadedCount) currentIndex = loadedCount - 1;
+          displayImage(loadedImages);
         }
       });
     }
@@ -4685,20 +4690,13 @@
     });
 
     function showInfo() {
-      if (currentImages.length === 0 || currentIndex >= currentImages.length) {
-        console.log('No images or invalid index:', currentImages, currentIndex);
-        return;
-      }
+      if (currentImages.length === 0 || currentIndex >= currentImages.length) return;
 
       const currentImage = currentImages[currentIndex];
-      console.log('Current Image:', currentImage);
-      console.log('Available menuItems keys:', Object.keys(menuItems));
-
       const hasMenuItem = Object.keys(menuItems).includes(currentImage);
       const menuItemName = document.getElementById('menuItemName');
 
       if (!hasMenuItem) {
-        console.log(`No menu item found for ${currentImage}. Hiding step-by-step section.`);
         menuItemName.innerHTML = 'メニュー情報なし';
         document.getElementById('ingredientTableContainer').innerHTML = '';
         document.getElementById('stepSection').style.display = 'none';
@@ -4708,8 +4706,6 @@
       }
 
       const item = menuItems[currentImage];
-      console.log('Selected Item:', item);
-
       menuItemName.innerHTML = `${item.name}${item.shorthand ? `<br><span class="shorthand-popup">${item.shorthand}</span>` : ''}`;
 
       const ingredientTableContainer = document.getElementById('ingredientTableContainer');
@@ -4734,7 +4730,6 @@
 
       currentSteps = item.steps || [];
       currentStepIndex = 0;
-      console.log('Current Steps:', currentSteps);
 
       const stepSection = document.getElementById('stepSection');
       const stepContainer = document.getElementById('stepImageContainer');
@@ -4746,21 +4741,25 @@
       if (currentSteps.length > 0) {
         stepSection.style.display = 'block';
         stepContainer.style.display = 'block';
-        preloadImagesDynamic(currentSteps, (loadedImages) => {
-          const availableSteps = currentSteps.filter(step => loadedImages.has(step));
-          currentSteps = availableSteps;
-          if (currentStepIndex >= currentSteps.length) currentStepIndex = 0;
-          stepImage.src = imageFolder + currentSteps[currentStepIndex];
-          stepCounter.textContent = `${currentStepIndex + 1}/${currentSteps.length}`;
-          stepper.innerHTML = '';
-          currentSteps.forEach((_, index) => {
-            const dot = document.createElement('span');
-            dot.className = 'step-dot';
-            dot.setAttribute('aria-label', `ステップ ${index + 1}`);
-            dot.onclick = () => goToStep(index);
-            if (index === currentStepIndex) dot.classList.add('active');
-            stepper.appendChild(dot);
-          });
+        let loadedCount = 0;
+        preloadImagesDynamic(currentSteps, (loadedImages, fullArray) => {
+          loadedCount = loadedImages.size;
+          if (loadedCount > 0) {
+            if (currentStepIndex >= loadedCount) currentStepIndex = loadedCount - 1;
+            stepImage.src = imageFolder + currentSteps[currentStepIndex];
+            stepCounter.textContent = `${currentStepIndex + 1}/${currentSteps.length} (Loaded: ${loadedImages.size}/${currentSteps.length})`;
+            stepper.innerHTML = '';
+            currentSteps.forEach((_, index) => {
+              if (index < loadedCount) {
+                const dot = document.createElement('span');
+                dot.className = 'step-dot';
+                dot.setAttribute('aria-label', `ステップ ${index + 1}`);
+                dot.onclick = () => goToStep(index);
+                if (index === currentStepIndex) dot.classList.add('active');
+                stepper.appendChild(dot);
+              }
+            });
+          }
         });
       } else {
         stepSection.style.display = 'none';
@@ -4846,8 +4845,8 @@
       updateStepDisplay();
     }
 
-    function updateStepDisplay() {
-      // Determine the context (menu or recipe) based on whether infoOverlay or recipeDetails is visible
+    // Update updateStepDisplay
+    function updateStepDisplay(loadedImages = new Set()) {
       const isMenuTab = document.getElementById('infoOverlay').style.display === 'flex';
       const isRecipeTab = document.getElementById('recipeDetails').style.display === 'block' || document.getElementById('recipeDetailsModal').style.display === 'flex';
 
@@ -4867,12 +4866,18 @@
         stepImage.src = imageFolder + currentSteps[currentStepIndex];
       }
       if (stepCounter) {
-        stepCounter.textContent = `${currentStepIndex + 1}/${currentSteps.length}`;
+        stepCounter.textContent = `${currentStepIndex + 1}/${currentSteps.length} (Loaded: ${loadedImages.size}/${currentSteps.length})`;
       }
       if (stepper) {
-        const dots = stepper.querySelectorAll('.step-dot');
-        dots.forEach((dot, index) => {
-          dot.classList.toggle('active', index === currentStepIndex);
+        stepper.innerHTML = '';
+        currentSteps.forEach((_, index) => {
+          if (index < loadedImages.size) {
+            const dot = document.createElement('span');
+            dot.className = 'step-dot';
+            dot.classList.toggle('active', index === currentStepIndex);
+            dot.onclick = () => goToStep(index);
+            stepper.appendChild(dot);
+          }
         });
       }
     }
@@ -5272,17 +5277,18 @@
       }
 
       if (currentSteps.length > 0) {
-        preloadImagesDynamic(currentSteps, (loadedImages) => {
-          const availableSteps = currentSteps.filter(step => loadedImages.has(step));
-          currentSteps = availableSteps;
-          if (currentStepIndex >= currentSteps.length) currentStepIndex = 0;
-          updateStepDisplay();
+        let loadedCount = 0;
+        preloadImagesDynamic(currentSteps, (loadedImages, fullArray) => {
+          loadedCount = loadedImages.size;
+          if (loadedCount > 0) {
+            if (currentStepIndex >= loadedCount) currentStepIndex = loadedCount - 1;
+            updateStepDisplay(loadedImages);
+          }
         });
       } else {
         updateStepDisplay();
       }
     }
-
     function renderIngredients() {
       if (!Object.keys(currentRecipe.ingredients || {}).length) return '';
       let html = '<h3>材料</h3><table class="ingredient-table"><thead><tr><th>材料</th><th>量</th></tr></thead><tbody>';
@@ -5462,7 +5468,7 @@
       let totalImages = imageArray.length;
 
       if (totalImages === 0) {
-        callback(loadedImages);
+        callback(loadedImages, imageArray);
         return;
       }
 
@@ -5478,12 +5484,12 @@
         img.onload = () => {
           loadedImages.add(image);
           console.log(`Loaded: ${image}. Total loaded: ${loadedImages.size}/${totalImages}`);
-          callback(loadedImages); // Update UI each time an image loads
+          callback(loadedImages, imageArray); // Pass both loaded and full array
         };
         img.onerror = () => {
           console.log(`Failed to load: ${image}`);
           loadedImages.add(image); // Treat as "loaded" to avoid blocking
-          callback(loadedImages);
+          callback(loadedImages, imageArray);
         };
         preloadContainer.appendChild(img);
       });
