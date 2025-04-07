@@ -1246,7 +1246,7 @@
         </div>
         <div class="bordercontainer no-background">
           <button class="buttonfullspace" onclick="navigateToPriceDatabase()">値段</button>
-          <button class="buttonfullspace" onclick="navigateToRecipeDatabase()">レシピ</button>
+          <button class="buttonfullspace" onclick="navigateToRecipeDatabase()">レシピいろいろ</button>
         </div>
         <div>
           <label for="imageLimit">限定: </label>
@@ -1292,7 +1292,7 @@
   <div class="page" id="recipeDatabasePage">
     <div id="recipeDatabase">
       <div id="recipeDatabaseHeader">
-        <h2>レシピ</h2>
+        <h2>レシピいろいろ</h2>
         <input type="text" id="recipeSearchBar" placeholder="レシピを検索..." oninput="filterRecipes()" autocorrect="off"
           autocomplete="off" spellcheck="false">
         <button id="recipeBackButton" onclick="navigateToMenu()">メニューに戻る</button>
@@ -4514,6 +4514,7 @@
       displayImage();
     }
 
+    // Modify generateImages to preload images after setting currentImages
     function generateImages() {
       const guestNumberDiv = document.getElementById('guestNumber');
       const tableContainer = document.getElementById('tableContainer');
@@ -4546,7 +4547,6 @@
 
       const allImages = [];
 
-      // LUNCH PASTA NOMI. BEFORE: 1 1 4 1 1 
       if (document.getElementById('lunchWeekdays').checked) {
         const lunchSetImages = getRandomImagesFromArray(imageListLunchSetWeekdays, 1);
         allImages.push(...lunchSetImages);
@@ -4616,6 +4616,10 @@
       currentImages = allImages.slice(0, limit);
       shuffleArray(currentImages);
       currentIndex = 0;
+
+      // Preload all current images
+      preloadImages(currentImages);
+
       displayImage();
     }
 
@@ -5433,6 +5437,18 @@
         if (lunchElement) lunchElement.textContent = `ランチ: ${lunchFormatted}`;
       }
       itemElement.querySelector('.quantity').textContent = item.quantity || 1;
+    }
+
+    function preloadImages(imageArray) {
+      const preloadContainer = document.createElement('div');
+      preloadContainer.style.display = 'none'; // Keep it hidden
+      document.body.appendChild(preloadContainer);
+
+      imageArray.forEach(image => {
+        const img = new Image(); // Use Image constructor for preloading
+        img.src = imageFolder + image; // Set src to trigger loading
+        preloadContainer.appendChild(img); // Add to hidden container
+      });
     }
   </script>
 </body>
