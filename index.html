@@ -1113,6 +1113,68 @@
         line-height: 1;
       }
 
+      .item {
+        display: flex;
+        justify-content: space-between;
+        /* Pushes item-name to left, right-container to right */
+        align-items: center;
+        /* Vertically centers content */
+        padding: 10px 0;
+        /* Optional: adds some vertical spacing */
+      }
+
+      .item-name {
+        flex: 1;
+        /* Takes up available space on the left */
+        text-align: left;
+      }
+
+      .right-container {
+        display: flex;
+        align-items: center;
+        /* Keeps shorthand and price-container vertically aligned */
+        gap: 10px;
+        /* Space between shorthand and price-container */
+      }
+
+      .shorthand {
+        margin-right: 5px;
+        /* Small space between shorthand and price-container */
+      }
+
+      .price-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        /* Space between price, lunch-price, and quantity-controls */
+      }
+
+      .lunch-price {
+        color: #666;
+        font-size: 0.9em;
+      }
+
+      .quantity-controls {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .quantity-controls button {
+        width: 20px;
+        height: 20px;
+        padding: 0;
+        font-size: 14px;
+      }
+
+      .category {
+        margin-bottom: 20px;
+      }
+
+      /* h3 {
+        margin: 10px 0;
+      } */
+
 
     }
   </style>
@@ -1266,7 +1328,9 @@
         shorthand: 'チキン', // Added shorthand property
         nicknames: ['鶏', 'にわとり', 'ニワトリ', 'チキン', 'chicken', 'ちきん', 'momo', 'chikin', 'chikkin', 'ポルチーニクリームソース'],
         category: 'メイン',
-        price: '2380円',
+        price: 2380,
+        // lunchPrice: 1,
+        quantity: 1,
         steps: ['step1-duck.jpg', 'step2-duck.jpg', 'step3-duck.jpg'],
         videoLink: 'https://www.youtube.com/watch?v=example1',
         additionalInfo: [
@@ -1295,7 +1359,7 @@
         shorthand: 'ラム', // Added shorthand property
         nicknames: ['ランプ', 'ラム', 'ラムランプ', 'ramu', 'ranpu', 'ramuranpu', 'grill', 'グリル', 'レモン胡椒タップナード'],
         category: 'メイン',
-        price: '2380円',
+        price: 2380,
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
         videoLink: 'https://www.youtube.com/watch?v=example2',
         ingredients: {
@@ -1316,7 +1380,7 @@
         shorthand: 'ハラミ',
         nicknames: ['ハラミ', '牛', 'beef', 'harami', 'gyuharami', 'gyuuharami', 'ぎゅうはらみ', 'うし', 'ぎゅ', 'roast', 'ロースト', 'バルサミコソース'],
         category: 'メイン',
-        price: '3100円',
+        price: 3100,
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
         videoLink: 'https://www.youtube.com/watch?v=example2',
         ingredients: {
@@ -1337,7 +1401,7 @@
         shorthand: 'カジキ',
         nicknames: ['メカジキ', 'Mekajiki', 'grill', 'グリル', 'guriru', '海塩とレモン'],
         category: 'メイン',
-        price: '1980円',
+        price: 1980,
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
         videoLink: 'https://www.youtube.com/watch?v=example2',
         ingredients: {
@@ -1359,8 +1423,8 @@
         shorthand: 'アラビ',
         nicknames: ['アラビアータ', 'Arabi', 'アラビ', 'Arabiata', '辛いトマトソース'],
         category: 'パスタ',
-        price: '1100円',
-        lunchPrice: '950円',
+        price: 1100,
+        lunchPrice: 950,
         steps: ['arabi0.avif', 'arabi1.avif', 'arabi2.avif', 'arabi3.avif', 'arabi4.avif'],
         videoLink: 'https://www.youtube.com/watch?v=example2',
         additionalInfo: [
@@ -1392,8 +1456,8 @@
         shorthand: 'しらす',
         nicknames: ['釜揚げ', 'かまあげ', 'しらす', '大葉', 'おおば', 'kamaage', 'shirasu', 'ooba', 'トマト', 'とトマト', 'tomato', 'sirasu'],
         category: 'パスタ',
-        price: '1380円',
-        lunchPrice: '1100円',
+        price: 1380,
+        lunchPrice: 1100,
         steps: ['shirasu1.avif', 'shirasu2.avif'],
         videoLink: 'https://www.youtube.com/watch?v=example2',
         additionalInfo: [
@@ -1427,8 +1491,8 @@
         shorthand: '帆立',
         nicknames: ['帆立', 'ほたて', 'ホタテ', 'オクラ', 'okura', 'hotate'],
         category: 'パスタ',
-        price: '',
-        lunchPrice: '1100円',
+        price: 1100,
+        lunchPrice: 1100,
         steps: ['okura1.avif', 'okura2.avif', 'okura3.avif'],
         videoLink: 'https://www.youtube.com/watch?v=example2',
         additionalInfo: [
@@ -1464,8 +1528,8 @@
         nicknames: ['えび', '海老', 'ジェノベ', 'じぇのべ', 'jenobe', 'genobe', 'ebi'
         ],
         category: 'パスタ',
-        price: '1680円',
-        lunchPrice: '1200円',
+        price: 1680,
+        lunchPrice: 1200,
         steps: ['jeno1.avif'],
         videoLink: 'https://www.youtube.com/watch?v=example2',
         additionalInfo: [
@@ -1497,8 +1561,8 @@
         shorthand: 'カルボ',
         nicknames: ['カルボ', 'かるぼ', 'karubon', 'carbo', 'カルボーナラ', 'かるぼーなら', 'カルボナーラ', 'かるぼなーら', 'karbo', 'クラシック'],
         category: 'パスタ',
-        price: '1540円',
-        lunchPrice: '1250円',
+        price: 1540,
+        lunchPrice: 1250,
         steps: ['karubo1.avif', 'karubo2.avif', 'karubo3.avif'],
         videoLink: 'https://www.youtube.com/watch?v=example2',
         additionalInfo: [
@@ -1529,8 +1593,8 @@
         shorthand: 'ボロ',
         nicknames: ['ボロ', 'ぼろ', 'ボロネーズ', 'ぼろねーず', 'boro', 'boronezu', 'クラシック'],
         category: 'パスタ',
-        price: '1580円',
-        lunchPrice: '1350円',
+        price: 1580,
+        lunchPrice: 1350,
         steps: ['boro1.avif', 'boro2.avif'],
         videoLink: 'https://www.youtube.com/watch?v=example2',
         additionalInfo: [
@@ -1560,8 +1624,8 @@
         nicknames: ['めんたいこ', '明太子', 'ヤリイカ', 'やりいか', 'uni', 'yariika', 'mentaiko', 'uniika', 'ういいか', 'うにイカ', 'ウニイカ'
         ],
         category: 'パスタ',
-        price: '1780円',
-        lunchPrice: '1450円',
+        price: 1780,
+        lunchPrice: 1450,
         steps: ['uni1.avif'],
         videoLink: 'https://www.youtube.com/watch?v=example2',
         additionalInfo: [
@@ -1593,7 +1657,7 @@
         shorthand: 'Todays',
         nicknames: [''],
         category: 'パスタ',
-        price: '1?00円',
+        price: 1,
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
         videoLink: 'https://www.youtube.com/watch?v=example2',
         additionalInfo: [
@@ -1618,7 +1682,7 @@
         shorthand: '青えび',
         nicknames: ['青じそ', '青えび', '青海老', 'あおえび', 'あお海老', 'Aoebi', 'ebi', 'Aojiso'],
         category: 'パスタ',
-        price: '1100円',
+        price: 1100,
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
         videoLink: 'https://www.youtube.com/watch?v=example2',
         ingredients: {
@@ -1640,7 +1704,7 @@
         shorthand: 'バジアン',
         nicknames: ['ばジアン', 'バジあん', 'バジリコ', 'アンチョビ', 'あんちょび', 'パルメサン', 'bajian', 'bajiriko', 'anchobi'],
         category: 'パスタ',
-        price: '1380円',
+        price: 1380,
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
         videoLink: 'https://www.youtube.com/watch?v=example2',
         ingredients: {
@@ -1662,8 +1726,8 @@
         shorthand: 'しらす',
         nicknames: ['釜揚げ', 'かまあげ', 'しらす', '大葉', 'おおば', 'kamaage', 'shirasu', 'ooba', 'トマト', 'とトマト', 'tomato', 'sirasu'],
         category: 'パスタ',
-        price: '1380円',
-        lunchPrice: '1100円',
+        price: 1380,
+        lunchPrice: 1100,
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
         videoLink: 'https://www.youtube.com/watch?v=example2',
         ingredients: {
@@ -1685,7 +1749,7 @@
         shorthand: '生ノリ',
         nicknames: ['ホタテ', '帆立', 'ほたて', '生ノリ', 'namanori', 'nori', 'なまのり', 'mizuna', '水菜'],
         category: 'パスタ',
-        price: '1540円',
+        price: 1540,
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
         videoLink: 'https://www.youtube.com/watch?v=example2',
         ingredients: {
@@ -1707,7 +1771,7 @@
         shorthand: 'ズワイ',
         nicknames: ['かに', '蟹', 'ズワイ', 'ちり', 'zuwai', 'zwei', 'kani', 'ちりめんじゃこ'],
         category: 'パスタ',
-        price: '1540円',
+        price: 1540,
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
         videoLink: 'https://www.youtube.com/watch?v=example2',
         ingredients: {
@@ -1729,7 +1793,7 @@
         shorthand: 'タコパク',
         nicknames: ['パクチ', 'ぱくち', 'マダコ', 'まだこ', '真蛸', 'madako', 'pakuchi', 'タコパク', 'たこぱく', 'takopaku'],
         category: 'パスタ',
-        price: '1540円',
+        price: 1540,
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
         videoLink: 'https://www.youtube.com/watch?v=example2',
         ingredients: {
@@ -1751,8 +1815,8 @@
         shorthand: 'アラビ',
         nicknames: ['アラビアータ', 'Arabi', 'アラビ', 'Arabiata', '辛いトマトソース'],
         category: 'パスタ',
-        price: '1100円',
-        lunchPrice: '950円',
+        price: 1100,
+        lunchPrice: 950,
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
         videoLink: 'https://www.youtube.com/watch?v=example2',
         ingredients: {
@@ -1774,7 +1838,7 @@
         shorthand: 'マトリ',
         nicknames: ['マトリ', 'まとり', 'matori', 'アマトリ', 'あまとり', 'amatori', 'アマトリチャーナ', 'マトリチャーナ', 'まとりちゃーな', 'あまとりちゃーな', 'アマトリチャナ', 'あまとりちゃな'],
         category: 'パスタ',
-        price: '1580円',
+        price: 1580,
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
         videoLink: 'https://www.youtube.com/watch?v=example2',
         ingredients: {
@@ -1796,7 +1860,7 @@
         shorthand: 'バジトマト',
         nicknames: ['バジトマト', 'ばじとまと', 'bajitomato', 'tomato', 'mozza', 'トマト', 'とまと', 'モッツァレラ', 'もっつぁれら'],
         category: 'パスタ',
-        price: '1600円',
+        price: 1600,
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
         videoLink: 'https://www.youtube.com/watch?v=example2',
         ingredients: {
@@ -1818,8 +1882,8 @@
         shorthand: 'カルボ',
         nicknames: ['カルボ', 'かるぼ', 'karubon', 'carbo', 'カルボーナラ', 'かるぼーなら', 'カルボナーラ', 'かるぼなーら', 'karbo', 'クラシック'],
         category: 'パスタ',
-        price: '1580円',
-        lunchPrice: '1250円',
+        price: 1580,
+        lunchPrice: 1250,
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
         videoLink: 'https://www.youtube.com/watch?v=example2',
         ingredients: {
@@ -1841,8 +1905,8 @@
         shorthand: 'ボロ',
         nicknames: ['ボロ', 'ぼろ', 'ボロネーズ', 'ぼろねーず', 'boro', 'boronezu', 'クラシック'],
         category: 'パスタ',
-        price: '1600円',
-        lunchPrice: '1350円',
+        price: 1600,
+        lunchPrice: 1350,
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
         videoLink: 'https://www.youtube.com/watch?v=example2',
         ingredients: {
@@ -1864,7 +1928,7 @@
         shorthand: 'ボンゴレ',
         nicknames: ['大あさり', 'あさり', 'アサリ', 'asari', 'ooasari', 'bianko', 'ぼんごれ', 'ボンゴレ', 'bongore', '大アサリ', '大漁り'],
         category: 'パスタ',
-        price: '1680円',
+        price: 1680,
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
         videoLink: 'https://www.youtube.com/watch?v=example2',
         ingredients: {
@@ -1886,7 +1950,7 @@
         shorthand: 'ゴルゴン',
         nicknames: ['ゴルゴン', 'gorugon', 'ごるごん', 'gogogon', 'ごろごん', 'ゴロゴン'],
         category: 'パスタ',
-        price: '1600円',
+        price: 1600,
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
         videoLink: 'https://www.youtube.com/watch?v=example2',
         ingredients: {
@@ -1909,8 +1973,8 @@
         nicknames: ['めんたいこ', '明太子', 'ヤリイカ', 'やりいか', 'uni', 'yariika', 'mentaiko', 'uniika', 'ういいか', 'うにイカ', 'ウニイカ'
         ],
         category: 'パスタ',
-        price: '1780円',
-        lunchPrice: '1450円',
+        price: 1780,
+        lunchPrice: 1450,
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
         videoLink: 'https://www.youtube.com/watch?v=example2',
         ingredients: {
@@ -1933,8 +1997,8 @@
         nicknames: ['えび', '海老', 'ジェノベ', 'じぇのべ', 'jenobe', 'genobe', 'ebi'
         ],
         category: 'パスタ',
-        price: '1680円',
-        lunchPrice: '1200円',
+        price: 1680,
+        lunchPrice: 1200,
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
         videoLink: 'https://www.youtube.com/watch?v=example2',
         ingredients: {
@@ -1957,7 +2021,7 @@
         nicknames: ['しらす', 'しめじ', 'のりぼ', 'ノリボ', 'noribo', 'shirasu', 'shimeji', 'karubo', 'カルボ', 'かるぼ'
         ],
         category: 'パスタ',
-        price: '1580円',
+        price: 1580,
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
         videoLink: 'https://www.youtube.com/watch?v=example2',
         ingredients: {
@@ -1980,7 +2044,7 @@
         nicknames: ['ペッパ', 'ぺっぱ', 'peppa', 'pepper', 'tamago', '卵', '玉子', 'たまご'
         ],
         category: 'パスタ',
-        price: '1680円',
+        price: 1680,
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
         videoLink: 'https://www.youtube.com/watch?v=example2',
         ingredients: {
@@ -2002,8 +2066,8 @@
         shorthand: '帆立',
         nicknames: ['帆立', 'ほたて', 'ホタテ', 'オクラ', 'okura', 'hotate'],
         category: 'パスタ',
-        price: '',
-        lunchPrice: '1100円',
+        price: 1100,
+        lunchPrice: 1100,
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
         videoLink: 'https://www.youtube.com/watch?v=example2',
         ingredients: {
@@ -2025,8 +2089,8 @@
         nicknames: ['今週', 'こんしゅ', 'todays', 'today', 'tod'
         ],
         category: 'パスタ',
-        price: '',
-        lunchPrice: '1300円/1350円',
+        price: 0,
+        lunchPrice: 0,
         steps: ['step1-steak.jpg', 'step2-steak.jpg'],
         videoLink: 'https://www.youtube.com/watch?v=example2',
         ingredients: {
@@ -2049,7 +2113,7 @@
         nicknames: ['きりたて', '切り立て', '2しゅ', '2', '２', 'shu', 'hamumori', 'ハム盛り', 'ハムモリ', 'はむもり', 'meat', 'kiritate', '切りたて', '2shuu'
         ],
         category: 'シャルキュトリー',
-        price: '1760円',
+        price: 1760,
       }
       ,
       'c2.avif': {
@@ -2058,7 +2122,7 @@
         nicknames: ['コッパ', 'こっぱ', 'koppa', 'kopa', 'meat'
         ],
         category: 'シャルキュトリー',
-        price: '880円',
+        price: 880,
       },
       'c3.avif': {
         name: 'サラミ',
@@ -2066,15 +2130,15 @@
         nicknames: ['サラミ', 'さらみ', 'salami', 'sarami', 'meat'
         ],
         category: 'シャルキュトリー',
-        price: '880円',
+        price: 880,
       },
       'd1.avif': {
         name: '生ビール',
         shorthand: '生',
         nicknames: ['なま', '生', 'ビル', 'ビール', 'びる', 'びーる', 'biru', 'bi-ru', 'beer', 'nama'],
         category: 'ドリンク',
-        price: '770円',
-        lunchPrice: '770円',
+        price: 770,
+        lunchPrice: 770,
       }
       ,
       'd2.avif': {
@@ -2082,7 +2146,7 @@
         shorthand: 'ヘル',
         nicknames: ['ビル', 'ビール', 'びる', 'びーる', 'biru', 'bi-ru', 'heru', 'hell', 'ヘル', 'へる', 'purichen', 'puri', 'purichenheru', 'プリ', 'ぷり', 'ぷりちぇん'],
         category: 'ドリンク',
-        price: '1200円',
+        price: 1200,
       }
       ,
       'd3.avif': {
@@ -2090,7 +2154,7 @@
         shorthand: 'ガフ',
         nicknames: ['ビル', 'ビール', 'びる', 'びーる', 'biru', 'bi-ru', 'shanti', 'schanti', 'シャンディ', 'しゃんでぃ', 'schandi', 'shandi', 'ガフ', 'がふ', 'gafu'],
         category: 'ドリンク',
-        price: '880円',
+        price: 880,
       }
       ,
       'd4.avif': {
@@ -2098,7 +2162,7 @@
         shorthand: 'ノーアル',
         nicknames: ['ビル', 'ビール', 'びる', 'びーる', 'biru', 'bi-ru', '札幌', 'サッポロ', 'サポ', 'さぽ', 'さぽろ', 'さっぽろ', 'saporo', 'sapporo', 'non', 'alcohol', 'arukoru', 'non aru', 'ノアル', 'のある'],
         category: 'ドリンク',
-        price: '700円',
+        price: 700,
       }
       ,
       'd5.avif': {
@@ -2106,8 +2170,8 @@
         shorthand: 'サン赤',
         nicknames: ['san', 'sangria', 'sun', 'sanguria', 'jikka', '実家', 'さん', 'サン', 'サングリ', '赤', 'あか', 'アカ', 'aka', '自家製'],
         category: 'ドリンク',
-        price: '850円',
-        lunchPrice: '850円',
+        price: 850,
+        lunchPrice: 850,
       }
       ,
       'd6.avif': {
@@ -2115,8 +2179,8 @@
         shorthand: 'サン白',
         nicknames: ['san', 'sangria', 'sun', 'sanguria', 'jikka', '実家', 'さん', 'サン', 'サングリ', '白', 'しろ', 'シロ', 'shiro', '自家製'],
         category: 'ドリンク',
-        price: '850円',
-        lunchPrice: '880円',
+        price: 850,
+        lunchPrice: 850,
       }
       ,
       'd7.avif': {
@@ -2124,7 +2188,7 @@
         shorthand: 'GHB',
         nicknames: ['kurafuto', 'ginger', 'ginja', 'haiboru', 'hai', 'boru', 'ginjahai', 'high', 'highball', 'はいぼろ', 'ハイボール', 'はいぼーる', 'gbh', 'GBH', 'cgbh', 'クラフト'],
         category: 'ドリンク',
-        price: '850円',
+        price: 850,
       }
       ,
       'd8.avif': {
@@ -2132,7 +2196,7 @@
         shorthand: 'コーラHB',
         nicknames: ['kurafuto', 'kora', 'cola', 'コーラ', 'ハイボール', 'こーら', 'ハイボル', 'はいぼーる', 'はいぼる', 'highball', 'haiboru', 'コーラHB', 'こーらHB', 'CHB', 'khb', 'クラフト'],
         category: 'ドリンク',
-        price: '850円',
+        price: 850,
       }
       ,
       'd9.avif': {
@@ -2140,7 +2204,7 @@
         shorthand: 'CTS',
         nicknames: ['kashishisuti', 'soda', 'ソーダ', 'そーだ', 'ソダ', 'そだ', 'CTS'],
         category: 'ドリンク',
-        price: '850円',
+        price: 850,
       }
       ,
       'd10.avif': {
@@ -2148,7 +2212,7 @@
         shorthand: 'カンパリ',
         nicknames: ['kanpari', 'soda', 'ソーダ', 'そーだ', 'ソダ', 'そだ', 'カンパリ'],
         category: 'ドリンク',
-        price: '850円',
+        price: 850,
       }
       ,
       'd11.avif': {
@@ -2156,7 +2220,7 @@
         shorthand: 'HB',
         nicknames: ['high', 'highball', 'はいぼろ', 'ハイボール', 'はいぼーる', 'haiboru', 'HB'],
         category: 'ドリンク',
-        price: '770円',
+        price: 770,
       }
       ,
       'd12.avif': {
@@ -2164,7 +2228,7 @@
         shorthand: 'Lサワー',
         nicknames: ['remonsawa', 'lemonsawa', 'lemon', 'sour', 'れもん', 'れもんさわ', 'サワー', 'さわ', 'Lさわー', 'Lサワー'],
         category: 'ドリンク',
-        price: '770円',
+        price: 770,
       }
       ,
       'd13.avif': {
@@ -2172,7 +2236,7 @@
         shorthand: 'GA',
         nicknames: ['kurafuto', 'ginger', 'ginja', 'gingerale', 'ジンジャーエール', 'ジンジャーエル', 'じんじゃーえーる', 'じんじゃーえる', 'エル', 'える', 'ale', 'あれ', 'アレ', 'GA', 'クラフト'],
         category: 'ドリンク',
-        price: '800円',
+        price: 800,
       }
       ,
       'd14.avif': {
@@ -2180,7 +2244,7 @@
         shorthand: 'コーラ',
         nicknames: ['kurafuto', 'kora', 'cola', 'コーラ', 'jikasei', 'こーら', 'こら', 'コラ', 'クラフト', '自家製'],
         category: 'ドリンク',
-        price: '800円',
+        price: 800,
       }
       ,
       'd15.avif': {
@@ -2188,7 +2252,7 @@
         shorthand: 'Lソーダ',
         nicknames: ['soda', 'ソーダ', 'そーだ', 'ソダ', 'そだ', 'しちりあ', 'sicilia', 'レモン', 'れもん', 'lemonsoda', 'lemon soda'],
         category: 'ドリンク',
-        price: '850円',
+        price: 850,
       }
       ,
       'd16.avif': {
@@ -2196,7 +2260,7 @@
         shorthand: 'BOJ',
         nicknames: ['blood orange juice', 'orangejuice', 'orange juice', 'blood', 'ジュース', 'ジューズ', 'じゅーす', 'じゅーず', 'オレンジ', 'おれんじ', 'boj', 'oj'],
         category: 'ドリンク',
-        price: '700円',
+        price: 700,
       }
       ,
       'd17.avif': {
@@ -2204,7 +2268,7 @@
         shorthand: 'りんご',
         nicknames: ['ringo', 'ringo juice', 'apple juice', 'ringo jusu', 'jusu', 'ジュース', 'ジューズ', 'じゅーす', 'じゅーず', 'りんご', 'リンゴ', '完熟'],
         category: 'ドリンク',
-        price: '700円',
+        price: 700,
       }
       ,
       'd18.avif': {
@@ -2212,7 +2276,7 @@
         shorthand: 'サンペレグリノ',
         nicknames: ['water', '水', 'みず', 'sparkling water', 'sparkling', 'スパークリング', 'さんぺれぐりの', 'saint pellegrino', 'sparkeling water', 'sparkeling'],
         category: 'ドリンク',
-        price: '900円',
+        price: 900,
       }
       ,
       'd19.avif': {
@@ -2220,8 +2284,8 @@
         shorthand: 'シャンパン',
         nicknames: ['champagne', 'chanpagne', 'シャンパン', 'しゃんぱん', 'シャンパーニュ', 'グラス'],
         category: 'ドリンク',
-        price: '1800円〜',
-        lunchPrice: '1500円〜',
+        price: 1,
+        lunchPrice: 1,
       }
       ,
       'd20.avif': {
@@ -2229,8 +2293,8 @@
         shorthand: 'スプ',
         nicknames: ['supumante', 'spumante', 'sparkling wine', 'sparkeling wine', 'スパークリングワイン', 'ワイン', 'スプマンテ', 'すぷまんて', 'アットゥアーレ'],
         category: 'ドリンク',
-        price: '990円',
-        lunchPrice: '990円',
+        price: 990,
+        lunchPrice: 990,
       }
       ,
       'd21.avif': {
@@ -2238,7 +2302,7 @@
         shorthand: 'ミモサ',
         nicknames: ['italian mimosa', 'italian mimoza', 'ミモザ', 'みもさ', 'ミモサ', 'みもざ'],
         category: 'ドリンク',
-        price: '990円',
+        price: 990,
       }
       ,
       'd22.avif': {
@@ -2246,7 +2310,7 @@
         shorthand: 'りんごスプ',
         nicknames: ['リンゴスプマンテ', 'すぷまんて', 'スプマンテ', 'ringo', 'apple', 'ringo supumante', 'supumante', 'spumante', 'リンゴ', 'りんご'],
         category: 'ドリンク',
-        price: '990円',
+        price: 990,
       }
       ,
       'd23.avif': {
@@ -2254,7 +2318,7 @@
         shorthand: 'Vベリニ',
         nicknames: ['virgin bellini', 'bajinberini', 'バジンベリニ', 'ばじんべりに', 'ベリニ', 'べりに', 'bellini', 'Vベリーに', 'Vベリーニ'],
         category: 'ドリンク',
-        price: '850円',
+        price: 850,
       }
       ,
       'd24.avif': {
@@ -2262,7 +2326,7 @@
         shorthand: 'パンチ',
         nicknames: ['strawberry punch', 'punch', 'パンチ', 'ぱんち', 'ベリー', 'べりー', 'sutoroberi'],
         category: 'ドリンク',
-        price: '850円',
+        price: 850,
       }
       ,
       'd25.avif': {
@@ -2270,8 +2334,8 @@
         shorthand: 'コーヒ',
         nicknames: ['kohi', 'こーひー', 'ice', 'hot', 'アイス', 'ホット', 'coffe', 'coffee', 'coofe', 'koohi', 'こひ', 'コヒ'],
         category: 'ドリンク',
-        price: '550円',
-        lunchPrice: '300円',
+        price: 550,
+        lunchPrice: 300,
       }
       ,
       'd26.avif': {
@@ -2279,8 +2343,8 @@
         shorthand: 'エスプレッソ',
         nicknames: ['espresso', 'coffe', 'coffee', 'coofe', 'koohi', 'kohi', 'こーひー'],
         category: 'ドリンク',
-        price: '550円',
-        lunchPrice: '550円',
+        price: 550,
+        lunchPrice: 550,
       }
       ,
       'd27.avif': {
@@ -2288,8 +2352,8 @@
         shorthand: 'ラテ',
         nicknames: ['kohi', 'こーひー', 'ice', 'hot', 'アイス', 'ホット', 'coffe', 'coffee', 'coofe', 'koohi', 'ラテ', 'らて', 'latte', 'rate', 'ratte', 'ラッテ', 'らって', 'milk'],
         category: 'ドリンク',
-        price: '700円',
-        lunchPrice: '400円',
+        price: 700,
+        lunchPrice: 400,
       }
       ,
       'd28.avif': {
@@ -2297,16 +2361,16 @@
         shorthand: 'IT',
         nicknames: ['ice tea', 'ulon', 'oolong', 'iceulon', 'ice', 'ウーロン', 'IT'],
         category: 'ドリンク',
-        price: '550円',
-        lunchPrice: '300円',
+        price: 550,
+        lunchPrice: 300,
       },
       'd28a.avif': {
         name: 'アイスウーロン茶',
         shorthand: 'Iウーロン',
         nicknames: ['ice tea', 'ulon', 'oolong', 'iceulon', 'ice', 'ウーロン', 'IT', '茶', 'ちゃ', 'cha'],
         category: 'ドリンク',
-        price: '550円',
-        lunchPrice: '300円',
+        price: 550,
+        lunchPrice: 300,
       }
       ,
       'd29.avif': {
@@ -2314,8 +2378,8 @@
         shorthand: 'チャイ',
         nicknames: ['ice', 'hot', 'アイス', 'ホット', 'chai', 'ちゃい', 'チャイ', 'milk'],
         category: 'ドリンク',
-        price: '700円',
-        lunchPrice: '700円',
+        price: 700,
+        lunchPrice: 700,
       }
       // ,
       // 'tapas1.avif': {
@@ -2323,8 +2387,8 @@
       //   shorthand: 'カキ　レ',
       //   nicknames: ['kaki', 'namakaki', 'namagaki', 'かき', 'カキ', 'がき', 'ガキ', '生カキ', '生ガキ', '生かき', '生がき', 'なまかき', 'ナマカキ'],
       //   category: '前菜',
-      //   price: '550円',
-      //   lunchPrice: '550円',
+      //   price: 550,
+      //   lunchPrice: 550,
       //   steps: ['kakilemon.avif'],
       //   // additionalInfo: [
       //   //   { title: '仕上げ', content: '①レモン　②西洋ワサビ' }
@@ -2343,8 +2407,8 @@
         shorthand: 'カキ　レ',
         nicknames: ['kaki', 'namakaki', 'namagaki', 'かき', 'カキ', 'がき', 'ガキ', '生カキ', '生ガキ', '生かき', '生がき', 'なまかき', 'ナマカキ'],
         category: '前菜',
-        price: '550円',
-        lunchPrice: '550円',
+        price: 550,
+        lunchPrice: 550,
         steps: ['step1-duck.jpg', 'step2-duck.jpg', 'step3-duck.jpg'],
         videoLink: 'https://www.youtube.com/watch?v=example1',
         additionalInfo: [
@@ -2375,7 +2439,7 @@
         shorthand: 'カキ　サ',
         nicknames: ['kaki', 'namakaki', 'namagaki', 'かき', 'カキ', 'がき', 'ガキ', '生カキ', '生ガキ', '生かき', '生がき', 'なまかき', 'ナマカキ'],
         category: '前菜',
-        price: '550円',
+        price: 550,
       }
       ,
       'g3.avif': {
@@ -2383,8 +2447,8 @@
         shorthand: 'ガンベロ',
         nicknames: ['ガンベロ', 'ganbero', '赤海老', 'あかえび', 'えび', '海老', 'エビ', 'akaebi', 'ebi', 'がんべろ', 'ガンベロロッソ', 'がんべろろっそ'],
         category: '前菜',
-        price: '550円',
-        lunchPrice: '550円',
+        price: 550,
+        lunchPrice: 550,
       }
       ,
       'g4.avif': {
@@ -2392,7 +2456,7 @@
         shorthand: 'タコポキ',
         nicknames: ['madako', 'abokado', 'avocado', 'takopoki', '真蛸', 'マダコ', 'まだこ', 'アボカド', 'あぼかど', 'タコアボ', 'たこあぼ'],
         category: '前菜',
-        price: '880円',
+        price: 880,
       }
       ,
       'g5.avif': {
@@ -2400,7 +2464,7 @@
         shorthand: 'タコマリネ',
         nicknames: ['たこマリネ', 'タコマリネ', '真蛸', '真だこ', '真ダコ', '真タコ', '真たこ', 'takomarine', 'tomato', 'salsa', 'tomato salsa', 'tomatosalsa', '青唐辛子'],
         category: '前菜',
-        price: '880円',
+        price: 880,
       }
       ,
       'g6.avif': {
@@ -2408,7 +2472,7 @@
         shorthand: 'ホタテ',
         nicknames: ['hotate karupaccho', '帆立', 'ホタテ', 'ほたて', 'カルパッチョ', 'かるぱっちょ'],
         category: '前菜',
-        price: '880円',
+        price: 880,
       }
       ,
       'h1.avif': {
@@ -2416,7 +2480,7 @@
         shorthand: 'ポテサラ',
         nicknames: ['potetosarada', 'ポテトサラダ', 'ぽてとさらだ', 'sarada', 'salad', 'サラダ', 'さらだ', 'ポテト', 'ぽてと'],
         category: '温かい前菜',
-        price: '880円',
+        price: 880,
       }
       ,
       'h2.avif': {
@@ -2424,7 +2488,7 @@
         shorthand: 'アヒージョ',
         nicknames: ['アヒージョ', 'しらーじょ', 'しらージョ', 'ahijo', 'shirajo', 'shirasu', 'しらす', 'ebi', 'えび', 'エビ', '海老', 'sirasu'],
         category: '温かい前菜',
-        price: '1050円',
+        price: 1050,
       }
       ,
       'h3.avif': {
@@ -2432,7 +2496,7 @@
         shorthand: 'カマンベル',
         nicknames: ['kamanberu', 'カマンベール', 'かまんべーる', 'mentaiko', '明太子', 'カマンベル', 'かまんベる'],
         category: '温かい前菜',
-        price: '1280円',
+        price: 1280,
       }
       ,
       'h4.avif': {
@@ -2440,7 +2504,7 @@
         shorthand: 'トリッパ',
         nicknames: ['tripper', 'torippa', 'hachinosu', 'とりぱ', 'トリパ', 'トリッパ', 'とりっぱ', 'hachisosu', 'そす', 'ソス', 'のす', 'ノス', 'beef', 'gyuuhachinosu', 'gyuhachinosu'],
         category: '温かい前菜',
-        price: '1100円',
+        price: 1100,
       }
       ,
       'h5.avif': {
@@ -2448,7 +2512,7 @@
         shorthand: 'あさり',
         nicknames: ['wain', 'wine', 'wine mushi', 'wain mushi', 'asari', 'ooasari', 'わいんむし', 'ワイン蒸し', 'ワインムシ', '大アサリ', 'おおあさり', '大漁り', 'おおあさり', 'あさり', 'アサリ'],
         category: '温かい前菜',
-        price: '1540円',
+        price: 1540,
       }
       ,
       'h6.avif': {
@@ -2456,7 +2520,7 @@
         shorthand: 'ソーセージ',
         nicknames: ['gurirudo soseji', 'sosejiasoto', 'niku', 'grill', 'グリル', 'sauce', 'sosu', 'asort', 'asoto', 'そせじ', 'ソーセージ', 'そーせーじ', 'アソート', 'あそーと', 'お肉屋さんの'],
         category: '温かい前菜',
-        price: '1280円',
+        price: 1280,
       }
       ,
       'h7.avif': {
@@ -2464,7 +2528,7 @@
         shorthand: 'モツ',
         nicknames: ['motsu', 'shiromutsu', 'motsuarabiata', 'arabiata', 'モツ', 'もつ', 'アラビアタ', 'アラビアータ', 'あらびあーた', '白モツ', '白もつ', 'karaitomato', 'からいとまと', 'カライトマト'],
         category: '温かい前菜',
-        price: '1100円',
+        price: 1100,
       }
       ,
       'h8.avif': {
@@ -2472,7 +2536,7 @@
         shorthand: 'うにクレソン',
         nicknames: ['unikureson', 'kureson', 'garlic sote', 'garikkusote', 'Kress', 'クレソン', 'くれそん', 'ガーリック', 'がーりっく', 'そてー', 'ソテー'],
         category: '温かい前菜',
-        price: '1350円',
+        price: 1350,
       }
       ,
       'h9.avif': {
@@ -2480,7 +2544,7 @@
         shorthand: 'チーズオーブン',
         nicknames: ['cheese', 'mash potato', 'masshupoteto', 'obunyaki', 'ovenyaki', 'mashpotato', '4cheese', '4chizu', '4chiizu', 'チーズ', '4チーズ', '4種', 'マッシュポテト', 'まっしゅぽてと', 'おぶんやき', 'オブン', 'オーブン', 'オーブン焼き', 'おーぶんやき'],
         category: '温かい前菜',
-        price: '1280円',
+        price: 1280,
       }
       ,
       'h10.avif': {
@@ -2488,7 +2552,7 @@
         shorthand: 'トリュフ',
         nicknames: ['truffletoast', 'buttertruffle', 'shirotruffle', 'truffle toast', 'トリュフ', 'バタートースト', 'トースト'],
         category: '温かい前菜',
-        price: '400円',
+        price: 400,
       }
       ,
       'h11.avif': {
@@ -2496,7 +2560,7 @@
         shorthand: 'ガート',
         nicknames: ['garlic toast', 'garlictoast', 'ガート', 'がーと', 'ガーリック', 'がーりっく', 'gato', 'garikkutosuto', 'garikku tost', 'garikku tosuto', 'トースト', 'とーすと'],
         category: '温かい前菜',
-        price: '300円',
+        price: 300,
       }
       ,
       'hon1.avif': {
@@ -2504,7 +2568,7 @@
         shorthand: 'ツラミ',
         nicknames: ['tsurami', 'karupacco', 'carpaccio', 'ツラミ', 'つらみ', 'カルパチョ', 'カルパッチョー', 'かるぱっちょー', 'turami'],
         category: '本日のおすすめ',
-        price: '1380円',
+        price: 1380,
       }
       ,
       'hon2.avif': {
@@ -2512,7 +2576,7 @@
         shorthand: '桜えび・Monthly',
         nicknames: ['sakuraebi', 'ebi', 'さくらえび', 'サクラエビ', '桜えび', 'sakura ebi'],
         category: 'Pasta',
-        price: '1800円',
+        price: 1800,
       }
       ,
       'hon3.avif': {
@@ -2520,7 +2584,7 @@
         shorthand: 'ティラミス',
         nicknames: ['jikasei', 'tiramisu', 'ティラミス', 'てぃらみす'],
         category: '本日のおすすめ',
-        price: '650円',
+        price: 650,
       }
       ,
       's1.avif': {
@@ -2528,7 +2592,7 @@
         shorthand: 'シーザー',
         nicknames: ['caesar', 'salad', 'sarada', 'shizasarada', 'classic', 'シーザーサラダ', 'しーざーさらだ', 'シザサラダ', 'しざさらだ', 'シーザサラダ', 'しーざさらだ', 'シザーサラダ', 'しざーさらだ', 'half', 'full', 'ハーフ', 'フル', 'はーふ', 'ふる'],
         category: 'サラダ',
-        price: 'H1150・F1430円',
+        price: [1150, '（H）・', 1430, '（F）'],
       }
       // ,
       // 's2.avif': {
@@ -2544,7 +2608,7 @@
         shorthand: 'コブ',
         nicknames: ['salad', 'sarada', 'abokado', 'kobusarada', 'kani', 'half', 'full', 'ハーフ', 'フル', 'はーふ', 'ふる', 'アボカド', 'こぶ', 'コブ', 'さらだ', 'サラダ'],
         category: 'サラダ',
-        price: 'H1150・F1430円',
+        price: [1150, '（H）・', 1430, '（F）'],
       }
       ,
       's4.avif': {
@@ -2552,7 +2616,7 @@
         shorthand: 'クレソンサラダ',
         nicknames: ['bacon', 'kureson', 'kreson', 'bekon', 'sarada', 'atatakaisarada'],
         category: 'サラダ',
-        price: '1430円',
+        price: 1430,
       }
       ,
       'set0.avif': {
@@ -2560,8 +2624,7 @@
         shorthand: 'B',
         nicknames: ['shumatsu set', 'set', 'lunch set', 'セット', 'せっと'],
         category: 'ランチ・セット',
-        price: '',
-        lunchPrice: '500円',
+        lunchPrice: 500,
       }
       ,
       'set1.avif': {
@@ -2569,8 +2632,7 @@
         shorthand: 'A',
         nicknames: ['set', 'lunch set', 'セット', 'せっと', 'デリ', 'パン', 'ぱん', 'でり'],
         category: 'ランチ・セット',
-        price: '',
-        lunchPrice: '250円',
+        lunchPrice: 250,
       }
       ,
       'set2.avif': {
@@ -2578,8 +2640,7 @@
         shorthand: 'B',
         nicknames: ['set', 'lunch set', 'セット', 'せっと', 'スープ', 'デリ', 'パン', 'すーぷ', 'でり', 'ぱん'],
         category: 'ランチ・セット',
-        price: '',
-        lunchPrice: '350円',
+        lunchPrice: 350,
       }
       ,
       'set3.avif': {
@@ -2587,8 +2648,7 @@
         shorthand: 'C',
         nicknames: ['set', 'lunch set', 'セット', 'せっと', 'すーぷ', 'さらだ', 'ぱん', 'スープ', 'さらだ', 'ぱん'],
         category: 'ランチ・セット',
-        price: '',
-        lunchPrice: '700円',
+        lunchPrice: 700,
       }
       ,
       't1.avif': {
@@ -2596,8 +2656,8 @@
         shorthand: '人参',
         nicknames: ['ninjin', 'ninjintsuna', 'kyarottorape', 'carrot', 'tsuna', 'tuna', '人参', 'キャロットラペ', 'マリネ', 'ツナ', 'にんじん', 'ニンジン', 'きゃろっとらぺ', 'ラペ', 'らぺ', 'つな'],
         category: '前菜',
-        price: '650円',
-        lunchPrice: '650円',
+        price: 650,
+        lunchPrice: 650,
       }
       ,
       't2.avif': {
@@ -2605,8 +2665,8 @@
         shorthand: 'いいだこ',
         nicknames: ['yariika', 'chichukaifu marine', 'マリネ', '地中海風', 'マリネ', 'まりね', 'いいダコ', 'いいだこ', 'イイダコ', '飯蛸', '飯ダコ', '飯だこ', '飯タコ', '飯たこ', 'iidako', 'idako'],
         category: '前菜',
-        price: '990円',
-        lunchPrice: '990円',
+        price: 990,
+        lunchPrice: 990,
       }
       ,
       't3.avif': {
@@ -2614,7 +2674,7 @@
         shorthand: 'ハニー',
         nicknames: ['honey', 'cheese', 'honeycheese', 'tofu', 'ichijika', 'natsu', 'nuts', 'なつ', 'ナツ', 'ナッツ', 'なっつ', 'ハニーチーズ', 'はにーちーず', 'チーズ', 'チズ', 'ちず', 'ちーず', 'ハニチズ', 'はにちず', 'はにちーず', 'ハニチーズ', 'hani'],
         category: '前菜',
-        price: '980円',
+        price: 980,
       }
       ,
       't4.avif': {
@@ -2622,7 +2682,7 @@
         shorthand: 'ブラータ',
         nicknames: ['burata', 'brata', 'burrata', 'cheese', 'namahamu', 'ブラータ', 'チーズ', 'チズ', 'ちず', 'ちーず', 'ブラタ', 'ぶらた', 'ぶらーた', 'hamu', 'はむ', 'ハム', 'chizu', 'chiizu', 'chis'],
         category: '前菜',
-        price: '1480円',
+        price: 1480,
       }
       ,
       't5.avif': {
@@ -2630,7 +2690,7 @@
         shorthand: 'チーモリ',
         nicknames: ['moriawase', 'cheese', 'チーズ', 'チズ', 'ちず', 'ちーず', 'chizu', 'chiizu', 'chis', 'もり', 'モリ', 'もりあわせ', 'モリアワセ'],
         category: '前菜',
-        price: '1480円',
+        price: 1480,
       }
       ,
       't6.avif': {
@@ -2638,7 +2698,7 @@
         shorthand: 'ピクルス',
         nicknames: ['pikurusu', 'pickels', 'pickles', 'jikasei', 'ピクルス', 'ピックルス', 'ピクルッス', 'ぴくるす', 'ぴっくるす', 'ぴくるっす'],
         category: '前菜',
-        price: '600円',
+        price: 600,
       }
       ,
       't7.avif': {
@@ -2646,7 +2706,7 @@
         shorthand: 'オリーブ',
         nicknames: ['oribu', 'olives', 'jikasei', 'おりぶ', 'オリブ', 'オーリブ', 'オリーブ', 'おりぶ', 'おーりぶ', 'おりーぶ', '2shu', '2種', '2種オリーブ', '2種おりーぶ'],
         category: '前菜',
-        price: '600円',
+        price: 600,
       }
       ,
       'tan1.avif': {
@@ -2654,8 +2714,8 @@
         shorthand: 'パン',
         nicknames: ['pan', 'yakitate', 'maru', 'set', 'lunch set', 'セット', 'せっと', 'ぱん', 'パン', '焼きたて', 'やきたて', '焼き立て', 'ヤキタテ'],
         category: '単品',
-        price: '150円',
-        lunchPrice: '150円',
+        price: 150,
+        lunchPrice: 150,
       }
       ,
       'tan2.avif': {
@@ -2663,8 +2723,8 @@
         shorthand: 'デリ',
         nicknames: ['deli', 'vegetable', 'daily', 'set', 'lunch set', 'セット', 'せっと', 'でり', 'デリ'],
         category: '単品',
-        price: '150円',
-        lunchPrice: '150円',
+        price: 150,
+        lunchPrice: 150,
       }
       ,
       'tan3.avif': {
@@ -2672,8 +2732,8 @@
         shorthand: 'スープ',
         nicknames: ['set', 'lunch set', 'soup', 'supu', 'suupu', 'セット', 'せっと', 'スープ', 'すぷ', 'スプ', 'すーぷ'],
         category: '単品',
-        price: '200円',
-        lunchPrice: '200円',
+        price: 200,
+        lunchPrice: 200,
       }
       ,
       'tan4.avif': {
@@ -2681,8 +2741,8 @@
         shorthand: 'サラダ',
         nicknames: ['salad', 'tuna', 'set', 'lunch set', 'sarada', 'セット', 'せっと', 'さらだ', 'サラダ'],
         category: '単品',
-        price: '500円',
-        lunchPrice: '500円',
+        price: 500,
+        lunchPrice: 500,
       }
       ,
       'w0.avif': {
@@ -2690,8 +2750,8 @@
         shorthand: 'W',
         nicknames: ['glass wine', 'wine', 'gurasu', 'ワイン', 'わいん', 'wain', 'グラス'],
         category: 'ワイン',
-        price: '990円',
-        lunchPrice: '990円',
+        price: 990,
+        lunchPrice: 990,
       }
       ,
       'w1.avif': {
@@ -2699,7 +2759,7 @@
         shorthand: 'ピ',
         nicknames: ['pikkoro', 'piccolo', 'ワイン', 'わいん', 'ぴころ', 'ピコロ', 'ぴっころ', 'wain', 'pikolo'],
         category: 'ワイン',
-        price: '芽育、河合、松田、坂東：1620円',
+        price: ['芽育、河合、松田、坂東', 1620],
       }
       ,
       'w11.avif': {
@@ -2707,7 +2767,7 @@
         shorthand: 'ピ',
         nicknames: ['pikkoro', 'piccolo', 'ワイン', 'わいん', 'ぴころ', 'ピコロ', 'ぴっころ', 'wain', 'pikolo'],
         category: 'ワイン',
-        price: 'みちょぱ 、森、水上、小田：1930円',
+        price: ['みちょぱ 、森、水上、小田', 1930],
       }
       ,
       'w12.avif': {
@@ -2715,7 +2775,7 @@
         shorthand: 'ピ',
         nicknames: ['pikkoro', 'piccolo', 'ワイン', 'わいん', 'ぴころ', 'ピコロ', 'ぴっころ', 'wain', 'pikolo'],
         category: 'ワイン',
-        price: '有村、高畑、玉森、岡田：2420円',
+        price: ['有村、高畑、玉森、岡田', 2420],
       }
       ,
       'w13.avif': {
@@ -2723,7 +2783,7 @@
         shorthand: 'ピ',
         nicknames: ['pikkoro', 'piccolo', 'ワイン', 'わいん', 'ぴころ', 'ピコロ', 'ぴっころ', 'wain', 'pikolo'],
         category: 'ワイン',
-        price: '長谷川、吉瀬、永山、鈴木：2850円',
+        price: ['長谷川、吉瀬、永山、鈴木', 2850],
       }
       ,
       'w14.avif': {
@@ -2731,7 +2791,7 @@
         shorthand: 'ピ',
         nicknames: ['pikkoro', 'piccolo', 'ワイン', 'わいん', 'ぴころ', 'ピコロ', 'ぴっころ', 'wain', 'pikolo'],
         category: 'ワイン',
-        price: '山口智子 、リリー・フランキー：3470円',
+        price: ['山口智子 、リリー・フランキー', 3470],
       }
       ,
       'w2.avif': {
@@ -2739,7 +2799,7 @@
         shorthand: 'デ',
         nicknames: ['dekyanta', 'dekyanter', 'dekanter', 'ワイン', 'わいん', 'できゃんた', 'wain'],
         category: 'ワイン',
-        price: '芽育、河合、松田、坂東：2990円',
+        price: ['芽育、河合、松田、坂東', 2990],
       }
       ,
       'w21.avif': {
@@ -2747,7 +2807,7 @@
         shorthand: 'デ',
         nicknames: ['dekyanta', 'dekyanter', 'dekanter', 'ワイン', 'わいん', 'できゃんた', 'wain'],
         category: 'ワイン',
-        price: 'みちょぱ 、森、水上、小田：3650円',
+        price: ['みちょぱ 、森、水上、小田', 3650],
       }
       ,
       'w22.avif': {
@@ -2755,7 +2815,7 @@
         shorthand: 'デ',
         nicknames: ['dekyanta', 'dekyanter', 'dekanter', 'ワイン', 'わいん', 'できゃんた', 'wain'],
         category: 'ワイン',
-        price: '有村、高畑、玉森、岡田：4600円',
+        price: ['有村、高畑、玉森、岡田', 4600],
       }
       ,
       'w23.avif': {
@@ -2763,7 +2823,7 @@
         shorthand: 'デ',
         nicknames: ['dekyanta', 'dekyanter', 'dekanter', 'ワイン', 'わいん', 'できゃんた', 'wain'],
         category: 'ワイン',
-        price: '長谷川、吉瀬、永山、鈴木：5450円',
+        price: ['長谷川、吉瀬、永山、鈴木', 5450],
       }
       ,
       'w24.avif': {
@@ -2771,7 +2831,7 @@
         shorthand: 'デ',
         nicknames: ['dekyanta', 'dekyanter', 'dekanter', 'ワイン', 'わいん', 'できゃんた', 'wain'],
         category: 'ワイン',
-        price: '山口智子 、リリー・フランキー：6650円',
+        price: ['山口智子 、リリー・フランキー', 6650],
       }
       ,
       'w3.avif': {
@@ -2779,37 +2839,177 @@
         shorthand: 'ボ',
         nicknames: ['botoru', 'bottoru', 'bottle', 'bottle wine', 'ワイン', 'わいん', 'ぼとる', 'wain'],
         category: 'ワイン',
-        price: '芽育、河合、松田、坂東：3990円',
+        price: ['芽育、河合、松田、坂東', 3990],
       },
       'w31.avif': {
         name: 'ボトル 3,4',
         shorthand: 'ボ',
         nicknames: ['botoru', 'bottoru', 'bottle', 'bottle wine', 'ワイン', 'わいん', 'ぼとる', 'wain'],
         category: 'ワイン',
-        price: 'みちょぱ 、森、水上、小田：4950円',
+        price: ['みちょぱ 、森、水上、小田', 4950],
       },
       'w32.avif': {
         name: 'ボトル 5,6',
         shorthand: 'ボ',
         nicknames: ['botoru', 'bottoru', 'bottle', 'bottle wine', 'ワイン', 'わいん', 'ぼとる', 'wain'],
         category: 'ワイン',
-        price: '有村、高畑、玉森、岡田：6400円',
+        price: ['有村、高畑、玉森、岡田', 6400],
       },
       'w33.avif': {
         name: 'ボトル 7,8',
         shorthand: 'ボ',
         nicknames: ['botoru', 'bottoru', 'bottle', 'bottle wine', 'ワイン', 'わいん', 'ぼとる', 'wain'],
         category: 'ワイン',
-        price: '長谷川、吉瀬、永山、鈴木：7650円',
+        price: ['長谷川、吉瀬、永山、鈴木', 7650],
       },
       'w34.avif': {
         name: 'ボトル 9',
         shorthand: 'ボ',
         nicknames: ['botoru', 'bottoru', 'bottle', 'bottle wine', 'ワイン', 'わいん', 'ぼとる', 'wain'],
         category: 'ワイン',
-        price: '山口智子 、リリー・フランキー：9450円',
+        price: ['山口智子 、リリー・フランキー', 9450],
       }
     };
+
+    /*
+    Data:
+      const menuItems = {
+        'm1.avif': {
+            name: '鶏もも肉のグリル',
+            shorthand: 'チキン',
+            nicknames: ['鶏', 'にわとり', 'ニワトリ', 'チキン', 'chicken', 'ちきん', 'momo', 'chikin', 'chikkin', 'ポルチーニクリームソース'],
+            category: 'メイン',
+            price: [1050, 1250],
+            lunchPrice: [850, 1000],
+            quantity: 1,
+            steps: ['step1-duck.jpg', 'step2-duck.jpg', 'step3-duck.jpg'],
+      },
+        'm2.avif': {
+            name: '特別ワイン',
+            category: 'ワイン',
+            price: ['芽育、河合、松田、坂東：', 1620],
+            quantity: 1
+      },
+        'm3.avif': {
+            name: 'ステーキ',
+            category: 'メイン',
+            price: [1620, '（H）・', 1800, '（F）'],
+            lunchPrice: [1400, '（H）・', 1600, '（F）'],
+            quantity: 1
+      },
+        'm4.avif': {
+            name: 'シンプルサラダ',
+            category: '前菜',
+            price: 2380,
+            lunchPrice: 1,
+            quantity: 1
+      }
+    };
+
+     const multipleItems = {
+        'm1.avif': {
+        priceMultiple: [150, 200],
+        lunchPriceMultiple: [100, 150]
+      },
+    'm3.avif': {
+        priceMultiple: [200, 250],
+        lunchPriceMultiple: [150, 200]
+      },
+    'm4.avif': {
+        priceMultiple: 300,  // Single multiple for single price
+        lunchPriceMultiple: 200
+      }
+    };
+
+    Expected Behavior:
+      'm1.avif' (array):
+          Quantity 1: "1050円・1250円" / "ランチ: 850円・1000円"
+          Quantity 2: "1200円・1450円" / "ランチ: 950円・1150円"
+      'm2.avif' (label + price, no multiples):
+          Quantity 1: "芽育、河合、松田、坂東：1620円"
+      'm3.avif' (price + label + price + label):
+          Quantity 1: "1620円（H）・1800円（F）" / "ランチ: 1400円（H）・1600円（F）"
+          Quantity 2: "1820円（H）・2050円（F）" / "ランチ: 1550円（H）・1800円（F）"
+      'm4.avif' (single prices):
+          Quantity 1: "2380円" / "ランチ: 1円"
+          Quantity 2: "2680円" (2380+300) / "ランチ: 201円" (1+200)
+          Quantity 3: "2980円" (2380+300×2) / "ランチ: 401円" (1+200×2)
+    */
+
+
+    const multipleItems = {
+      // 'm1.avif': {
+      //   priceMultiple: 150,
+      //   lunchPriceMultiple: 100
+      // },
+
+      'd1.avif': {
+        priceMultiple: 770,
+        lunchPriceMultiple: 770
+      },
+      'd5.avif': {
+        priceMultiple: 850,
+        lunchPriceMultiple: 850
+      },
+      'd6.avif': {
+        priceMultiple: 850,
+        lunchPriceMultiple: 850
+      },
+      'd11.avif': {
+        priceMultiple: 770,
+      },
+      'd20.avif': {
+        priceMultiple: 990,
+        lunchPriceMultiple: 990
+      },
+      'd25.avif': {
+        priceMultiple: 550,
+        lunchPriceMultiple: 300
+      },
+      'd27.avif': {
+        priceMultiple: 700,
+        lunchPriceMultiple: 400
+      },
+      'tan1.avif': {
+        priceMultiple: 150,
+        lunchPriceMultiple: 150
+      },
+      'set1.avif': {
+        lunchPriceMultiple: 250
+      },
+      'set2.avif': {
+        lunchPriceMultiple: 350
+      },
+      'set3.avif': {
+        lunchPriceMultiple: 700
+      },
+      'h2.avif': {
+        priceMultiple: 150,
+      },
+      'h10.avif': {
+        priceMultiple: 400,
+      },
+      'h11.avif': {
+        priceMultiple: 300,
+      },
+      'g1.avif': {
+        priceMultiple: 550,
+        lunchPriceMultiple: 550
+      },
+      'g2.avif': {
+        priceMultiple: 550,
+      },
+      'g3.avif': {
+        priceMultiple: 550,
+        lunchPriceMultiple: 550
+      },
+      'w0.avif': {
+        priceMultiple: 990,
+        lunchPriceMultiple: 990
+      },
+
+    };
+
 
     const recipeItems = {
       '1.avif': {
@@ -3016,7 +3216,7 @@
       },
       '11.avif': {
         name: 'ハニーチーズ豆腐',
-        nicknames: ['honey', 'cheese', 'tofu', 'チーズ', '豆腐', 'とうふ', 'トウフ', 'ちず'],
+        nicknames: ['honey', 'cheese', 'tofu', 'チーズ', '豆腐', 'とうふ', 'トウフ', 'ちず', 'hani'],
         category: '前菜',
         tags: ['？mins', '前菜'],
         ingredients: {
@@ -3696,6 +3896,7 @@
           'すりおろしドレッシング': '150cc(300cc)',
           'コブドレッシング': '300cc(600cc)'
         },
+        steps: ['kobudres01.avif', 'kobudres02.avif'],
         stepText: `"""
         0. 2倍量で1回戦分
         1. 野菜をミキサーにかけるので下処理し、一口大に切っておく
@@ -3814,7 +4015,7 @@
       },
       '48.avif': {
         name: '無花果とナッツのハニーチーズ豆腐',
-        nicknames: ['ichijiku', 'natsu', 'honey', 'cheese', 'tofu', 'chizu', 'ハニー', 'チーズ', 'とふ', 'トウフ', 'とうふ', '豆腐', 'ナッツ'],
+        nicknames: ['ichijiku', 'natsu', 'honey', 'cheese', 'tofu', 'chizu', 'ハニー', 'チーズ', 'とふ', 'トウフ', 'とうふ', '豆腐', 'ナッツ', 'hani'],
         category: 'デザート',
         tags: ['？mins', 'デザート'],
         ingredients: {
@@ -3828,6 +4029,7 @@
           '無花果': '35g',
           'ドライフルーツ（マンゴ、クランべり）': '35g'
         },
+        steps: ['hani01.avif', 'hani02.avif', 'hani03.avif', 'hani04.avif', 'hani05.avif', 'hani06.avif', 'hani07.avif', 'hani08.avif', 'hani09.avif', 'hani10.avif', 'hani11.avif', 'hani12.avif', 'hani13.avif', 'hani14.avif', 'hani15.avif', 'hani16.avif', 'hani17.avif', 'hani18.avif', 'hani19.avif', 'hani20.avif', 'hani21.avif', 'hani22.avif', 'hani23.avif', 'hani24.avif', 'hani25.avif', 'hani26.avif', 'hani27.avif', 'hani28.avif', 'hani29.avif', 'hani30.avif', 'hani31.avif', 'hani32.avif', 'hani33.avif', 'hani34.avif'],
         stepText: `"""
         ハニー準備
         1. いれこに、上白糖をぐるぐるラップして入れる
@@ -3853,8 +4055,8 @@
         tags: ['？mins', '前菜'],
         ingredients: {
           'タコ': '1kg',
-          '赤タマネギ(スライス)': '0.5ケ',
-          '玉ネギ(みじん切り)': '1ケ',
+          '赤タマネギ(スライス)': '0.5ケ（量は違う、確認して！）',
+          '玉ネギ(みじん切り)': '1ケ（量は違う、確認して！）',
           '正油': '150g',
           'ごま油': '150g',
           'にんにく(すりおろし)': '25g',
@@ -3862,6 +4064,7 @@
           '-白ごま': '25g',
           'とびっこ': '100g',
         },
+        steps: ['takososu01.avif', 'takososu02.avif', 'takososu03.avif', 'takososu04.avif', 'takososu05.avif', 'takososu06.avif', 'takososu07.avif', 'takososu08.avif'],
         stepText: `"""
         1. 赤玉ネギはスライス、玉ネギはみじん切りにして水でさらしておく
         2. タコはぶつ切りにする(乱切り) (隠し包丁入れる)
@@ -3964,8 +4167,8 @@
         nicknames: ['アラビアータ', 'Arabi', 'アラビ', 'Arabiata', '辛いトマトソース'],
         category: 'ソース',
         tags: ['5mins', 'パスタ'],
-        price: '1100円',
-        lunchPrice: '950円',
+        price: 1100,
+        lunchPrice: 950,
         steps: ['arabi0.avif', 'arabi1.avif', 'arabi2.avif', 'arabi3.avif', 'arabi4.avif'],
         videoLink: 'https://www.youtube.com/watch?v=example2',
         additionalInfo: [
@@ -3990,24 +4193,51 @@
         5. 水分がちょっと蒸発してきたら、火をとめる
         """`
       },
-      '.avif': {
-        name: '',
-        category: '',
-        tags: ['？mins', ''],
+      '53.avif': {
+        name: 'アサリ',
+        nicknames: ['asari', 'あさり'],
+        category: '材料',
+        tags: ['2mins', '材料'],
         ingredients: {
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': ''
+          'アサリ': 'x',
+          '塩': '2杯'
         },
+        steps: ['asari01.avif'],
+        stepText: `"""
+        1. あさりをゴシゴシして洗って
+        2. 一タッパに塩2杯（命スプーン）
+        """`
+      },
+      '54.avif': {
+        name: '生牡蠣',
+        nicknames: ['かき', 'kaki', 'namakaki', 'gaki', 'namagaki'],
+        category: '材料',
+        tags: ['10mins', '材料'],
+        ingredients: {
+          'かき': '40?',
+        },
+        steps: ['kakiclean01.avif', 'kakiclean02.avif', 'kakiclean03.avif', 'kakiclean04.avif'],
+        stepText: `"""
+        1. かきをブラシでゴシゴシして汚れをとる
+        2. 
+        """`
+      },
+      '55.avif': {
+        name: 'レモン　カット',
+        nicknames: ['lemon', 'れもん', 'cut', 'カット'],
+        category: 'カット',
+        tags: ['5mins', 'カット'],
+        ingredients: {
+          'レモン': '~8',
+        },
+        steps: ['remon01.avif', 'remon02.avif', 'remon03.avif', 'remon04.avif'],
         stepText: `"""
         1. 
         """`
       },
       '.avif': {
         name: '',
+        nicknames: [''],
         category: '',
         tags: ['？mins', ''],
         ingredients: {
@@ -4018,294 +4248,7 @@
           '': '',
           '': ''
         },
-        stepText: `"""
-        1. 
-        """`
-      },
-      '.avif': {
-        name: '',
-        category: '',
-        tags: ['？mins', ''],
-        ingredients: {
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': ''
-        },
-        stepText: `"""
-        1. 
-        """`
-      },
-      '.avif': {
-        name: '',
-        category: '',
-        tags: ['？mins', ''],
-        ingredients: {
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': ''
-        },
-        stepText: `"""
-        1. 
-        """`
-      },
-      '.avif': {
-        name: '',
-        category: '',
-        tags: ['？mins', ''],
-        ingredients: {
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': ''
-        },
-        stepText: `"""
-        1. 
-        """`
-      },
-      '.avif': {
-        name: '',
-        category: '',
-        tags: ['？mins', ''],
-        ingredients: {
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': ''
-        },
-        stepText: `"""
-        1. 
-        """`
-      },
-      '.avif': {
-        name: '',
-        category: '',
-        tags: ['？mins', ''],
-        ingredients: {
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': ''
-        },
-        stepText: `"""
-        1. 
-        """`
-      },
-      '.avif': {
-        name: '',
-        category: '',
-        tags: ['？mins', ''],
-        ingredients: {
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': ''
-        },
-        stepText: `"""
-        1. 
-        """`
-      },
-      '.avif': {
-        name: '',
-        category: '',
-        tags: ['？mins', ''],
-        ingredients: {
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': ''
-        },
-        stepText: `"""
-        1. 
-        """`
-      },
-      '.avif': {
-        name: '',
-        category: '',
-        tags: ['？mins', ''],
-        ingredients: {
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': ''
-        },
-        stepText: `"""
-        1. 
-        """`
-      },
-      '.avif': {
-        name: '',
-        category: '',
-        tags: ['？mins', ''],
-        ingredients: {
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': ''
-        },
-        stepText: `"""
-        1. 
-        """`
-      },
-      '.avif': {
-        name: '',
-        category: '',
-        tags: ['？mins', ''],
-        ingredients: {
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': ''
-        },
-        stepText: `"""
-        1. 
-        """`
-      },
-      '.avif': {
-        name: '',
-        category: '',
-        tags: ['？mins', ''],
-        ingredients: {
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': ''
-        },
-        stepText: `"""
-        1. 
-        """`
-      },
-      '.avif': {
-        name: '',
-        category: '',
-        tags: ['？mins', ''],
-        ingredients: {
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': ''
-        },
-        stepText: `"""
-        1. 
-        """`
-      },
-      '.avif': {
-        name: '',
-        category: '',
-        tags: ['？mins', ''],
-        ingredients: {
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': ''
-        },
-        stepText: `"""
-        1. 
-        """`
-      },
-      '.avif': {
-        name: '',
-        category: '',
-        tags: ['？mins', ''],
-        ingredients: {
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': ''
-        },
-        stepText: `"""
-        1. 
-        """`
-      },
-      '.avif': {
-        name: '',
-        category: '',
-        tags: ['？mins', ''],
-        ingredients: {
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': ''
-        },
-        stepText: `"""
-        1. 
-        """`
-      },
-      '.avif': {
-        name: '',
-        category: '',
-        tags: ['？mins', ''],
-        ingredients: {
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': ''
-        },
-        stepText: `"""
-        1. 
-        """`
-      },
-      '.avif': {
-        name: '',
-        category: '',
-        tags: ['？mins', ''],
-        ingredients: {
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': ''
-        },
-        stepText: `"""
-        1. 
-        """`
-      },
-      '.avif': {
-        name: '',
-        category: '',
-        tags: ['？mins', ''],
-        ingredients: {
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': '',
-          '': ''
-        },
+        steps: [''],
         stepText: `"""
         1. 
         """`
@@ -4797,34 +4740,58 @@
 
     function displayPriceDatabase() {
       const itemList = document.getElementById('itemList');
-      if (!itemList) return;
+      if (!itemList) {
+        console.error('itemList element not found');
+        return;
+      }
+
       itemList.innerHTML = '';
 
-      const items = Object.values(menuItems).filter(item =>
-        !excludedItems.includes(Object.keys(menuItems).find(key => menuItems[key] === item))
-      );
+      const items = Object.values(menuItems).filter(item => {
+        const key = Object.keys(menuItems).find(key => menuItems[key] === item);
+        return !excludedItems.includes(key);
+      });
+
+      if (items.length === 0) {
+        itemList.innerHTML = '<p>表示するアイテムがありません</p>';
+        return;
+      }
 
       const categorizedItems = {};
       items.forEach(item => {
-        if (!categorizedItems[item.category]) categorizedItems[item.category] = [];
-        categorizedItems[item.category].push(item);
+        const category = item.category || 'その他';
+        if (!categorizedItems[category]) categorizedItems[category] = [];
+        categorizedItems[category].push(item);
       });
 
       for (const category in categorizedItems) {
         const categoryDiv = document.createElement('div');
         categoryDiv.className = 'category';
         const categoryHeader = document.createElement('h3');
-        categoryHeader.textContent = category || 'その他';
+        categoryHeader.textContent = category;
         categoryDiv.appendChild(categoryHeader);
 
         categorizedItems[category].forEach(item => {
+          const itemId = Object.keys(menuItems).find(key => menuItems[key] === item);
+          const { regularFormatted, lunchFormatted } = calculatePrices(itemId);
+          const hasMultiples = multipleItems.hasOwnProperty(itemId);
+
           const div = document.createElement('div');
           div.className = 'item';
+          div.setAttribute('data-item-id', itemId);
           div.innerHTML = `
+        <span class="item-name">${item.name}</span>
         ${item.shorthand ? `<span class="shorthand">${item.shorthand}</span>` : ''}
         <div class="price-container">
-          <span class="price">${item.price}</span>
-          ${item.lunchPrice ? `<span class="lunch-price"> ${item.lunchPrice}</span>` : ''}
+          <span class="price">${regularFormatted}</span>
+          ${lunchFormatted !== null ? `<span class="lunch-price">ランチ: ${lunchFormatted}</span>` : ''}
+          ${hasMultiples ? `
+            <div class="quantity-controls">
+              <button class="decrease" onclick="decreaseQuantity('${itemId}')">-</button>
+              <span class="quantity">${item.quantity || 1}</span>
+              <button class="increase" onclick="increaseQuantity('${itemId}')">+</button>
+            </div>
+          ` : ''}
         </div>
       `;
           categoryDiv.appendChild(div);
@@ -4843,44 +4810,64 @@
 
       const searchText = searchBar.value.toLowerCase();
       const lunchOnly = showLunchOnly.checked;
-      const items = Object.values(menuItems).filter(item =>
-        !excludedItems.includes(Object.keys(menuItems).find(key => menuItems[key] === item))
-      );
 
-      itemList.innerHTML = '';
+      const items = Object.values(menuItems).filter(item => {
+        const key = Object.keys(menuItems).find(key => menuItems[key] === item);
+        if (excludedItems.includes(key)) return false;
 
-      const filteredItems = items.filter(item => {
         const searchTerms = [
           item.name.toLowerCase(),
           ...(item.nicknames || []).map(n => n.toLowerCase())
         ];
         const matchesSearch = searchText ? searchTerms.some(term => term.includes(searchText)) : true;
         const matchesCategory = currentCategoryFilter ? item.category === currentCategoryFilter : true;
-        const matchesLunch = lunchOnly ? item.lunchPrice && item.lunchPrice !== '' : true;
+        const matchesLunch = lunchOnly ? item.lunchPrice !== undefined : true;
+
         return matchesSearch && matchesCategory && matchesLunch;
       });
 
+      itemList.innerHTML = '';
+
+      if (items.length === 0) {
+        itemList.innerHTML = '<p>検索に一致するアイテムがありません</p>';
+        return;
+      }
+
       const categorizedItems = {};
-      filteredItems.forEach(item => {
-        if (!categorizedItems[item.category]) categorizedItems[item.category] = [];
-        categorizedItems[item.category].push(item);
+      items.forEach(item => {
+        const category = item.category || 'その他';
+        if (!categorizedItems[category]) categorizedItems[category] = [];
+        categorizedItems[category].push(item);
       });
 
       for (const category in categorizedItems) {
         const categoryDiv = document.createElement('div');
         categoryDiv.className = 'category';
         const categoryHeader = document.createElement('h3');
-        categoryHeader.textContent = category || 'その他';
+        categoryHeader.textContent = category;
         categoryDiv.appendChild(categoryHeader);
 
         categorizedItems[category].forEach(item => {
+          const itemId = Object.keys(menuItems).find(key => menuItems[key] === item);
+          const { regularFormatted, lunchFormatted } = calculatePrices(itemId);
+          const hasMultiples = multipleItems.hasOwnProperty(itemId);
+
           const div = document.createElement('div');
           div.className = 'item';
+          div.setAttribute('data-item-id', itemId);
           div.innerHTML = `
+        <span class="item-name">${item.name}</span>
         ${item.shorthand ? `<span class="shorthand">${item.shorthand}</span>` : ''}
         <div class="price-container">
-          <span class="price">${item.price}</span>
-          ${item.lunchPrice ? `<span class="lunch-price"> ${item.lunchPrice}</span>` : ''}
+          <span class="price">${regularFormatted}</span>
+          ${lunchFormatted !== null ? `<span class="lunch-price">ランチ: ${lunchFormatted}</span>` : ''}
+          ${hasMultiples ? `
+            <div class="quantity-controls">
+              <button class="decrease" onclick="decreaseQuantity('${itemId}')">-</button>
+              <span class="quantity">${item.quantity || 1}</span>
+              <button class="increase" onclick="increaseQuantity('${itemId}')">+</button>
+            </div>
+          ` : ''}
         </div>
       `;
           categoryDiv.appendChild(div);
@@ -4889,6 +4876,7 @@
         itemList.appendChild(categoryDiv);
       }
     }
+
     function setupCategoryFilters() {
       const filterButtons = document.querySelectorAll('.category-filter');
       if (filterButtons.length === 0) return;
@@ -5125,8 +5113,77 @@
 
 
 
+    function increaseQuantity(itemId) {
+      const item = menuItems[itemId];
+      if (!item) return;
+      item.quantity = Number(item.quantity || 1) + 1;
+      updatePriceDisplay(itemId);
+    }
 
+    function decreaseQuantity(itemId) {
+      const item = menuItems[itemId];
+      if (!item) return;
+      item.quantity = Math.max(1, Number(item.quantity || 1) - 1);
+      updatePriceDisplay(itemId);
+    }
 
+    function calculatePrices(itemId) {
+      const item = menuItems[itemId];
+      const multiples = multipleItems[itemId];
+      const quantity = Number(item.quantity) || 1;
+
+      const processPriceArray = (priceInput, multipleInput) => {
+        // Handle single number case
+        if (!Array.isArray(priceInput)) {
+          let price = Number(priceInput || 0);
+          if (multiples && quantity > 1 && multipleInput) {
+            const multiple = Number(multipleInput || 0); // Use single multiple if provided
+            price += multiple * (quantity - 1);
+          }
+          return `${price}円`;
+        }
+
+        // Handle array case
+        const formattedParts = [];
+        let priceIndex = 0;
+
+        priceInput.forEach((part) => {
+          if (typeof part === 'number') {
+            let price = Number(part);
+            if (multiples && quantity > 1 && multipleInput) {
+              const multiple = Number(Array.isArray(multipleInput) ? (multipleInput[priceIndex] || multipleInput[0] || 0) : (multipleInput || 0));
+              price += multiple * (quantity - 1);
+            }
+            formattedParts.push(`${price}円`);
+            priceIndex++;
+          } else {
+            formattedParts.push(part);
+          }
+        });
+
+        return formattedParts.join('');
+      };
+
+      const regularFormatted = processPriceArray(item.price, multiples?.priceMultiple);
+      const lunchFormatted = item.lunchPrice !== undefined ? processPriceArray(item.lunchPrice, multiples?.lunchPriceMultiple) : null;
+
+      return { regularFormatted, lunchFormatted };
+    }
+
+    function updatePriceDisplay(itemId) {
+      const itemElement = document.querySelector(`[data-item-id="${itemId}"]`);
+      if (!itemElement) return;
+
+      const { regularFormatted, lunchFormatted } = calculatePrices(itemId);
+      const item = menuItems[itemId];
+
+      itemElement.querySelector('.price').textContent = regularFormatted;
+      if (lunchFormatted !== null) {
+        const lunchElement = itemElement.querySelector('.lunch-price');
+        if (lunchElement) lunchElement.textContent = `ランチ: ${lunchFormatted}`;
+      }
+      itemElement.querySelector('.quantity').textContent = item.quantity || 1;
+    }
   </script>
 </body>
 

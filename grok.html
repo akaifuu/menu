@@ -6,6 +6,7 @@
   <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
   <meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content">
   <title>メニュー</title>
+
 </head>
 
 <body>
@@ -17,6 +18,12 @@
       <div class="checkbox-group">
         <strong>食べ物</strong>
         <div class="radio-group">
+          <label>
+            <input type="radio" id="lunchWeekdaysPASTA" name="food" value="lunchWeekdaysPASTA"
+              style="margin-right: 8px;"
+              onchange="document.getElementById('pasta').disabled = true; document.getElementById('pasta').checked = false;">
+            ランチ（平）パスタのみ
+          </label>
           <label>
             <input type="radio" id="lunchWeekdays" name="food" value="lunchWeekdays" style="margin-right: 8px;"
               onchange="document.getElementById('pasta').disabled = true; document.getElementById('pasta').checked = false;">
@@ -84,9 +91,9 @@
       <div id="filters">
         <button class="category-filter" data-category="" onclick="zenbu()">リセット</button>
         <button class="category-filter" data-category="前菜" onclick="qfocus()">前菜</button>
-        <button class="category-filter" data-category="Pasta" onclick="qfocus()">パスタ</button>
-        <button class="category-filter" data-category="Drink" onclick="qfocus()">ドリンク</button>
-        <button class="category-filter" data-category="Wine" onclick="qfocus()">ワイン</button>
+        <button class="category-filter" data-category="パスタ" onclick="qfocus()">パスタ</button>
+        <button class="category-filter" data-category="ドリンク" onclick="qfocus()">ドリンク</button>
+        <button class="category-filter" data-category="ワイン" onclick="qfocus()">ワイン</button>
         <label>
           <input type="checkbox" id="showLunchOnly" onchange="filterItems()"> ランチのみ
         </label>
@@ -134,7 +141,6 @@
         <div class="step-text" id="stepText"></div>
       </div>
       <div class="video-section" id="videoSection">
-        <h3>レシピ動画</h3>
       </div>
       <div class="additional-info" id="additionalInfo"></div>
     </div>
@@ -143,15 +149,17 @@
   <script>
     const imageFolder = 'menu/';
 
-    const excludedItems = ['m1.avif']; // Add items to exclude from pricelist here 
+    const excludedItems = ['rh1.avif', 'rh2.avif', 'rh3.avif', 'rh4.avif', 'rh5.avif', 'rh6.avif', 'rh7.avif', 'rh8.avif',]; // Add items to exclude from pricelist here 
 
     const menuItems = {
       'm1.avif': {
         name: '鶏もも肉のグリル',
         shorthand: 'チキン', // Added shorthand property
         nicknames: ['鶏', 'にわとり', 'ニワトリ', 'チキン', 'chicken', 'ちきん', 'momo', 'chikin', 'chikkin', 'ポルチーニクリームソース'],
-        category: 'Main Dish',
-        price: '2380円',
+        category: 'メイン',
+        price: 2380,
+        multiple: 150,
+        quantitiy: 1,
         steps: ['step1-duck.jpg', 'step2-duck.jpg', 'step3-duck.jpg'],
         videoLink: 'https://www.youtube.com/watch?v=example1',
         additionalInfo: [
@@ -170,10 +178,9 @@
           '胡椒': '2g'
         },
         stepText: `"""
-        1. 鴨肉を塩と胡椒で下味をつける。
-           - **低温で** 30分ほど置く。
-        2. 鍋に**赤ワイン**、にんにく、ローズマリーを加え、*低温*で煮込む。
-        3. 鴨肉を加え、**2時間**かけてじっくり火を通す。
+        1. 
+        2. 
+        3. 
         """`
       }
     };
@@ -200,7 +207,7 @@
         2. Aの材料で砂肝をもみこみ、1晩マリネする
         3. ワインとオイルの中で100℃ 5~6時間煮る。
         """`
-      }
+      },
     };
 
     const flagList = ['p1.avif', 'p2.avif', 'p3.avif', 'p4.avif', 'p5.avif', 'p6.avif', 'p7.avif', 'p8.avif', 'p9.avif', 'p10.avif', 'p11.avif', 'p12.avif', 'p13.avif', 'p14.avif', 'p15.avif', 'p16.avif', 'p17.avif'];
@@ -225,6 +232,7 @@
     const imageListDinnerSalad = ['s1.avif', 's2.avif', 's3.avif', 's4.avif'];
     const imageListDinnerTapasCold = ['t1.avif', 't2.avif', 't3.avif', 't4.avif', 't5.avif', 't6.avif', 't7.avif'];
     const imageListLunchPastaWeekdays = ['rh1.avif', 'rh2.avif', 'rh3.avif', 'rh4.avif', 'rh5.avif', 'rh6.avif', 'rh7.avif', 'rh8.avif'];
+    const imageListLunchPastaWeekdaysNoTodays = ['rh1.avif', 'rh2.avif', 'rh3.avif', 'rh4.avif', 'rh5.avif', 'rh6.avif', 'rh7.avif'];
     const imageListLunchSetWeekdays = ['set1.avif', 'set2.avif', 'set3.avif'];
     const imageListLunchTanpinWeekdays = ['tan1.avif', 'tan2.avif', 'tan3.avif', 'tan4.avif'];
     const imageListLunchTapasWeekdays = ['tapas1.avif', 'tapas2.avif', 'tapas3.avif', 'tapas4.avif'];
@@ -251,6 +259,12 @@
 
     function getRandomImagesFromArray(array, maxCount) {
       const count = Math.floor(Math.random() * (maxCount + 1));
+      let shuffled = [...array].sort(() => 0.5 - Math.random());
+      return shuffled.slice(0, count);
+    }
+
+    function getRandomImagesFromArrayMin1(array, maxCount) {
+      const count = Math.floor(Math.random() * maxCount) + 1; // 1 to maxCount
       let shuffled = [...array].sort(() => 0.5 - Math.random());
       return shuffled.slice(0, count);
     }
@@ -322,14 +336,19 @@
 
       const allImages = [];
 
+      // LUNCH PASTA NOMI. BEFORE: 1 1 4 1 1 
       if (document.getElementById('lunchWeekdays').checked) {
-        const lunchSetImages = getRandomImagesFromArray(imageListLunchSetWeekdays, 2);
+        const lunchSetImages = getRandomImagesFromArray(imageListLunchSetWeekdays, 1);
         allImages.push(...lunchSetImages);
         const lunchTodayImages = getRandomImagesFromArray(imageListLunchTodaysWeekdays, 1);
         allImages.push(...lunchTodayImages);
         allImages.push(...getRandomImagesFromArray(imageListLunchPastaWeekdays, 4));
         allImages.push(...getRandomImagesFromArray(imageListLunchTanpinWeekdays, 1));
         allImages.push(...getRandomImagesFromArray(imageListLunchTapasWeekdays, 1));
+      }
+
+      if (document.getElementById('lunchWeekdaysPASTA').checked) {
+        allImages.push(...getRandomImagesFromArrayMin1(imageListLunchPastaWeekdaysNoTodays, 4));
       }
 
       if (document.getElementById('lunchWeekend').checked) {
@@ -455,9 +474,11 @@
       console.log('Available menuItems keys:', Object.keys(menuItems));
 
       const hasMenuItem = Object.keys(menuItems).includes(currentImage);
+      const menuItemName = document.getElementById('menuItemName');
+
       if (!hasMenuItem) {
         console.log(`No menu item found for ${currentImage}. Hiding step-by-step section.`);
-        document.getElementById('menuItemName').textContent = 'メニュー情報なし';
+        menuItemName.innerHTML = 'メニュー情報なし';
         document.getElementById('ingredientTableContainer').innerHTML = '';
         document.getElementById('stepSection').style.display = 'none';
         document.getElementById('videoSection').style.display = 'none';
@@ -468,7 +489,8 @@
       const item = menuItems[currentImage];
       console.log('Selected Item:', item);
 
-      document.getElementById('menuItemName').textContent = item.name;
+      // Display name and shorthand together
+      menuItemName.innerHTML = `${item.name}${item.shorthand ? `<br><span class="shorthand-popup">${item.shorthand}</span>` : ''}`;
 
       const ingredientTableContainer = document.getElementById('ingredientTableContainer');
       ingredientTableContainer.innerHTML = '';
@@ -527,12 +549,11 @@
       stepText.innerHTML = parseStepText(item.stepText);
 
       const videoSection = document.getElementById('videoSection');
-      videoSection.innerHTML = '<h3>レシピ動画</h3>';
       if (item.videoLink) {
         const videoLink = document.createElement('a');
         videoLink.href = item.videoLink;
         videoLink.target = '_blank';
-        videoLink.textContent = 'レシピ動画を見る';
+        videoLink.textContent = 'レシピ動画';
         videoSection.appendChild(videoLink);
         videoSection.style.display = 'block';
       } else {
@@ -554,7 +575,6 @@
           additionalInfo.appendChild(details);
         });
       } else {
-        // additionalInfo.innerHTML = '<p>追加情報がありません</p>';
         additionalInfo.innerHTML = '';
       }
 
@@ -935,8 +955,7 @@
       if (!currentRecipe.videoLink) return '';
       return `
         <div class="video-section">
-          <h3>レシピ動画</h3>
-          <a href="${currentRecipe.videoLink}" target="_blank" rel="noopener noreferrer">レシピ動画を見る</a>
+          <a href="${currentRecipe.videoLink}" target="_blank" rel="noopener noreferrer">レシピ動画</a>
         </div>
       `;
     }
@@ -1000,6 +1019,12 @@
         }
       });
     });
+
+
+
+
+
+
   </script>
 </body>
 
