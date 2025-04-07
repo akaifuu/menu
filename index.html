@@ -4479,8 +4479,9 @@
       return shuffled.slice(0, count);
     }
 
-    function displayImage(loadedImages = new Set()) {
+    function displayImage() {
       const imageContainer = document.getElementById('imageContainer');
+      const flagEmoji = document.getElementById('flagEmoji');
       imageContainer.innerHTML = '';
 
       if (currentImages.length === 0) {
@@ -4499,24 +4500,18 @@
 
       const counter = document.createElement('div');
       counter.id = 'imageCounter';
-      counter.innerHTML = `${currentIndex + 1}/${currentImages.length} (Loaded: ${loadedImages.size}/${currentImages.length})`;
+      counter.innerHTML = `${currentIndex + 1}/${currentImages.length}`;
       imageContainer.appendChild(counter);
     }
 
     function prevImage() {
-      const loadedCount = document.getElementById('imageCounter').textContent.match(/Loaded: (\d+)/)[1];
-      if (currentIndex > 0) {
-        currentIndex--;
-        displayImage(new Set(currentImages.slice(0, loadedCount)));
-      }
+      currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
+      displayImage();
     }
 
     function nextImage() {
-      const loadedCount = document.getElementById('imageCounter').textContent.match(/Loaded: (\d+)/)[1];
-      if (currentIndex < loadedCount - 1) {
-        currentIndex++;
-        displayImage(new Set(currentImages.slice(0, loadedCount)));
-      }
+      currentIndex = (currentIndex + 1) % currentImages.length;
+      displayImage();
     }
 
     function generateImages() {
@@ -4621,18 +4616,9 @@
       shuffleArray(currentImages);
       currentIndex = 0;
 
-      const imageContainer = document.getElementById('imageContainer');
-      imageContainer.innerHTML = '<p>Loading images...</p>'; // Initial placeholder
-
-      let loadedCount = 0;
-      preloadImagesDynamic(currentImages, (loadedImages, fullArray) => {
-        loadedCount = loadedImages.size;
-        if (loadedCount > 0) {
-          // Ensure currentIndex stays within loaded range
-          if (currentIndex >= loadedCount) currentIndex = loadedCount - 1;
-          displayImage(loadedImages);
-        }
-      });
+      console.log('Generated currentImages:', currentImages); // Log to confirm array contents
+      preloadImages(currentImages); // Preload all images immediately
+      displayImage();
     }
 
     let touchStartX = 0;
@@ -4690,13 +4676,20 @@
     });
 
     function showInfo() {
-      if (currentImages.length === 0 || currentIndex >= currentImages.length) return;
+      if (currentImages.length === 0 || currentIndex >= currentImages.length) {
+        console.log('No images or invalid index:', currentImages, currentIndex);
+        return;
+      }
 
       const currentImage = currentImages[currentIndex];
+      console.log('Current Image:', currentImage);
+      console.log('Available menuItems keys:', Object.keys(menuItems));
+
       const hasMenuItem = Object.keys(menuItems).includes(currentImage);
       const menuItemName = document.getElementById('menuItemName');
 
       if (!hasMenuItem) {
+        console.log(`No menu item found for ${currentImage}. Hiding step-by-step section.`);
         menuItemName.innerHTML = 'メニュー情報なし';
         document.getElementById('ingredientTableContainer').innerHTML = '';
         document.getElementById('stepSection').style.display = 'none';
@@ -4706,6 +4699,14 @@
       }
 
       const item = menuItems[currentImage];
+      console.log('Selected Item:', item);
+
+      // Preload popup step images
+      currentSteps = item.steps || [];
+      if (currentSteps.length > 0) {
+        preloadImages(currentSteps);
+      }
+
       menuItemName.innerHTML = `${item.name}${item.shorthand ? `<br><span class="shorthand-popup">${item.shorthand}</span>` : ''}`;
 
       const ingredientTableContainer = document.getElementById('ingredientTableContainer');
@@ -4728,8 +4729,8 @@
         ingredientTableContainer.appendChild(table);
       }
 
-      currentSteps = item.steps || [];
       currentStepIndex = 0;
+      console.log('Current Steps:', currentSteps);
 
       const stepSection = document.getElementById('stepSection');
       const stepContainer = document.getElementById('stepImageContainer');
@@ -4741,25 +4742,18 @@
       if (currentSteps.length > 0) {
         stepSection.style.display = 'block';
         stepContainer.style.display = 'block';
-        let loadedCount = 0;
-        preloadImagesDynamic(currentSteps, (loadedImages, fullArray) => {
-          loadedCount = loadedImages.size;
-          if (loadedCount > 0) {
-            if (currentStepIndex >= loadedCount) currentStepIndex = loadedCount - 1;
-            stepImage.src = imageFolder + currentSteps[currentStepIndex];
-            stepCounter.textContent = `${currentStepIndex + 1}/${currentSteps.length} (Loaded: ${loadedImages.size}/${currentSteps.length})`;
-            stepper.innerHTML = '';
-            currentSteps.forEach((_, index) => {
-              if (index < loadedCount) {
-                const dot = document.createElement('span');
-                dot.className = 'step-dot';
-                dot.setAttribute('aria-label', `ステップ ${index + 1}`);
-                dot.onclick = () => goToStep(index);
-                if (index === currentStepIndex) dot.classList.add('active');
-                stepper.appendChild(dot);
-              }
-            });
-          }
+        stepImage.src = imageFolder + currentSteps[currentStepIndex];
+        console.log('Step Image Source:', stepImage.src);
+        stepCounter.textContent = `${currentStepIndex + 1}/${currentSteps.length}`;
+
+        stepper.innerHTML = '';
+        currentSteps.forEach((_, index) => {
+          const dot = document.createElement('span');
+          dot.className = 'step-dot';
+          dot.setAttribute('aria-label', `ステップ ${index + 1}`);
+          dot.onclick = () => goToStep(index);
+          if (index === currentStepIndex) dot.classList.add('active');
+          stepper.appendChild(dot);
         });
       } else {
         stepSection.style.display = 'none';
@@ -4845,8 +4839,8 @@
       updateStepDisplay();
     }
 
-    // Update updateStepDisplay
-    function updateStepDisplay(loadedImages = new Set()) {
+    function updateStepDisplay() {
+      // Determine the context (menu or recipe) based on whether infoOverlay or recipeDetails is visible
       const isMenuTab = document.getElementById('infoOverlay').style.display === 'flex';
       const isRecipeTab = document.getElementById('recipeDetails').style.display === 'block' || document.getElementById('recipeDetailsModal').style.display === 'flex';
 
@@ -4866,18 +4860,12 @@
         stepImage.src = imageFolder + currentSteps[currentStepIndex];
       }
       if (stepCounter) {
-        stepCounter.textContent = `${currentStepIndex + 1}/${currentSteps.length} (Loaded: ${loadedImages.size}/${currentSteps.length})`;
+        stepCounter.textContent = `${currentStepIndex + 1}/${currentSteps.length}`;
       }
       if (stepper) {
-        stepper.innerHTML = '';
-        currentSteps.forEach((_, index) => {
-          if (index < loadedImages.size) {
-            const dot = document.createElement('span');
-            dot.className = 'step-dot';
-            dot.classList.toggle('active', index === currentStepIndex);
-            dot.onclick = () => goToStep(index);
-            stepper.appendChild(dot);
-          }
+        const dots = stepper.querySelectorAll('.step-dot');
+        dots.forEach((dot, index) => {
+          dot.classList.toggle('active', index === currentStepIndex);
         });
       }
     }
@@ -5242,6 +5230,11 @@
       currentSteps = currentRecipe.steps || [];
       currentStepIndex = 0;
 
+      // Preload recipe step images
+      if (currentSteps.length > 0) {
+        preloadImages(currentSteps);
+      }
+
       let additionalInfoHtml = '';
       if (currentRecipe.additionalInfo && currentRecipe.additionalInfo.length > 0) {
         additionalInfoHtml = currentRecipe.additionalInfo.map(info => `
@@ -5276,19 +5269,9 @@
         document.getElementById('recipeDetailsModal').style.display = 'none';
       }
 
-      if (currentSteps.length > 0) {
-        let loadedCount = 0;
-        preloadImagesDynamic(currentSteps, (loadedImages, fullArray) => {
-          loadedCount = loadedImages.size;
-          if (loadedCount > 0) {
-            if (currentStepIndex >= loadedCount) currentStepIndex = loadedCount - 1;
-            updateStepDisplay(loadedImages);
-          }
-        });
-      } else {
-        updateStepDisplay();
-      }
+      updateStepDisplay();
     }
+
     function renderIngredients() {
       if (!Object.keys(currentRecipe.ingredients || {}).length) return '';
       let html = '<h3>材料</h3><table class="ingredient-table"><thead><tr><th>材料</th><th>量</th></tr></thead><tbody>';
@@ -5463,34 +5446,16 @@
     }
 
     // Add this function (unchanged from previous response, but with a console log)
-    function preloadImagesDynamic(imageArray, callback) {
-      const loadedImages = new Set(); // Track loaded image filenames
-      let totalImages = imageArray.length;
-
-      if (totalImages === 0) {
-        callback(loadedImages, imageArray);
-        return;
-      }
-
-      console.log('Starting dynamic preloading for:', imageArray);
-
+    function preloadImages(imageArray) {
       const preloadContainer = document.createElement('div');
       preloadContainer.style.display = 'none';
       document.body.appendChild(preloadContainer);
 
+      console.log('Preloading images:', imageArray); // Log to verify all images are preloaded
+
       imageArray.forEach(image => {
         const img = new Image();
         img.src = imageFolder + image;
-        img.onload = () => {
-          loadedImages.add(image);
-          console.log(`Loaded: ${image}. Total loaded: ${loadedImages.size}/${totalImages}`);
-          callback(loadedImages, imageArray); // Pass both loaded and full array
-        };
-        img.onerror = () => {
-          console.log(`Failed to load: ${image}`);
-          loadedImages.add(image); // Treat as "loaded" to avoid blocking
-          callback(loadedImages, imageArray);
-        };
         preloadContainer.appendChild(img);
       });
     }
