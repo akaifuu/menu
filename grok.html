@@ -158,8 +158,8 @@
         nicknames: ['鶏', 'にわとり', 'ニワトリ', 'チキン', 'chicken', 'ちきん', 'momo', 'chikin', 'chikkin', 'ポルチーニクリームソース'],
         category: 'メイン',
         price: 2380,
-        multiple: 150,
-        quantitiy: 1,
+        // lunchPrice: 1,
+        quantity: 1,
         steps: ['step1-duck.jpg', 'step2-duck.jpg', 'step3-duck.jpg'],
         videoLink: 'https://www.youtube.com/watch?v=example1',
         additionalInfo: [
@@ -185,6 +185,19 @@
       }
     };
 
+
+
+    const multipleItems = {
+
+
+      'm1.avif': {
+        priceMultiple: 770,
+        lunchPriceMultiple: 770
+      }
+
+    };
+
+
     const recipeItems = {
       '1.avif': {
         name: '砂肝のコンフィ',
@@ -208,6 +221,7 @@
         3. ワインとオイルの中で100℃ 5~6時間煮る。
         """`
       },
+
     };
 
     const flagList = ['p1.avif', 'p2.avif', 'p3.avif', 'p4.avif', 'p5.avif', 'p6.avif', 'p7.avif', 'p8.avif', 'p9.avif', 'p10.avif', 'p11.avif', 'p12.avif', 'p13.avif', 'p14.avif', 'p15.avif', 'p16.avif', 'p17.avif'];
@@ -695,34 +709,60 @@
 
     function displayPriceDatabase() {
       const itemList = document.getElementById('itemList');
-      if (!itemList) return;
+      if (!itemList) {
+        console.error('itemList element not found');
+        return;
+      }
+
       itemList.innerHTML = '';
 
-      const items = Object.values(menuItems).filter(item =>
-        !excludedItems.includes(Object.keys(menuItems).find(key => menuItems[key] === item))
-      );
+      const items = Object.values(menuItems).filter(item => {
+        const key = Object.keys(menuItems).find(key => menuItems[key] === item);
+        return !excludedItems.includes(key);
+      });
+
+      if (items.length === 0) {
+        itemList.innerHTML = '<p>表示するアイテムがありません</p>';
+        return;
+      }
 
       const categorizedItems = {};
       items.forEach(item => {
-        if (!categorizedItems[item.category]) categorizedItems[item.category] = [];
-        categorizedItems[item.category].push(item);
+        const category = item.category || 'その他';
+        if (!categorizedItems[category]) categorizedItems[category] = [];
+        categorizedItems[category].push(item);
       });
 
       for (const category in categorizedItems) {
         const categoryDiv = document.createElement('div');
         categoryDiv.className = 'category';
         const categoryHeader = document.createElement('h3');
-        categoryHeader.textContent = category || 'その他';
+        categoryHeader.textContent = category;
         categoryDiv.appendChild(categoryHeader);
 
         categorizedItems[category].forEach(item => {
+          const itemId = Object.keys(menuItems).find(key => menuItems[key] === item);
+          const { regularFormatted, lunchFormatted } = calculatePrices(itemId);
+          const hasMultiples = multipleItems.hasOwnProperty(itemId);
+
           const div = document.createElement('div');
           div.className = 'item';
+          div.setAttribute('data-item-id', itemId);
           div.innerHTML = `
-        ${item.shorthand ? `<span class="shorthand">${item.shorthand}</span>` : ''}
-        <div class="price-container">
-          <span class="price">${item.price}</span>
-          ${item.lunchPrice ? `<span class="lunch-price"> ${item.lunchPrice}</span>` : ''}
+        <span class="item-name">${item.name}</span>
+        <div class="right-container">
+          ${item.shorthand ? `<span class="shorthand">${item.shorthand}</span>` : ''}
+          <div class="price-container">
+            <span class="price">${regularFormatted}</span>
+            ${lunchFormatted !== null ? `<span class="lunch-price">ランチ: ${lunchFormatted}</span>` : ''}
+            ${hasMultiples ? `
+              <div class="quantity-controls">
+                <button class="decrease" onclick="decreaseQuantity('${itemId}')">-</button>
+                <span class="quantity">${item.quantity || 1}</span>
+                <button class="increase" onclick="increaseQuantity('${itemId}')">+</button>
+              </div>
+            ` : ''}
+          </div>
         </div>
       `;
           categoryDiv.appendChild(div);
@@ -741,44 +781,66 @@
 
       const searchText = searchBar.value.toLowerCase();
       const lunchOnly = showLunchOnly.checked;
-      const items = Object.values(menuItems).filter(item =>
-        !excludedItems.includes(Object.keys(menuItems).find(key => menuItems[key] === item))
-      );
 
-      itemList.innerHTML = '';
+      const items = Object.values(menuItems).filter(item => {
+        const key = Object.keys(menuItems).find(key => menuItems[key] === item);
+        if (excludedItems.includes(key)) return false;
 
-      const filteredItems = items.filter(item => {
         const searchTerms = [
           item.name.toLowerCase(),
           ...(item.nicknames || []).map(n => n.toLowerCase())
         ];
         const matchesSearch = searchText ? searchTerms.some(term => term.includes(searchText)) : true;
         const matchesCategory = currentCategoryFilter ? item.category === currentCategoryFilter : true;
-        const matchesLunch = lunchOnly ? item.lunchPrice && item.lunchPrice !== '' : true;
+        const matchesLunch = lunchOnly ? item.lunchPrice !== undefined : true;
+
         return matchesSearch && matchesCategory && matchesLunch;
       });
 
+      itemList.innerHTML = '';
+
+      if (items.length === 0) {
+        itemList.innerHTML = '<p>検索に一致するアイテムがありません</p>';
+        return;
+      }
+
       const categorizedItems = {};
-      filteredItems.forEach(item => {
-        if (!categorizedItems[item.category]) categorizedItems[item.category] = [];
-        categorizedItems[item.category].push(item);
+      items.forEach(item => {
+        const category = item.category || 'その他';
+        if (!categorizedItems[category]) categorizedItems[category] = [];
+        categorizedItems[category].push(item);
       });
 
       for (const category in categorizedItems) {
         const categoryDiv = document.createElement('div');
         categoryDiv.className = 'category';
         const categoryHeader = document.createElement('h3');
-        categoryHeader.textContent = category || 'その他';
+        categoryHeader.textContent = category;
         categoryDiv.appendChild(categoryHeader);
 
         categorizedItems[category].forEach(item => {
+          const itemId = Object.keys(menuItems).find(key => menuItems[key] === item);
+          const { regularFormatted, lunchFormatted } = calculatePrices(itemId);
+          const hasMultiples = multipleItems.hasOwnProperty(itemId);
+
           const div = document.createElement('div');
           div.className = 'item';
+          div.setAttribute('data-item-id', itemId);
           div.innerHTML = `
-        ${item.shorthand ? `<span class="shorthand">${item.shorthand}</span>` : ''}
-        <div class="price-container">
-          <span class="price">${item.price}</span>
-          ${item.lunchPrice ? `<span class="lunch-price"> ${item.lunchPrice}</span>` : ''}
+        <span class="item-name">${item.name}</span>
+        <div class="right-container">
+          ${item.shorthand ? `<span class="shorthand">${item.shorthand}</span>` : ''}
+          <div class="price-container">
+            <span class="price">${regularFormatted}</span>
+            ${lunchFormatted !== null ? `<span class="lunch-price">ランチ: ${lunchFormatted}</span>` : ''}
+            ${hasMultiples ? `
+              <div class="quantity-controls">
+                <button class="decrease" onclick="decreaseQuantity('${itemId}')">-</button>
+                <span class="quantity">${item.quantity || 1}</span>
+                <button class="increase" onclick="increaseQuantity('${itemId}')">+</button>
+              </div>
+            ` : ''}
+          </div>
         </div>
       `;
           categoryDiv.appendChild(div);
@@ -787,6 +849,7 @@
         itemList.appendChild(categoryDiv);
       }
     }
+
     function setupCategoryFilters() {
       const filterButtons = document.querySelectorAll('.category-filter');
       if (filterButtons.length === 0) return;
@@ -900,12 +963,27 @@
       currentSteps = currentRecipe.steps || [];
       currentStepIndex = 0;
 
+      let additionalInfoHtml = '';
+      if (currentRecipe.additionalInfo && currentRecipe.additionalInfo.length > 0) {
+        additionalInfoHtml = currentRecipe.additionalInfo.map(info => `
+      <details class="additional-info-item">
+        <summary>${info.title}</summary>
+        <p>${info.content}</p>
+      </details>
+    `).join('');
+      }
+
       const content = `
-        <h2>${currentRecipe.name}</h2>
-        ${renderIngredients()}
-        ${renderSteps()}
-        ${renderVideo()}
-      `;
+    <h2>${currentRecipe.name}</h2>
+    ${renderIngredients()}
+    ${renderSteps()}
+    ${renderVideo()}
+    ${additionalInfoHtml ? `
+      <div class="additional-info">
+        ${additionalInfoHtml}
+      </div>
+    ` : ''}
+  `;
 
       if (isMobile) {
         const modalContent = document.getElementById('recipeModalContent');
@@ -1023,8 +1101,77 @@
 
 
 
+    function increaseQuantity(itemId) {
+      const item = menuItems[itemId];
+      if (!item) return;
+      item.quantity = Number(item.quantity || 1) + 1;
+      updatePriceDisplay(itemId);
+    }
 
+    function decreaseQuantity(itemId) {
+      const item = menuItems[itemId];
+      if (!item) return;
+      item.quantity = Math.max(1, Number(item.quantity || 1) - 1);
+      updatePriceDisplay(itemId);
+    }
 
+    function calculatePrices(itemId) {
+      const item = menuItems[itemId];
+      const multiples = multipleItems[itemId];
+      const quantity = Number(item.quantity) || 1;
+
+      const processPriceArray = (priceInput, multipleInput) => {
+        // Handle single number case
+        if (!Array.isArray(priceInput)) {
+          let price = Number(priceInput || 0);
+          if (multiples && quantity > 1 && multipleInput) {
+            const multiple = Number(multipleInput || 0); // Use single multiple if provided
+            price += multiple * (quantity - 1);
+          }
+          return `${price}円`;
+        }
+
+        // Handle array case
+        const formattedParts = [];
+        let priceIndex = 0;
+
+        priceInput.forEach((part) => {
+          if (typeof part === 'number') {
+            let price = Number(part);
+            if (multiples && quantity > 1 && multipleInput) {
+              const multiple = Number(Array.isArray(multipleInput) ? (multipleInput[priceIndex] || multipleInput[0] || 0) : (multipleInput || 0));
+              price += multiple * (quantity - 1);
+            }
+            formattedParts.push(`${price}円`);
+            priceIndex++;
+          } else {
+            formattedParts.push(part);
+          }
+        });
+
+        return formattedParts.join('');
+      };
+
+      const regularFormatted = processPriceArray(item.price, multiples?.priceMultiple);
+      const lunchFormatted = item.lunchPrice !== undefined ? processPriceArray(item.lunchPrice, multiples?.lunchPriceMultiple) : null;
+
+      return { regularFormatted, lunchFormatted };
+    }
+
+    function updatePriceDisplay(itemId) {
+      const itemElement = document.querySelector(`[data-item-id="${itemId}"]`);
+      if (!itemElement) return;
+
+      const { regularFormatted, lunchFormatted } = calculatePrices(itemId);
+      const item = menuItems[itemId];
+
+      itemElement.querySelector('.price').textContent = regularFormatted;
+      if (lunchFormatted !== null) {
+        const lunchElement = itemElement.querySelector('.lunch-price');
+        if (lunchElement) lunchElement.textContent = `ランチ: ${lunchFormatted}`;
+      }
+      itemElement.querySelector('.quantity').textContent = item.quantity || 1;
+    }
   </script>
 </body>
 
