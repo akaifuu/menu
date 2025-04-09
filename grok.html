@@ -106,9 +106,16 @@
     <div id="recipeDatabase">
       <div id="recipeDatabaseHeader">
         <h2>レシピ</h2>
-        <input type="text" id="recipeSearchBar" placeholder="レシピを検索..." oninput="filterRecipes()" 　autocorrect="off"
+        <input type="text" id="recipeSearchBar" placeholder="レシピを検索..." oninput="filterRecipes()" autocorrect="off"
           autocomplete="off" spellcheck="false">
         <button id="recipeBackButton" onclick="navigateToMenu()">メニューに戻る</button>
+        <!-- Added Filter Buttons -->
+        <div id="recipeFilters">
+          <button class="recipe-category-filter" data-category="" onclick="resetRecipeFilter()">リセット</button>
+          <button class="recipe-category-filter" data-category="ソース" onclick="focusRecipeSearch()">ソース</button>
+          <button class="recipe-category-filter" data-category="前菜" onclick="focusRecipeSearch()">前菜</button>
+          <button class="recipe-category-filter" data-category="パスタ" onclick="focusRecipeSearch()">パスタ</button>
+        </div>
       </div>
       <div id="recipeContainer">
         <div id="recipeList" role="list"></div>
@@ -189,11 +196,70 @@
 
     const multipleItems = {
 
-
-      'm1.avif': {
+      'd1.avif': {
         priceMultiple: 770,
         lunchPriceMultiple: 770
-      }
+      },
+      'd5.avif': {
+        priceMultiple: 850,
+        lunchPriceMultiple: 850
+      },
+      'd6.avif': {
+        priceMultiple: 850,
+        lunchPriceMultiple: 850
+      },
+      'd11.avif': {
+        priceMultiple: 770,
+      },
+      'd20.avif': {
+        priceMultiple: 990,
+        lunchPriceMultiple: 990
+      },
+      'd25.avif': {
+        priceMultiple: 550,
+        lunchPriceMultiple: 300
+      },
+      'd27.avif': {
+        priceMultiple: 700,
+        lunchPriceMultiple: 400
+      },
+      'tan1.avif': {
+        priceMultiple: 150,
+        lunchPriceMultiple: 150
+      },
+      'set1.avif': {
+        lunchPriceMultiple: 250
+      },
+      'set2.avif': {
+        lunchPriceMultiple: 350
+      },
+      'set3.avif': {
+        lunchPriceMultiple: 700
+      },
+      'h2.avif': {
+        priceMultiple: 150,
+      },
+      'h10.avif': {
+        priceMultiple: 400,
+      },
+      'h11.avif': {
+        priceMultiple: 300,
+      },
+      'g1.avif': {
+        priceMultiple: 550,
+        lunchPriceMultiple: 550
+      },
+      'g2.avif': {
+        priceMultiple: 550,
+      },
+      'g3.avif': {
+        priceMultiple: 550,
+        lunchPriceMultiple: 550
+      },
+      'w0.avif': {
+        priceMultiple: 990,
+        lunchPriceMultiple: 990
+      },
 
     };
 
@@ -222,9 +288,11 @@
         """`
       },
 
+
     };
 
-    const flagList = ['p1.avif', 'p2.avif', 'p3.avif', 'p4.avif', 'p5.avif', 'p6.avif', 'p7.avif', 'p8.avif', 'p9.avif', 'p10.avif', 'p11.avif', 'p12.avif', 'p13.avif', 'p14.avif', 'p15.avif', 'p16.avif', 'p17.avif'];
+    // const flagList = ['p1.avif', 'p2.avif', 'p3.avif', 'p4.avif', 'p5.avif', 'p6.avif', 'p7.avif', 'p8.avif', 'p9.avif', 'p10.avif', 'p11.avif', 'p12.avif', 'p13.avif', 'p14.avif', 'p15.avif', 'p16.avif', 'p17.avif'];
+    const flagList = [''];
     const tableList = ['ta1.avif', 'ta2.avif', 'ta3.avif', 'ta4.avif', 'ta5.avif', 'ta6.avif', 'ta10.avif', 'ta12.avif', 'ta20.avif', 'ta21.avif', 'ta22.avif', 'ta23.avif', 'ta24.avif', 'ta25.avif', 'ta26.avif', 'ta27.avif', 'ta28.avif', 'ta29.avif', 'ta30.avif', 'ta31.avif', 'ta32.avif', 'ta33.avif', 'ta34.avif', 'ta35.avif', 'ta36.avif', 'ta37.avif', 'ta38.avif', 'ta39.avif', 'ta40.avif', 'ta41.avif', 'ta42.avif', 'ta43.avif', 'ta44.avif', 'ta45.avif', 'ta46.avif', 'ta47.avif', 'ta48.avif', 'ta49.avif', 'ta50.avif', 'ta51.avif', 'ta52.avif'];
     const table0 = ['ttt1.avif', 'ttt2.avif', 'ttt3.avif', 'ttt4.avif'];
     const guestNumbersStandard = [1, 2];
@@ -350,7 +418,6 @@
 
       const allImages = [];
 
-      // LUNCH PASTA NOMI. BEFORE: 1 1 4 1 1 
       if (document.getElementById('lunchWeekdays').checked) {
         const lunchSetImages = getRandomImagesFromArray(imageListLunchSetWeekdays, 1);
         allImages.push(...lunchSetImages);
@@ -420,6 +487,9 @@
       currentImages = allImages.slice(0, limit);
       shuffleArray(currentImages);
       currentIndex = 0;
+
+      console.log('Generated currentImages:', currentImages); // Log to confirm array contents
+      preloadImages(currentImages); // Preload all images immediately
       displayImage();
     }
 
@@ -503,7 +573,12 @@
       const item = menuItems[currentImage];
       console.log('Selected Item:', item);
 
-      // Display name and shorthand together
+      // Preload popup step images
+      currentSteps = item.steps || [];
+      if (currentSteps.length > 0) {
+        preloadImages(currentSteps);
+      }
+
       menuItemName.innerHTML = `${item.name}${item.shorthand ? `<br><span class="shorthand-popup">${item.shorthand}</span>` : ''}`;
 
       const ingredientTableContainer = document.getElementById('ingredientTableContainer');
@@ -526,7 +601,6 @@
         ingredientTableContainer.appendChild(table);
       }
 
-      currentSteps = item.steps || [];
       currentStepIndex = 0;
       console.log('Current Steps:', currentSteps);
 
@@ -544,7 +618,6 @@
         console.log('Step Image Source:', stepImage.src);
         stepCounter.textContent = `${currentStepIndex + 1}/${currentSteps.length}`;
 
-        // Render stepper dots
         stepper.innerHTML = '';
         currentSteps.forEach((_, index) => {
           const dot = document.createElement('span');
@@ -677,8 +750,20 @@
       document.getElementById("searchBar").focus();
     }
 
+    // function zenbu() {
+    //   searchBar.value = "";
+    //   document.getElementById("searchBar").focus();
+    // }
+
     function zenbu() {
-      searchBar.value = "";
+      document.getElementById("searchBar").value = "";
+      currentCategoryFilter = '';
+      const filterButtons = document.querySelectorAll('.category-filter');
+      filterButtons.forEach(btn => btn.classList.remove('selected'));
+      Object.values(menuItems).forEach(item => {
+        item.quantity = 1;
+      });
+      filterItems();
       document.getElementById("searchBar").focus();
     }
 
@@ -876,12 +961,19 @@
       });
     }
 
+    // Add this variable near your other globals (e.g., after currentCategoryFilter)
+    let currentRecipeCategoryFilter = '';
+
+    // Modify displayRecipeDatabase to respect category filter
     function displayRecipeDatabase() {
       const recipeList = document.getElementById('recipeList');
       if (!recipeList) return;
       recipeList.innerHTML = '';
 
-      const items = Object.values(recipeItems);
+      const items = Object.values(recipeItems).filter(item => {
+        return currentRecipeCategoryFilter ? item.category === currentRecipeCategoryFilter : true;
+      });
+
       items.forEach(item => {
         const div = document.createElement('div');
         div.className = 'recipe-card';
@@ -889,12 +981,12 @@
         div.setAttribute('tabindex', '0');
         const thumbnailSrc = item.steps && item.steps.length > 0 ? `${imageFolder}${item.steps[0]}` : null;
         div.innerHTML = `
-          ${thumbnailSrc ? `<img src="${thumbnailSrc}" class="thumbnail" alt="${item.name}のサムネイル">` : '<div class="placeholder">画像なし</div>'}
-          <div class="content">
-            <div class="name">${item.name}</div>
-            <div class="tags">${(item.tags || []).join(' • ')}</div>
-          </div>
-        `;
+      ${thumbnailSrc ? `<img src="${thumbnailSrc}" class="thumbnail" alt="${item.name}のサムネイル">` : '<div class="placeholder">画像なし</div>'}
+      <div class="content">
+        <div class="name">${item.name}</div>
+        <div class="tags">${(item.tags || []).join(' • ')}</div>
+      </div>
+    `;
         div.onclick = () => selectRecipe(item);
         div.onkeydown = (e) => {
           if (e.key === 'Enter' || e.key === ' ') {
@@ -904,8 +996,11 @@
         };
         recipeList.appendChild(div);
       });
+
+      setupRecipeCategoryFilters(); // Call this to initialize filter buttons
     }
 
+    // Update filterRecipes to include category filtering
     function filterRecipes() {
       const searchBar = document.getElementById('recipeSearchBar');
       const recipeList = document.getElementById('recipeList');
@@ -921,7 +1016,9 @@
           item.name.toLowerCase(),
           ...(item.nicknames || []).map(n => n.toLowerCase())
         ];
-        return searchText ? searchTerms.some(term => term.includes(searchText)) : true;
+        const matchesSearch = searchText ? searchTerms.some(term => term.includes(searchText)) : true;
+        const matchesCategory = currentRecipeCategoryFilter ? item.category === currentRecipeCategoryFilter : true;
+        return matchesSearch && matchesCategory;
       });
 
       filteredItems.forEach(item => {
@@ -931,12 +1028,12 @@
         div.setAttribute('tabindex', '0');
         const thumbnailSrc = item.steps && item.steps.length > 0 ? `${imageFolder}${item.steps[0]}` : null;
         div.innerHTML = `
-          ${thumbnailSrc ? `<img src="${thumbnailSrc}" class="thumbnail" alt="${item.name}のサムネイル">` : '<div class="placeholder">画像なし</div>'}
-          <div class="content">
-            <div class="name">${item.name}</div>
-            <div class="tags">${(item.tags || []).join(' • ')}</div>
-          </div>
-        `;
+      ${thumbnailSrc ? `<img src="${thumbnailSrc}" class="thumbnail" alt="${item.name}のサムネイル">` : '<div class="placeholder">画像なし</div>'}
+      <div class="content">
+        <div class="name">${item.name}</div>
+        <div class="tags">${(item.tags || []).join(' • ')}</div>
+      </div>
+    `;
         div.onclick = () => selectRecipe(item);
         div.onkeydown = (e) => {
           if (e.key === 'Enter' || e.key === ' ') {
@@ -946,6 +1043,48 @@
         };
         recipeList.appendChild(div);
       });
+    }
+
+    // Add new function to setup category filter buttons
+    function setupRecipeCategoryFilters() {
+      const filterButtons = document.querySelectorAll('.recipe-category-filter');
+      if (filterButtons.length === 0) return;
+
+      filterButtons.forEach(button => {
+        const newButton = button.cloneNode(true);
+        button.parentNode.replaceChild(newButton, button);
+
+        newButton.addEventListener('click', () => {
+          const category = newButton.getAttribute('data-category');
+          const updatedFilterButtons = document.querySelectorAll('.recipe-category-filter');
+
+          updatedFilterButtons.forEach(btn => btn.classList.remove('selected'));
+
+          if (currentRecipeCategoryFilter === category && category !== '') {
+            currentRecipeCategoryFilter = '';
+          } else {
+            currentRecipeCategoryFilter = category;
+            if (category !== '') newButton.classList.add('selected');
+          }
+
+          filterRecipes();
+        });
+      });
+    }
+
+    // Add reset function
+    function resetRecipeFilter() {
+      currentRecipeCategoryFilter = '';
+      document.getElementById('recipeSearchBar').value = '';
+      const filterButtons = document.querySelectorAll('.recipe-category-filter');
+      filterButtons.forEach(btn => btn.classList.remove('selected'));
+      filterRecipes();
+      document.getElementById('recipeSearchBar').focus();
+    }
+
+    // Add focus function for consistency
+    function focusRecipeSearch() {
+      document.getElementById('recipeSearchBar').focus();
     }
 
     function selectRecipe(item) {
@@ -962,6 +1101,11 @@
 
       currentSteps = currentRecipe.steps || [];
       currentStepIndex = 0;
+
+      // Preload recipe step images
+      if (currentSteps.length > 0) {
+        preloadImages(currentSteps);
+      }
 
       let additionalInfoHtml = '';
       if (currentRecipe.additionalInfo && currentRecipe.additionalInfo.length > 0) {
@@ -1171,6 +1315,21 @@
         if (lunchElement) lunchElement.textContent = `ランチ: ${lunchFormatted}`;
       }
       itemElement.querySelector('.quantity').textContent = item.quantity || 1;
+    }
+
+    // Add this function (unchanged from previous response, but with a console log)
+    function preloadImages(imageArray) {
+      const preloadContainer = document.createElement('div');
+      preloadContainer.style.display = 'none';
+      document.body.appendChild(preloadContainer);
+
+      console.log('Preloading images:', imageArray); // Log to verify all images are preloaded
+
+      imageArray.forEach(image => {
+        const img = new Image();
+        img.src = imageFolder + image;
+        preloadContainer.appendChild(img);
+      });
     }
   </script>
 </body>
