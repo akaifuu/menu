@@ -1238,6 +1238,11 @@
               onchange="document.getElementById('pasta').disabled = false;">
             ディナー
           </label>
+          <label>
+            <input type="radio" id="XXXX" name="food" value="XXXX" style="margin-right: 8px;"
+              onchange="document.getElementById('pasta').disabled = false;">
+            XXXX
+          </label>
         </div>
         <label>
           <input type="checkbox" id="pasta" style="margin-right: 8px;">
@@ -4403,6 +4408,25 @@
         1. 
         """`
       },
+      'SP55.avif': {
+        name: 'SPタコポキ',
+        nicknames: ['takopoki', 'タコポキ', 'たこポキ'],
+        category: '前菜',
+        tags: ['1min', '前菜'],
+        ingredients: {
+          '真蛸': '60g',
+          'アボカド': '1/6',
+          'タコポキソース': '60g',
+        },
+        steps: ['takpokSP.avif'],
+        additionalInfo: [
+          { title: '仕上げ', content: 'あおさ、オイル' },
+          { title: 'お皿', content: '透明皿' },
+        ],
+        stepText: `"""
+        1. 
+        """`
+      },
       '56.avif': {
         name: 'タコマリネ',
         nicknames: ['takomarine', 'タコマリネ', 'たこまりね'],
@@ -4737,18 +4761,37 @@
       //   steps: ['73.avif'],
       // },
       '74.avif': {
-        name: 'アサリ',
-        nicknames: ['asari', 'あさり'],
+        name: '北海大あさりのワイン蒸し',
+        nicknames: ['asari', 'あさり', 'wainmushi', 'wain mushi'],
         category: '前菜',
-        tags: ['1min', '前菜'],
+        tags: ['1min', '温かい前菜'],
         ingredients: {
         },
-        steps: ['74.avif'],
+        steps: ['74.avif', 'asari0.avif', 'asari1.avif', 'asari2.avif', 'asari3.avif', 'asari4.avif', 'asari5.avif', 'asari6.avif', 'asari7.avif', 'asari8.avif', 'asari9.avif', 'asari10.avif', 'asari11.avif'],
         additionalInfo: [
           { title: '仕上げ', content: 'パセリ、オイル' }
         ],
         stepText: `"""
         1. 
+        (鉄オーバルをオーブンで温める)
+        ・フライパンに、エクストラバージンオイル30g、にんにく1 とうがらレホール本、アンチョビ8g、入れる。
+        ・色付いてきたらあさり8個入れ両面焼く。
+        ・白ワイン4周まわし入れる。
+        ・アルコールがとんだら水8杯入れる。
+        ・トマト8個入れふたをする
+        ・あさりが開いたらバター、スプーン1/2入れる、混ぜる。
+        ・温めていた鉄オーバルに盛り、1-2分焼いたバケットをさす
+        ・木の板大に鉄オーバルを乗せ、パセリ、エクストラバージンオイルかける。
+        
+        (Das ovale Eisen im Ofen erhitzen)
+        - Geben Sie 30 g natives Olivenöl extra, 1 Knoblauchzehe, 1 Chilischote und 8 g Sardellen in eine Bratpfanne.
+        Sobald die Muscheln etwas Farbe angenommen haben, 8 Muscheln hinzufügen und von beiden Seiten braten.
+        - Gießen Sie vier Tassen Weißwein hinzu.
+        Sobald der Alkohol verdunstet ist, fügen Sie 8 Gläser Wasser hinzu.
+        ・8 Tomaten hinzufügen und abdecken
+        - Sobald sich die Muscheln geöffnet haben, einen halben Löffel Butter hinzufügen und vermischen.
+        In ein vorgeheiztes ovales Eisen legen und ein 1–2 Minuten gebackenes Baguette hineinlegen.
+        - Legen Sie das ovale Eisenstück auf ein Holzbrett und beträufeln Sie es mit Petersilie und nativem Olivenöl extra.
         """`
       },
       // '75.avif': {
@@ -4899,7 +4942,7 @@
         tags: ['1min', '前菜'],
         ingredients: {
         },
-        steps: ['79.avif'],
+        steps: ['79.avif', 'unikure0.avif', 'unikure1.avif', 'unikure2.avif', 'unikure3.avif', 'unikure4.avif', 'unikure5.avif'],
         additionalInfo: [
           { title: '仕上げ', content: '' }
         ],
@@ -5036,11 +5079,12 @@
         tags: ['1min', 'メイン'],
         ingredients: {
         },
-        steps: ['84.avif', 'haromi0.avif', 'haromi1.avif', 'haromi2.avif'],
+        steps: ['84.avif', 'haramy0.avif', 'haromi0.avif', 'haromi1.avif', 'haromi2.avif'],
         additionalInfo: [
           { title: '仕上げ', content: '燻製塩をお肉とお皿の横にそえる。' }
         ],
         stepText: `"""
+        20 min erwärmen in onsen
         30g mash potato Portion 1 min in microwave 
         Auf Teller basiliko Sauce 
         pfanne aufwärmen 
@@ -5081,11 +5125,14 @@
         nicknames: ['メカジキ', 'Mekajiki', 'grill', 'グリル', 'guriru', '海塩とレモン', 'main'],
         category: 'メイン',
         price: 1980,
-        steps: [''],
+        steps: ['fish1.avif', 'fish2.avif', 'fish3.avif', 'fish4.avif', 'fish5.avif', 'fish6.avif', 'fish7.avif', 'fish8.avif',],
         ingredients: {
           '': '',
         },
         stepText: `"""
+        14 min in onsen
+        take new tymian & slightly roast it but make sure it doesnt burn. just get the aroma out for the fish. 
+        the marinated tymian can be put into the pan with the fish together. no problem!!
         1. request teller lol
         2. 
         3. 
@@ -5825,6 +5872,7 @@
     const imageListLunchSetWeekdays = ['set1.avif', 'set2.avif', 'set3.avif'];
     const imageListLunchTanpinWeekdays = ['tan1.avif', 'tan2.avif', 'tan3.avif', 'tan4.avif'];
     const imageListLunchTapasWeekdays = ['tapas1.avif', 'tapas2.avif', 'tapas3.avif', 'tapas4.avif'];
+    const kannNicht = ['h1.avif', 'h2.avif', 'h3.avif', 'h4.avif', 'h5.avif', 'h6.avif', 'h7.avif', 'h8.avif', 'h9.avif', 'h10.avif', 'h11.avif', 'm1.avif', 'm2.avif', 'm3.avif', 'm4.avif', 'p1.avif', 'p2.avif', 'p3.avif', 'p4.avif', 'p5.avif', 'p6.avif', 'p7.avif', 'p8.avif', 'p9.avif', 'p10.avif', 'p11.avif', 'p12.avif', 'p13.avif', 'p14.avif', 'p15.avif', 'p16.avif', 'p17.avif', 'p99.avif'];
 
     let currentImages = [];
     let currentIndex = 0;
@@ -5948,6 +5996,11 @@
         allImages.push(...getRandomImagesFromArray(imageListDinnerMainDish, 2));
         allImages.push(...getRandomImagesFromArray(imageListDinnerSalad, 2));
         allImages.push(...getRandomImagesFromArray(imageListDinnerTapasCold, 2));
+      }
+
+      if (document.getElementById('XXXX').checked) {
+        const lunchTodayImages = getRandomImagesFromArrayMin1(kannNicht, 7);
+        allImages.push(...lunchTodayImages);
       }
 
       if (document.getElementById('dinner').checked) {
